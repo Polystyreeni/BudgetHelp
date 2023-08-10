@@ -1,8 +1,12 @@
 package com.poly.budgethelp.utility
 
+import android.util.Log
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 
 class DateUtils {
     companion object {
@@ -15,6 +19,25 @@ class DateUtils {
 
         fun dateToLong(value: String) {
 
+        }
+
+        fun getFirstDayOfMonth(time: Long): Long {
+            val calendar: Calendar = Calendar.getInstance(Locale("en", "UK"))
+            calendar.timeInMillis = time
+            calendar.set(Calendar.DAY_OF_MONTH, 1)
+            calendar.set(Calendar.HOUR_OF_DAY, 0)
+            Log.d("DateUtils", "Current date is ${longToDateString(calendar.timeInMillis)}")
+            return calendar.timeInMillis
+            // val date: Date = Date(time)
+        }
+
+        fun getFirstDayOfWeek(time: Long): Long {
+            val calendar: Calendar = Calendar.getInstance(Locale("en", "UK"))
+            calendar.timeInMillis = time
+            calendar.set(Calendar.DAY_OF_WEEK, 1)
+            calendar.set(Calendar.HOUR_OF_DAY, 0)
+            Log.d("DateUtils", "Current date is ${longToDateString(calendar.timeInMillis)}")
+            return calendar.timeInMillis
         }
     }
 }

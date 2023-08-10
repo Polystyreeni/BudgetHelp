@@ -25,6 +25,7 @@ import com.poly.budgethelp.data.Receipt
 import com.poly.budgethelp.data.ReceiptWithProducts
 import com.poly.budgethelp.data.SpendingTimeBlock
 import com.poly.budgethelp.utility.ActivityUtils
+import com.poly.budgethelp.utility.DateUtils
 import com.poly.budgethelp.viewmodel.ProductViewModel
 import com.poly.budgethelp.viewmodel.ProductViewModelFactory
 import com.poly.budgethelp.viewmodel.ReceiptProductViewModel
@@ -52,6 +53,7 @@ class SpendingOverviewActivity : AppCompatActivity() {
     private var currentPopup: PopupWindow? = null
 
     // Overview state
+    private var currentTimeStepIndex: Int = 0
     private val spendingBlockList: ArrayList<SpendingTimeBlock> = arrayListOf()
     private val warningLimit: Long = 7889400000L
 
@@ -98,6 +100,7 @@ class SpendingOverviewActivity : AppCompatActivity() {
                     timeStep = null
                 else
                     generateTimeSteps(timeStepSpinner.getItemAtPosition(position).toString())
+                currentTimeStepIndex = position
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -220,10 +223,10 @@ class SpendingOverviewActivity : AppCompatActivity() {
 
         val diff: Long = endDate!! - startDate!!
         val add: Long = timeStepRange[selectedTimeStep]!!
-        val step: Long = diff / add
-        timeStep = step
+        // val step: Long = diff / add
+        timeStep = add
 
-        Log.d(TAG, "Step is: $step")
+        // Log.d(TAG, "Step is: $step")
     }
 
     private fun getReceiptCrossRefData(receipts: List<Receipt>, timeStep: Long) {
@@ -251,7 +254,10 @@ class SpendingOverviewActivity : AppCompatActivity() {
         var currentDate: Long = startDate!!
         while (currentDate < endDate!!)
         {
-            val upperLimit = currentDate + (endDate!! - startDate!!) / timeStep
+            val upperLimit =
+                if (currentTimeStepIndex == 1) DateUtils.getFirstDayOfWeek(currentDate + timeStep)
+                else DateUtils.getFirstDayOfMonth(currentDate + timeStep)
+
             for (ref in crossRef) {
                 if (ref.receipt.receiptDate in currentDate until upperLimit) {
                     if (productBlocks[blockIndex] == null) {
@@ -273,8 +279,12 @@ class SpendingOverviewActivity : AppCompatActivity() {
         Log.d(TAG, "Product map contains ${productBlocks.size} elements")
 
         for (kvp in productBlocks) {
-            val begin = startDate!! + ((endDate!! - startDate!!) / timeStep) * kvp.key
-            var end = startDate!! + ((endDate!! - startDate!!) / timeStep) * (kvp.key + 1)
+            val begin =
+                if (currentTimeStepIndex == 1) DateUtils.getFirstDayOfWeek(startDate!! + timeStep * kvp.key)
+                else DateUtils.getFirstDayOfMonth(startDate!! + timeStep * kvp.key)
+            var end =
+                if (currentTimeStepIndex == 1) DateUtils.getFirstDayOfWeek(startDate!! + timeStep * (kvp.key + 1))
+                else DateUtils.getFirstDayOfMonth(startDate!! + timeStep * (kvp.key + 1))
             if (end > endDate!!)
                 end = endDate!!
 
