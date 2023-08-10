@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.poly.budgethelp.data.CategoryPricePojo
 import com.poly.budgethelp.data.Product
 import kotlinx.coroutines.flow.Flow
 
@@ -33,6 +34,9 @@ interface ProductDao {
 
     @Query("DELETE FROM product WHERE productId = :productId")
     suspend fun delete(productId: Int)
+
+    @Query("SELECT productCategory AS category, SUM(productPrice) AS totalPrice FROM product WHERE productId IN (:productIds) GROUP BY productCategory")
+    fun getPricesInCategory(productIds: List<Long>): Flow<List<CategoryPricePojo>>
 
     @Query("DELETE FROM product")
     suspend fun deleteAll()

@@ -10,9 +10,35 @@
     <string name="error_no_price">Tuotteella ei ole hintaa!</string>
     <string name="error_invalid_price">Tuotteen hinta on virheellinen!</string>
     <string name="error_invalid_category">Tuotteen hinta on virheellinen!</string>
+    <string name="error_no_start_date">Alkupäivämäärää ei ole asetettu!</string>
+    <string name="error_no_end_date">Loppupäivämäärää ei ole asetettu!</string>
+    <string name="error_no_timestep">Aikaväliä ei ole määritetty</string>
     <string name="receipt_info_products">Tuotteet kuitilla:</string>
     <string name="hint_receipt_date">Kuitin päivämäärä</string>
     <string name="load_process_camera_image">Luetaan tekstiä…</string>
     <string name="load_save_receipt">Tallennetaan kuittia…</string>
     <string name="product_list_limit_category">Näytettävät kategoriat</string>
+    <string name="spending_time_range">%1$s - %2$s</string>
+    <string name="spending_total_price">Yhteensä: %1$02d €</string>
+    <string name="spending_time_warning">Pitkällä aikavälillä haku voi kestää kauan.\nHaluatko varmasti jatkaa?</string>
+
+    <string-array name="spending_timestep_array">
+        <item>Valitse aika-asteikko</item>
+        <item>Viikko</item>
+        <item>Kuukausi</item>
+    </string-array>
+    <string-array name="month_array">
+        <item>Tammikuu</item>
+        <item>Helmikuu</item>
+        <item>Maaliskuu</item>
+        <item>Huhtikuu</item>
+        <item>Toukokuu</item>
+        <item>Kesäkuu</item>
+        <item>Heinäkuu</item>
+        <item>Elokuu</item>
+        <item>Syyskuu</item>
+        <item>Lokakuu</item>
+        <item>Marraskuu</item>
+        <item>Joulukuu</item>
+    </string-array>
 </resources>

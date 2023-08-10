@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.poly.budgethelp.data.CategoryPricePojo
 import com.poly.budgethelp.data.Product
 import com.poly.budgethelp.data.ProductRepository
 import kotlinx.coroutines.withContext
@@ -19,6 +20,9 @@ class ProductViewModel (private val repository: ProductRepository) : ViewModel()
 
     fun productsInCategories(categories: List<String>): LiveData<List<Product>> =
         repository.getProductsInCategories(categories).asLiveData()
+
+    fun pricesInCategory(productIds: List<Long>): LiveData<List<CategoryPricePojo>> =
+        repository.getPricesInCategory(productIds).asLiveData()
 
     suspend fun insert(product: Product): Long =
         withContext(viewModelScope.coroutineContext) {

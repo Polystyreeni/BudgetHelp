@@ -56,6 +56,11 @@ class MainActivity : ComponentActivity() {
         this.startActivity(intent)
     }
 
+    private fun startSpendingActivity() {
+        val intent = Intent(this, SpendingOverviewActivity::class.java)
+        this.startActivity(intent)
+    }
+
     @Composable
     fun Greeting(name: String, modifier: Modifier = Modifier) {
         Column {
@@ -74,6 +79,9 @@ class MainActivity : ComponentActivity() {
             }
             Button(onClick = { startProductList() }) {
                 Text(text = "Product list")
+            }
+            Button(onClick = { startSpendingActivity() }) {
+                Text(text = "Spending")
             }
         }
     }

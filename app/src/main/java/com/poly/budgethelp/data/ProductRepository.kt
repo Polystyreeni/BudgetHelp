@@ -16,6 +16,9 @@ class ProductRepository(private val productDao: ProductDao) {
 
     fun getProductsInCategories(categoryNames: List<String>): Flow<List<Product>> =
         productDao.getProductsInCategories(categoryNames)
+    
+    fun getPricesInCategory(productIds: List<Long>): Flow<List<CategoryPricePojo>> =
+        productDao.getPricesInCategory(productIds)
 
     @WorkerThread
     suspend fun insert(product: Product): Long {

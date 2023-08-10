@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Kulutustarkastelu"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:layout_marginVertical="6dp"
+        android:textSize="24sp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:id="@+id/spendingStartDate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="6dp"
+            android:layout_weight="1"
+            android:focusable="false"
+            android:hint="@string/receipt_list_start_date"
+            />
+        <EditText
+            android:id="@+id/spendingEndDate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="6dp"
+            android:layout_weight="1"
+            android:focusable="false"
+            android:hint="@string/receipt_list_end_date"
+            />
+        <Spinner
+            android:id="@+id/spendingTimeStepSpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="10dp"
+            android:spinnerMode="dialog"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+    <Button
+        android:id="@+id/spendingSearchButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="6dp"
+        android:text="Muodosta yhteenveto"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/spendingRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        tools:listitem="@layout/item_spending_overview"
+        />
+
+</LinearLayout>
