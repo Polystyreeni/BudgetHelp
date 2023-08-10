@@ -1,5 +1,6 @@
 package com.poly.budgethelp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.adapter.SpendingItemAdapter
@@ -51,6 +53,7 @@ class SpendingOverviewActivity : AppCompatActivity() {
 
     // Overview state
     private val spendingBlockList: ArrayList<SpendingTimeBlock> = arrayListOf()
+    private val warningLimit: Long = 7889400000L
 
     // Viewmodels
     private val receiptProductViewModel: ReceiptProductViewModel by viewModels {
@@ -130,8 +133,35 @@ class SpendingOverviewActivity : AppCompatActivity() {
             return
         }
 
-        // TODO: Warning for long time
+        // Warning for long time (3 months)
+        if (endDate!! - startDate!! > warningLimit) {
+            createTimeWarningAlert()
+        }
 
+        else {
+            beginDataFetch()
+        }
+    }
+
+    private fun createTimeWarningAlert() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(resources.getString(R.string.camera_reading_complete))
+        builder.setCancelable(false)
+
+        builder.setMessage(resources.getString(R.string.spending_time_warning))
+        builder.setPositiveButton(resources.getString(R.string.spending_alert_positive)) {dialogInterface, index ->
+            beginDataFetch()
+            dialogInterface.dismiss()
+        }
+
+        builder.setNegativeButton(resources.getString(R.string.spending_alert_negative)) { dialogInterface, index ->
+            dialogInterface.dismiss()
+        }
+
+        builder.show()
+    }
+
+    private fun beginDataFetch() {
         fetchButton.isClickable = false
         receiptViewModel.receiptsInRange(startDate!!, endDate!!).observe(this) {receipts ->
             getReceiptCrossRefData(receipts, timeStep!!)
@@ -258,13 +288,7 @@ class SpendingOverviewActivity : AppCompatActivity() {
             }
         }
 
-        // TODO: Temporary implementation, need to handle timestep as well
-        /*val productIds = products.map { product -> product.productId }
-        productViewModel.pricesInCategory(productIds).observe(this) { priceCategoryPojoList ->
-             priceCategoryPojoList.let {
-                 it.forEach {elem -> Log.d(TAG, "Category: ${elem.category}, total price: ${elem.totalPrice}")}
-                 fetchButton.isClickable = true
-             }
-        }*/
+        // Re-enable fetch button
+        fetchButton.isClickable = true
     }
 }

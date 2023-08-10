@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -45,8 +46,6 @@ import kotlin.math.abs
 
 class CameraActivity : AppCompatActivity() {
 
-
-    // public val EXTRA_MESSAGE = "CameraActivityProducts"
     private var TAG: String = "CameraActivity"
 
     private lateinit var viewBinding: ActivityCameraBinding
@@ -262,16 +261,36 @@ class CameraActivity : AppCompatActivity() {
         }
 
         val builder = StringBuilder()
+        var productCount = 0
         for(pair in itemWithPrice) {
+            productCount++
             Log.d(TAG, pair.first + " : " + pair.second)
             builder.append(pair.first).append(":").append(pair.second).append(System.lineSeparator())
         }
 
-        // Start new activity
-        val intent = Intent(this, NewReceiptActivity::class.java)
-        intent.putExtra(EXTRA_MESSAGE, builder.toString())  //(EXTRA_MESSAGE, builder.toString())
-        startActivity(intent)
-        finish()
+        createAlert(productCount, builder)
+    }
+
+    private fun createAlert(productCount: Int, data: StringBuilder) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(resources.getString(R.string.camera_reading_complete))
+        builder.setCancelable(false)
+
+        builder.setMessage(resources.getString(R.string.camera_number_of_items, productCount))
+        builder.setPositiveButton(resources.getString(R.string.camera_alert_positive)) {dialogInterface, index ->
+            // Start new activity
+            val intent = Intent(this, NewReceiptActivity::class.java)
+            intent.putExtra(EXTRA_MESSAGE, data.toString())
+            startActivity(intent)
+            finish()
+        }
+
+        builder.setNegativeButton(resources.getString(R.string.camera_alert_negative)) { dialogInterface, index ->
+            dialogInterface.dismiss()
+            currentPopup?.dismiss()
+        }
+
+        builder.show()
     }
 
     private fun createLoadPopup() {

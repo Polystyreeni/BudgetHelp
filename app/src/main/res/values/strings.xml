@@ -20,7 +20,15 @@
     <string name="product_list_limit_category">Näytettävät kategoriat</string>
     <string name="spending_time_range">%1$s - %2$s</string>
     <string name="spending_total_price">Yhteensä: %1$02d €</string>
-    <string name="spending_time_warning">Pitkällä aikavälillä haku voi kestää kauan.\nHaluatko varmasti jatkaa?</string>
+    <string name="spending_alert_positive">Jatka</string>
+    <string name="spending_alert_negative">Peruuta</string>
+    <string name="spending_time_warning">Pitkällä aikavälillä haku voi kestää kauan.
+        Haluatko varmasti jatkaa?</string>
+    <string name="camera_reading_complete">Kuitti luettu</string>
+    <string name="camera_number_of_items">Löydettiin %1$d tuotetta kuitilta.
+        Lisätäänkö tuotteet uudelle kuitille?</string>
+    <string name="camera_alert_positive">Lisää</string>
+    <string name="camera_alert_negative">Peruuta</string>
 
     <string-array name="spending_timestep_array">
         <item>Valitse aika-asteikko</item>
