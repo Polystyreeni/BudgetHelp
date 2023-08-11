@@ -1,11 +1,14 @@
 package com.poly.budgethelp
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CalendarView
@@ -67,7 +70,6 @@ class NewReceiptActivity : AppCompatActivity() {
     val currentPopups = arrayListOf<PopupWindow>()
 
     // Save state
-    private var existingProductChecked = false
     private val existingProductsCheck: CompletableJob = Job()
     private val existingProducts = arrayListOf<Product>()
 
@@ -102,11 +104,15 @@ class NewReceiptActivity : AppCompatActivity() {
             receiptName = receiptNameEdit.text.toString()
         }
 
-        receiptDateButton.setOnClickListener {view ->
-            //if (currentPopups.size < 1) {
-            Log.d(TAG, "Current popups: " + currentPopups.size)
-                createCalendarPopup()
-            //}
+        receiptDateButton.setOnClickListener {_ ->
+            // Some hackery for hiding soft keyboard
+            // https://stackoverflow.com/questions/1109022/how-to-close-hide-the-android-soft-keyboard-programmatically
+            this.currentFocus?.let { view ->
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                imm?.hideSoftInputFromWindow(view.windowToken, 0)
+            }
+
+            createCalendarPopup()
         }
 
         itemListAdapter = ReceiptProductAdapter()
@@ -129,20 +135,6 @@ class NewReceiptActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         dataSet.add(AddItem(this))
-
-        /* productViewModel.allProducts.observe(this) { products ->
-            products.let {
-                dataSet.clear()
-                it.forEach {product -> dataSet.add(ContentItem(product))}
-                dataSet.add(AddItem(this))
-                adapter.notifyDataSetChanged()
-            }
-        }*/
-
-        // productViewModel.allProducts.observe(this) { products ->
-        //     // Update the cached copy of the products in the adapter
-        //    products.let { adapter.submitList(it) }
-        // }
 
         val text: String? = intent.extras?.getString(CameraActivity.EXTRA_MESSAGE)
         parseProductsFromCamera(text)
@@ -200,14 +192,18 @@ class NewReceiptActivity : AppCompatActivity() {
     }
 
     fun addNewCategory(categoryName: String) {
+        if (categoryName.isEmpty() || categoryName.isBlank()) {
+            Toast.makeText(this, resources.getString(R.string.receipt_save_successful), Toast.LENGTH_SHORT).show()
+            return
+        }
         val category = Category(categoryName)
         categoryViewModel.insert(category)
     }
 
     fun removePopup(popup: PopupWindow) {
-        currentPopups.remove(popup)
-        popup.dismiss()
-        Log.d(TAG, "Current popups: " + currentPopups.size)
+        val latest = currentPopups[currentPopups.size - 1]
+        latest.dismiss()
+        currentPopups.remove(latest)
     }
 
     private fun calculateTotalPrice() {
@@ -235,8 +231,6 @@ class NewReceiptActivity : AppCompatActivity() {
         val itemNames: List<String> = productsInReceipt.map { product -> product.productName }
 
         checkExistingProducts(itemNames)
-
-        // val existingProducts = lifecycleScope.async {  }
 
         joinAll(existingProductsCheck)
 
@@ -270,7 +264,7 @@ class NewReceiptActivity : AppCompatActivity() {
 
         Log.d(TAG, "Add products coroutine finished")
 
-        Toast.makeText(this, "Receipt saved successfully!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, resources.getString(R.string.receipt_save_successful), Toast.LENGTH_SHORT).show()
         finish()
     }
 
@@ -293,8 +287,12 @@ class NewReceiptActivity : AppCompatActivity() {
     }
 
     private fun parseProductsFromCamera(text: String?) {
-        if (text == null)
+        if (text == null) {
+            // Initialize price amount to 0
+            calculateTotalPrice()
             return
+        }
+
         Log.d(TAG, "Parsing products from camera")
         val pairs: List<String> = text.split(System.lineSeparator())
 
@@ -312,9 +310,6 @@ class NewReceiptActivity : AppCompatActivity() {
 
             productNames.add(name)
             prices.add(price)
-
-            // val product = Product(name, 0, price)
-            // addNewProduct(product)
         }
 
         productViewModel.productsWithNames(productNames).observe(this) {products ->
@@ -374,13 +369,11 @@ class NewReceiptActivity : AppCompatActivity() {
             val date: Date = calendar.time
             receiptDate = date.time
             receiptDateButton.setText(String.format("%d.%d %d", d, m + 1, y))
+            popupWindow.dismiss()
+        }
 
-            for(popup in currentPopups) {
-                if (popup == popupWindow) {
-                    popup.dismiss()
-                    break
-                }
-            }
+        popupWindow.setOnDismissListener {
+            currentPopups.remove(popupWindow)
         }
 
         currentPopups.add(popupWindow)

@@ -3,13 +3,14 @@
     <string name="item_price">%1$02d €</string>
     <string name="receipt_total_price">Summa kuitilla: %1$s €</string>
     <string name="receipt_list_total_price">Kuittien kokonaissumma: %1$s €</string>
+    <string name="receipt_save_successful">Kuitin tallennus onnistui!</string>
     <string name="receipt_list_start_date">Kuitit alkaen</string>
     <string name="receipt_list_end_date">Kuitit loppuen</string>
     <string name="error_no_text_found">Yhtään tuotetta ei näkynyt!</string>
     <string name="error_empty_product">Tyhjää ei voi ostaa!</string>
     <string name="error_no_price">Tuotteella ei ole hintaa!</string>
     <string name="error_invalid_price">Tuotteen hinta on virheellinen!</string>
-    <string name="error_invalid_category">Tuotteen hinta on virheellinen!</string>
+    <string name="error_invalid_category">Tuotteen kategoria on virheellinen!</string>
     <string name="error_no_start_date">Alkupäivämäärää ei ole asetettu!</string>
     <string name="error_no_end_date">Loppupäivämäärää ei ole asetettu!</string>
     <string name="error_no_timestep">Aikaväliä ei ole määritetty</string>

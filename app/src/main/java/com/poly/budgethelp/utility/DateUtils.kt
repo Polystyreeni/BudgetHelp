@@ -26,7 +26,6 @@ class DateUtils {
             calendar.timeInMillis = time
             calendar.set(Calendar.DAY_OF_MONTH, 1)
             calendar.set(Calendar.HOUR_OF_DAY, 0)
-            Log.d("DateUtils", "Current date is ${longToDateString(calendar.timeInMillis)}")
             return calendar.timeInMillis
             // val date: Date = Date(time)
         }
@@ -36,7 +35,6 @@ class DateUtils {
             calendar.timeInMillis = time
             calendar.set(Calendar.DAY_OF_WEEK, 1)
             calendar.set(Calendar.HOUR_OF_DAY, 0)
-            Log.d("DateUtils", "Current date is ${longToDateString(calendar.timeInMillis)}")
             return calendar.timeInMillis
         }
     }

@@ -12,7 +12,6 @@
         android:layout_weight="3"
         android:gravity="center"
         android:minHeight="40dp"
-        android:scrollbars="horizontal"
         android:text="Tuotenimi..."
         android:textAlignment="center"
         android:textColor="@color/black"

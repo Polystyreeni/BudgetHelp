@@ -20,6 +20,7 @@
         android:textSize="12sp"
         android:textColor="@color/black"
         android:layout_marginVertical="5dp"
+        android:layout_marginHorizontal="5dp"
         android:textAlignment="center"
         android:text="LATAUS_NIMI"
         />
