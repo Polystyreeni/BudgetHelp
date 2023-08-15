@@ -69,14 +69,12 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val categoryTextView: TextView = itemView.findViewById(R.id.productCategoryTextView)
             val priceTextView: TextView = itemView.findViewById(R.id.productPriceTextView)
             val editButton: TextView = itemView.findViewById(R.id.productEditButton)
-            val deleteButton: TextView = itemView.findViewById(R.id.productDeleteButton)
 
             nameTextView.text = item.product.productName
             categoryTextView.text = item.product.productCategory
             priceTextView.text = item.product.productPrice.toString()
 
             // Button functionalities
-            deleteButton.setOnClickListener { item.context.removeProduct(item.product) }
             editButton.setOnClickListener {
                 val popupData = ActivityUtils.createPopup(R.layout.popup_add_item, item.context)
                 val nameEditText: EditText = popupData.first.findViewById(R.id.addProductNameEditText)

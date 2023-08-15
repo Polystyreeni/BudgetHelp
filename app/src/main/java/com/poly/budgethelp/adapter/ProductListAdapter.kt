@@ -106,7 +106,7 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
         companion object {
             fun create(parent: ViewGroup): ProductListViewHolder {
                 val view: View = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.product_list_item, parent, false)
+                    .inflate(R.layout.product_list_item_with_delete, parent, false)
                 return ProductListViewHolder(view)
             }
         }

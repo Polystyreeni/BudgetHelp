@@ -47,6 +47,8 @@ import java.util.Calendar
 import java.util.Date
 import kotlin.math.abs
 import androidx.activity.addCallback
+import androidx.recyclerview.widget.ItemTouchHelper
+import com.google.android.material.snackbar.Snackbar
 
 class NewReceiptActivity : AppCompatActivity() {
 
@@ -136,6 +138,44 @@ class NewReceiptActivity : AppCompatActivity() {
 
         dataSet.add(AddItem(this))
 
+        // Swipe to delete functionality
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+
+            override fun getSwipeDirs(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ): Int {
+                if (dataSet[viewHolder.adapterPosition] is AddItem) return 0
+                return super.getSwipeDirs(recyclerView, viewHolder)
+            }
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+               // Don't delete the add button
+                if (dataSet[viewHolder.adapterPosition] is AddItem) {
+                    return
+                }
+
+                val position = viewHolder.adapterPosition
+                val toDelete: ContentItem = dataSet[viewHolder.adapterPosition] as ContentItem
+
+                removeProductAtPosition(toDelete.product, position)
+
+                // Possibility to undo this delete action
+                Snackbar.make(recyclerView, resources.getString(R.string.delete_from_new_receipt, toDelete.product.productName), Snackbar.LENGTH_LONG)
+                    .setAction(resources.getString(R.string.generic_reply_undo), View.OnClickListener {
+                        addProductAtPosition(toDelete.product, position)
+                    }).show()
+            }
+        }).attachToRecyclerView(recyclerView)
+
         val text: String? = intent.extras?.getString(CameraActivity.EXTRA_MESSAGE)
         parseProductsFromCamera(text)
 
@@ -173,12 +213,26 @@ class NewReceiptActivity : AppCompatActivity() {
         calculateTotalPrice()
     }
 
+    fun addProductAtPosition(product: Product, position: Int) {
+        productsInReceipt.add(position, product)
+        dataSet.add(position, ContentItem(product, this))
+        itemListAdapter.notifyItemInserted(position)
+        calculateTotalPrice()
+    }
+
     fun removeProduct(product: Product) {
         productsInReceipt.remove(product)
         dataSet.clear()
         productsInReceipt.forEach {prod -> dataSet.add(ContentItem(prod, this))}
         dataSet.add(AddItem(this))
         itemListAdapter.notifyDataSetChanged()
+        calculateTotalPrice()
+    }
+
+    fun removeProductAtPosition(product: Product, position: Int) {
+        productsInReceipt.remove(product)
+        dataSet.removeAt(position)
+        itemListAdapter.notifyItemRemoved(position)
         calculateTotalPrice()
     }
 

@@ -4,11 +4,15 @@
     <string name="generic_reply_positive">Okei</string>
     <string name="generic_reply_negative">Peruuta</string>
     <string name="generic_reply_clear">Tyhjennä</string>
+    <string name="generic_reply_undo">Kumoa</string>
     <string name="receipt_total_price">Summa kuitilla: %1$s €</string>
     <string name="receipt_list_total_price">Kuittien kokonaissumma: %1$s €</string>
     <string name="receipt_save_successful">Kuitin tallennus onnistui!</string>
     <string name="receipt_list_start_date">Kuitit alkaen</string>
     <string name="receipt_list_end_date">Kuitit loppuen</string>
+    <string name="header_receipt_name">Tuotenimi</string>
+    <string name="header_receipt_category">Kategoria</string>
+    <string name="header_receipt_price">Hinta</string>
     <string name="error_no_text_found">Yhtään tuotetta ei näkynyt!</string>
     <string name="error_empty_product">Tyhjää ei voi ostaa!</string>
     <string name="error_no_price">Tuotteella ei ole hintaa!</string>
@@ -33,6 +37,7 @@
         Lisätäänkö tuotteet uudelle kuitille?</string>
     <string name="camera_alert_positive">Lisää</string>
     <string name="camera_alert_negative">Peruuta</string>
+    <string name="delete_from_new_receipt">Poistettiin %1$s</string>
     <string name="delete_product_header">Poista tuote</string>
     <string name="delete_product_message">Haluatko varmasti poistaa tuotteen?
         Tuote poistuu kuittilistoista, mutta kuittien kokonaissummat pysyvät ennallaan</string>
