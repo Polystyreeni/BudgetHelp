@@ -33,7 +33,7 @@ interface ProductDao {
     suspend fun insert(product: Product): Long
 
     @Query("DELETE FROM product WHERE productId = :productId")
-    suspend fun delete(productId: Int)
+    suspend fun delete(productId: Long)
 
     @Query("SELECT productCategory AS category, SUM(productPrice) AS totalPrice FROM product WHERE productId IN (:productIds) GROUP BY productCategory")
     fun getPricesInCategory(productIds: List<Long>): Flow<List<CategoryPricePojo>>

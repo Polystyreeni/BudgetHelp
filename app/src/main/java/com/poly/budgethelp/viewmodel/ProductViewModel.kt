@@ -31,6 +31,8 @@ class ProductViewModel (private val repository: ProductRepository) : ViewModel()
         }
 
     suspend fun updateProduct(product: Product) = repository.updateProduct(product)
+
+    suspend fun deleteProduct(productId: Long) = repository.deleteProduct(productId)
 }
 
 class ProductViewModelFactory (private val repository: ProductRepository) : ViewModelProvider.Factory {

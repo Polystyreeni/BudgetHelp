@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">BudgetHelp</string>
     <string name="item_price">%1$02d €</string>
+    <string name="generic_reply_positive">Okei</string>
+    <string name="generic_reply_negative">Peruuta</string>
+    <string name="generic_reply_clear">Tyhjennä</string>
     <string name="receipt_total_price">Summa kuitilla: %1$s €</string>
     <string name="receipt_list_total_price">Kuittien kokonaissumma: %1$s €</string>
     <string name="receipt_save_successful">Kuitin tallennus onnistui!</string>
@@ -30,6 +33,9 @@
         Lisätäänkö tuotteet uudelle kuitille?</string>
     <string name="camera_alert_positive">Lisää</string>
     <string name="camera_alert_negative">Peruuta</string>
+    <string name="delete_product_header">Poista tuote</string>
+    <string name="delete_product_message">Haluatko varmasti poistaa tuotteen?
+        Tuote poistuu kuittilistoista, mutta kuittien kokonaissummat pysyvät ennallaan</string>
 
     <string-array name="spending_timestep_array">
         <item>Valitse aika-asteikko</item>

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:layout_marginBottom="4dp"
     >
 
     <TextView
@@ -12,6 +13,7 @@
         android:layout_weight="3"
         android:gravity="center"
         android:minHeight="40dp"
+        android:paddingVertical="2dp"
         android:text="Tuotenimi..."
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -23,6 +25,7 @@
         android:minHeight="40dp"
         android:textColor="@color/black"
         android:text="Kategoria..."
+        android:paddingVertical="2dp"
         android:textSize="12sp"
         android:textAlignment="center"
         android:gravity="center"
@@ -35,6 +38,7 @@
         android:textColor="@color/black"
         android:text="Hinta..."
         android:textSize="12sp"
+        android:paddingVertical="2dp"
         android:textAlignment="center"
         android:gravity="center"
         android:layout_weight="2" />

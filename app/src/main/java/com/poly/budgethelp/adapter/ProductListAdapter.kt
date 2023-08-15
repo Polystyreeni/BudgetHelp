@@ -42,6 +42,10 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
             categoryTextView.text = product.productCategory
             priceTextView.text = String.format("%.2f %s", product.productPrice, "€")
 
+            deleteButton.setOnClickListener { _ ->
+                baseContext.requestDeleteProduct(product)
+            }
+
             editButton.setOnClickListener { view ->
                 val popupData = ActivityUtils.createPopup(R.layout.popup_add_item, baseContext)
                 popupData.second.isFocusable = true
@@ -94,6 +98,8 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
                         baseContext.activePopup = null
                     }
                 }
+
+                popupData.second.setOnDismissListener { baseContext.activePopup = null }
             }
         }
 

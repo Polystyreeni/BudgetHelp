@@ -227,8 +227,6 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         }
                     }
 
-                    // item.context.currentPopups.remove(popupWindow)
-                    // popupWindow.dismiss()
                     item.context.removePopup(popupData.second)
                 }
             }

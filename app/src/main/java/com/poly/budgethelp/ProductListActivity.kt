@@ -73,7 +73,7 @@ class ProductListActivity : AppCompatActivity() {
             builder.setTitle(resources.getString(R.string.product_list_limit_category))
             builder.setCancelable(false)
 
-            builder.setMultiChoiceItems(categoryArray, selectedCategories) { listener, index, value ->
+            builder.setMultiChoiceItems(categoryArray, selectedCategories) { _, index, value ->
                 if (value) {
                     categoryList.add(index)
                     categoryList.sort()
@@ -83,7 +83,7 @@ class ProductListActivity : AppCompatActivity() {
                 }
             }
 
-            builder.setPositiveButton("OOKOO") {dialogInterface, index ->
+            builder.setPositiveButton(resources.getString(R.string.generic_reply_positive)) {_, _ ->
                 val stringBuilder = StringBuilder()
                 for (i in 0 until categoryList.size) {
                     stringBuilder.append(categoryArray[categoryList[i]])
@@ -94,10 +94,10 @@ class ProductListActivity : AppCompatActivity() {
                 categorySelectView.text = stringBuilder.toString()
                 getProducts()
             }
-            builder.setNegativeButton("Per.") { dialogInterface, index ->
+            builder.setNegativeButton(resources.getString(R.string.generic_reply_negative)) { dialogInterface, _ ->
                 dialogInterface.dismiss()
             }
-            builder.setNeutralButton("Tyhj.") { dialogInterface, index ->
+            builder.setNeutralButton(resources.getString(R.string.generic_reply_clear)) { _, _ ->
                 for (i in selectedCategories.indices) {
                     selectedCategories[i] = false
                     categoryList.clear()
@@ -147,6 +147,31 @@ class ProductListActivity : AppCompatActivity() {
     fun saveProduct(newProduct: Product) {
         lifecycleScope.launch {
             productViewModel.updateProduct(newProduct)
+            productAdapter.notifyDataSetChanged()
+        }
+    }
+
+    fun requestDeleteProduct(toDelete: Product) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(resources.getString(R.string.delete_product_header))
+        builder.setCancelable(false)
+
+        builder.setMessage(resources.getString(R.string.delete_product_message))
+        builder.setPositiveButton(resources.getString(R.string.generic_reply_positive)) {dialogInterface, _ ->
+            deleteProduct(toDelete)
+            dialogInterface.dismiss()
+        }
+
+        builder.setNegativeButton(resources.getString(R.string.generic_reply_negative)) { dialogInterface, _ ->
+            dialogInterface.dismiss()
+        }
+
+        builder.show()
+    }
+
+    private fun deleteProduct(toDelete: Product) {
+        lifecycleScope.launch {
+            productViewModel.deleteProduct(toDelete.productId)
             productAdapter.notifyDataSetChanged()
         }
     }

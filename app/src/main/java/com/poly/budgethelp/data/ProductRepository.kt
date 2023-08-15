@@ -27,4 +27,7 @@ class ProductRepository(private val productDao: ProductDao) {
 
     @WorkerThread
     suspend fun updateProduct(product: Product) = productDao.updateProduct(product)
+
+    @WorkerThread
+    suspend fun deleteProduct(productId: Long) = productDao.delete(productId)
 }

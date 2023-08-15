@@ -187,13 +187,14 @@ class NewReceiptActivity : AppCompatActivity() {
         dataSet.clear()
         productsInReceipt.forEach {prod -> dataSet.add(ContentItem(prod, this))}
         dataSet.add(AddItem(this))
-        itemListAdapter.notifyDataSetChanged()
+        itemListAdapter.notifyItemChanged(position)
+        // itemListAdapter.notifyDataSetChanged()
         calculateTotalPrice()
     }
 
     fun addNewCategory(categoryName: String) {
         if (categoryName.isEmpty() || categoryName.isBlank()) {
-            Toast.makeText(this, resources.getString(R.string.receipt_save_successful), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, resources.getString(R.string.error_invalid_category), Toast.LENGTH_SHORT).show()
             return
         }
         val category = Category(categoryName)
