@@ -247,7 +247,7 @@ class NewReceiptActivity : AppCompatActivity() {
     }
 
     fun addNewCategory(categoryName: String) {
-        if (categoryName.isEmpty() || categoryName.isBlank()) {
+        if (categoryName.isEmpty() || categoryName.isBlank() || categoryName == "+") {
             Toast.makeText(this, resources.getString(R.string.error_invalid_category), Toast.LENGTH_SHORT).show()
             return
         }
