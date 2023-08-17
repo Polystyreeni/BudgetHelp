@@ -86,6 +86,8 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 popupData.second.isFocusable = true
                 popupData.second.update()
 
+                popupData.second.setOnDismissListener { item.context.removePopup(popupData.second) }
+
                 nameEditText.setText(item.product.productName)
                 categorySpinner.adapter = item.context.categoryAdapter
                 categorySpinner.setSelection(item.context.categoryAdapter.getPosition(item.product.productCategory))
@@ -145,7 +147,7 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         }
                     }
 
-                    item.context.removePopup(popupData.second)
+                    // item.context.removePopup(popupData.second)
                     //item.context.currentPopups.remove(popupData.second)
                     //popupData.second.dismiss()
                 }
@@ -162,6 +164,8 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 popupData.second.update()
 
                 item.context.currentPopups.add(popupData.second)
+
+                popupData.second.setOnDismissListener { item.context.removePopup(popupData.second) }
 
                 // Set popupView item stuff
                 val nameEditText: EditText = popupData.first.findViewById(R.id.addProductNameEditText)

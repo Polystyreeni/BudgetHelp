@@ -24,6 +24,10 @@ class ReceiptViewModel (private val repository: ReceiptRepository) : ViewModel()
         withContext(viewModelScope.coroutineContext) {
             repository.insert(receipt)
         }
+
+    suspend fun deleteReceiptWithId(id: Long) = withContext(viewModelScope.coroutineContext) {
+        repository.deleteReceiptWithId(id)
+    }
 }
 
 class ReceiptViewModelFactory(private val repository: ReceiptRepository) : ViewModelProvider.Factory {

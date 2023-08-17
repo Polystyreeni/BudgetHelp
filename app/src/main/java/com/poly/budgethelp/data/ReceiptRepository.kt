@@ -16,4 +16,7 @@ class ReceiptRepository (private val receiptDao: ReceiptDao) {
     suspend fun insert(receipt: Receipt): Long {
         return receiptDao.insertReceipt(receipt)
     }
+
+    @WorkerThread
+    suspend fun deleteReceiptWithId(id: Long) = receiptDao.deleteReceiptWithId(id)
 }

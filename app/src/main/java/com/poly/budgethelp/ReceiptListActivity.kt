@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +29,7 @@ class ReceiptListActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var dateStartEdit: EditText
     private lateinit var dateEndEdit: EditText
+    private lateinit var receiptPriceText: TextView
     private lateinit var adapter: ReceiptListAdapter
 
     private var dateStart: Long? = null
@@ -44,26 +46,40 @@ class ReceiptListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_receipt_list)
 
         recyclerView = findViewById(R.id.receiptRecyclerView)
+        receiptPriceText = findViewById(R.id.receiptListTotalPrice)
         adapter = ReceiptListAdapter()
         adapter.baseContext = this
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        receiptPriceText.text = resources.getString(R.string.receipt_list_total_price, 0f)
+
         receiptViewModel.allReceipts.observe(this) {receipts ->
             receipts.let {
                 adapter.submitList(it)
+                calculateReceiptTotalPrice(it)
             }
         }
 
         dateStartEdit = findViewById(R.id.receiptListStartEdit)
         dateEndEdit = findViewById(R.id.receiptListEndEdit)
 
-        dateStartEdit.setOnClickListener {view ->
+        dateStartEdit.setOnClickListener {_ ->
             createPopup(true)
         }
 
-        dateEndEdit.setOnClickListener {view ->
+        dateEndEdit.setOnClickListener {_ ->
             createPopup(false)
+        }
+
+        onBackPressedDispatcher.addCallback(this) {
+            if (currentPopup != null) {
+                currentPopup?.dismiss()
+                currentPopup = null
+            }
+            else {
+                finish()
+            }
         }
     }
 
@@ -72,14 +88,13 @@ class ReceiptListActivity : AppCompatActivity() {
         currentPopup?.dismiss()
     }
 
-    override fun onBackPressed() {
-        if (currentPopup != null) {
-            currentPopup?.dismiss()
-            currentPopup = null
+    private fun calculateReceiptTotalPrice(receipts: List<Receipt>) {
+        var total = 0f
+        for (receipt in receipts) {
+            total += receipt.receiptPrice
         }
-        else {
-            onBackPressedDispatcher.onBackPressed()
-        }
+
+        receiptPriceText.text = resources.getString(R.string.receipt_list_total_price, total)
     }
 
     private fun createPopup(startDate: Boolean) {
