@@ -31,7 +31,7 @@ class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(Re
         fun bind(product: Product, context: ReceiptInfoActivity) {
             productNameView.text = product.productName
             productCategoryView.text = product.productCategory
-            productPriceView.text = product.productPrice.toString()
+            productPriceView.text = String.format("%.2f €", product.productPrice)
         }
 
         companion object {

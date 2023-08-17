@@ -5,8 +5,8 @@
     <string name="generic_reply_negative">Peruuta</string>
     <string name="generic_reply_clear">Tyhjennä</string>
     <string name="generic_reply_undo">Kumoa</string>
-    <string name="receipt_total_price">Summa kuitilla: %1$s €</string>
-    <string name="receipt_list_total_price">Kuittien kokonaissumma: %1$02f €</string>
+    <string name="receipt_total_price">Summa kuitilla: %1$.2f €</string>
+    <string name="receipt_list_total_price">Kuittien kokonaissumma: %1$.2f €</string>
     <string name="receipt_save_successful">Kuitin tallennus onnistui!</string>
     <string name="receipt_list_start_date">Kuitit alkaen</string>
     <string name="receipt_list_end_date">Kuitit loppuen</string>
@@ -27,7 +27,7 @@
     <string name="load_save_receipt">Tallennetaan kuittia…</string>
     <string name="product_list_limit_category">Näytettävät kategoriat</string>
     <string name="spending_time_range">%1$s - %2$s</string>
-    <string name="spending_total_price">Yhteensä: %1$02d €</string>
+    <string name="spending_total_price">Yhteensä: %1$.2f €</string>
     <string name="spending_alert_positive">Jatka</string>
     <string name="spending_alert_negative">Peruuta</string>
     <string name="spending_time_warning">Pitkällä aikavälillä haku voi kestää kauan.

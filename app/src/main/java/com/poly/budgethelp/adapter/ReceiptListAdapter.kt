@@ -33,9 +33,9 @@ class ReceiptListAdapter : ListAdapter<Receipt, ReceiptListAdapter.ReceiptViewHo
         fun bind(receipt: Receipt, baseContext: ReceiptListActivity) {
             receiptNameView.text = receipt.receiptName
             receiptDateView.text = DateUtils.longToDateString(receipt.receiptDate)
-            receiptPriceView.text = receipt.receiptPrice.toString()
+            receiptPriceView.text = String.format("%.2f €", receipt.receiptPrice)
 
-            receiptListItemLayout.setOnClickListener {view ->
+            receiptListItemLayout.setOnClickListener {_ ->
                 baseContext.startReceiptInfoActivity(receipt)
             }
         }

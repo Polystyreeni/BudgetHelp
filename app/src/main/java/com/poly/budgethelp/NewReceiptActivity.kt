@@ -267,7 +267,7 @@ class NewReceiptActivity : AppCompatActivity() {
             price += product.productPrice
         }
 
-        totalPriceText.text = resources.getString(R.string.receipt_total_price, price.toString())
+        totalPriceText.text = resources.getString(R.string.receipt_total_price, price)
         receiptPrice = price
     }
 

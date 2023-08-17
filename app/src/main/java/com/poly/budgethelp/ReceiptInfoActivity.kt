@@ -91,7 +91,7 @@ class ReceiptInfoActivity : AppCompatActivity() {
                 productAdapter.submitList(r.products)
                 receiptNameView.text = r.receipt.receiptName
                 receiptDateView.text = DateUtils.longToDateString(r.receipt.receiptDate)
-                receiptPriceView.text = resources.getString(R.string.receipt_total_price, r.receipt.receiptPrice.toString())
+                receiptPriceView.text = resources.getString(R.string.receipt_total_price, r.receipt.receiptPrice)
             }
         }
     }
