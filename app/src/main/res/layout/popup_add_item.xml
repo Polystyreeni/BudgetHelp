@@ -12,9 +12,10 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/addItemPopupHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lisää tuote"
+        android:text="@string/new_product_header"
         android:layout_gravity="center"
         android:padding="6dp"
         android:layout_marginBottom="20dp"
@@ -29,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
-        android:hint="Tuotenimi..." />
+        android:hint="@string/new_product_name" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -39,7 +40,7 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         android:layout_marginBottom="10dp"
-        android:text="Kategoria:" />
+        android:text="@string/new_product_category" />
 
     <Spinner
         android:id="@+id/addProductCategorySpinner"
@@ -57,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:inputType="numberDecimal"
-        android:hint="Hinta..." />
+        android:hint="@string/new_product_price" />
 
     <Button
         android:id="@+id/addProductConfirmButton"
@@ -65,7 +66,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginVertical="10dp"
-        android:text="Lisää" />
-
-
+        android:text="@string/new_product_confirm" />
 </LinearLayout>

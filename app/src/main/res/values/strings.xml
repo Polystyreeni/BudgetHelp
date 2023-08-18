@@ -43,6 +43,13 @@
         Tuote poistuu kuittilistoista, mutta kuittien kokonaissummat pysyvät ennallaan</string>
     <string name="delete_receipt_header">Poista kuitti</string>
     <string name="delete_receipt_message">Haluatko varmasti poistaa tämän kuitin?</string>
+    <string name="new_product_name">Tuotenimi…</string>
+    <string name="new_product_category">Kategoria:</string>
+    <string name="new_product_price">Hinta…</string>
+    <string name="new_product_header">Lisää uusi tuote</string>
+    <string name="new_product_confirm">Lisää</string>
+    <string name="edit_product_header">Muokkaa tuotetta</string>
+    <string name="edit_product_confirm">Tallenna</string>
 
     <string-array name="spending_timestep_array">
         <item>Valitse aika-asteikko</item>
