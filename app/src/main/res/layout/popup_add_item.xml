@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
+        android:textAllCaps="true"
         android:hint="@string/new_product_name" />
 
     <TextView

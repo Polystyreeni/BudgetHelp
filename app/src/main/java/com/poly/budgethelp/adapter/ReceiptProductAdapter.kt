@@ -135,7 +135,7 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             Toast.LENGTH_SHORT).show()
                     }
                     else {
-                        val name: String = nameEditText.text.toString()
+                        val name: String = nameEditText.text.toString().uppercase()
                         val price: Float? = priceEditText.text.toString().toFloatOrNull()
                         val category: String = categorySpinner.selectedItem as String
 
@@ -222,7 +222,7 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             Toast.LENGTH_SHORT).show()
                     }
                     else {
-                        val name: String = nameEditText.text.toString()
+                        val name: String = nameEditText.text.toString().uppercase()
                         val price: Float? = priceEditText.text.toString().toFloatOrNull()
                         val category: String = categorySpinner.selectedItem as String
                         if (price != null) {

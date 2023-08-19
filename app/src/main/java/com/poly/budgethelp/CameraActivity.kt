@@ -265,7 +265,7 @@ class CameraActivity : AppCompatActivity() {
         for(pair in itemWithPrice) {
             productCount++
             Log.d(TAG, pair.first + " : " + pair.second)
-            builder.append(pair.first).append(":").append(pair.second).append(System.lineSeparator())
+            builder.append(pair.first.uppercase()).append(":").append(pair.second).append(System.lineSeparator())
         }
 
         createAlert(productCount, builder)
