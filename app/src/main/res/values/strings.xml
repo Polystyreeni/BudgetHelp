@@ -5,8 +5,8 @@
     <string name="generic_reply_negative">Peruuta</string>
     <string name="generic_reply_clear">Tyhjennä</string>
     <string name="generic_reply_undo">Kumoa</string>
-    <string name="receipt_total_price">Summa kuitilla: %1$.2f €</string>
-    <string name="receipt_list_total_price">Kuittien kokonaissumma: %1$.2f €</string>
+    <string name="receipt_total_price">Summa kuitilla: %1$.2f %2$s</string>
+    <string name="receipt_list_total_price">Kuittien kokonaissumma: %1$.2f %2$s</string>
     <string name="receipt_save_successful">Kuitin tallennus onnistui!</string>
     <string name="receipt_list_start_date">Kuitit alkaen</string>
     <string name="receipt_list_end_date">Kuitit loppuen</string>
@@ -21,13 +21,15 @@
     <string name="error_no_start_date">Alkupäivämäärää ei ole asetettu!</string>
     <string name="error_no_end_date">Loppupäivämäärää ei ole asetettu!</string>
     <string name="error_no_timestep">Aikaväliä ei ole määritetty</string>
+    <string name="error_empty_word_to_ignore">Tyhjää sanaa ei voi lisätä!</string>
+    <string name="error_word_to_ignore_exists">Tämä sana on jo lisätty!</string>
     <string name="receipt_info_products">Tuotteet kuitilla:</string>
     <string name="hint_receipt_date">Kuitin päivämäärä</string>
     <string name="load_process_camera_image">Luetaan tekstiä…</string>
     <string name="load_save_receipt">Tallennetaan kuittia…</string>
     <string name="product_list_limit_category">Näytettävät kategoriat</string>
     <string name="spending_time_range">%1$s - %2$s</string>
-    <string name="spending_total_price">Yhteensä: %1$.2f €</string>
+    <string name="spending_total_price">Yhteensä: %1$.2f %2$s</string>
     <string name="spending_alert_positive">Jatka</string>
     <string name="spending_alert_negative">Peruuta</string>
     <string name="spending_time_warning">Pitkällä aikavälillä haku voi kestää kauan.
@@ -50,6 +52,21 @@
     <string name="new_product_confirm">Lisää</string>
     <string name="edit_product_header">Muokkaa tuotetta</string>
     <string name="edit_product_confirm">Tallenna</string>
+    <string name="settings_header">Asetukset</string>
+    <string name="settings_header_general">Yleiset</string>
+    <string name="settings_header_camera">Kuitin lukuasetukset</string>
+    <string name="setting_user_name_header">Käyttäjänimi</string>
+    <string name="setting_user_name_hint">Käyttäjänimi…</string>
+    <string name="setting_currency_header">Valuutta:</string>
+    <string name="setting_max_price_header">Maksimihinta:</string>
+    <string name="setting_max_price_hint">Maksimihinta…</string>
+    <string name="setting_vertical_offset_header">Pystysuunt. virhemarginaali (pikseliä):</string>
+    <string name="setting_vertical_offset_hint">Virhemarginaali…</string>
+    <string name="setting_words_to_ignore_hint">Ohitettavat sanat:</string>
+    <string name="setting_words_to_ignore_description">Kuiteissa esiintyviä sanoja, joita ei haluta
+        tulkita tuotteeksi (esimerkiksi "Yhteensä", "KPL" jne.)</string>
+    <string name="word_to_ignore_add_header">Uusi ohitettava sana</string>
+    <string name="word_to_ignore_add_hint">Sana…</string>
 
     <string-array name="spending_timestep_array">
         <item>Valitse aika-asteikko</item>
@@ -69,5 +86,10 @@
         <item>Lokakuu</item>
         <item>Marraskuu</item>
         <item>Joulukuu</item>
+    </string-array>
+    <string-array name="settings_currency_symbol">
+        <item>€</item>
+        <item>$</item>
+        <item>£</item>
     </string-array>
 </resources>

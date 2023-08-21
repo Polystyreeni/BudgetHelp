@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.ProductListActivity
 import com.poly.budgethelp.R
 import com.poly.budgethelp.ReceiptInfoActivity
+import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.data.Product
 import com.poly.budgethelp.utility.ActivityUtils
 
@@ -40,7 +41,7 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
 
             nameTextView.text = product.productName
             categoryTextView.text = product.productCategory
-            priceTextView.text = String.format("%.2f %s", product.productPrice, "€")
+            priceTextView.text = String.format("%.2f %s", product.productPrice, UserConfig.currency)
 
             deleteButton.setOnClickListener { _ ->
                 baseContext.requestDeleteProduct(product)

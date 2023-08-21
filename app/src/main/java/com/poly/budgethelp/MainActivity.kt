@@ -1,9 +1,7 @@
 package com.poly.budgethelp
 
-import android.R.attr.data
 import android.content.Intent
 import android.os.Bundle
-import android.provider.AlarmClock.EXTRA_MESSAGE
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -15,14 +13,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
+import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.ui.theme.BudgetHelpTheme
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val configExists: Boolean = UserConfig.readConfig(this)
+        if (!configExists) {
+            startSettingsActivity()
+        }
+
         setContent {
             BudgetHelpTheme {
                 // A surface container using the 'background' color from the theme
@@ -61,6 +64,11 @@ class MainActivity : ComponentActivity() {
         this.startActivity(intent)
     }
 
+    private fun startSettingsActivity() {
+        val intent = Intent(this, UserSettingsActivity::class.java)
+        this.startActivity(intent)
+    }
+
     @Composable
     fun Greeting(name: String, modifier: Modifier = Modifier) {
         Column {
@@ -82,6 +90,9 @@ class MainActivity : ComponentActivity() {
             }
             Button(onClick = { startSpendingActivity() }) {
                 Text(text = "Spending")
+            }
+            Button(onClick = { startSettingsActivity() }) {
+                Text(text = "Settings")
             }
         }
     }

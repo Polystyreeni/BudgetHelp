@@ -14,7 +14,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Uusi kategoria"
+        android:text="@string/word_to_ignore_add_header"
         android:layout_gravity="center"
         android:padding="6dp"
         android:layout_marginBottom="20dp"
@@ -24,18 +24,19 @@
         />
 
     <EditText
-        android:id="@+id/addCategoryNameEditText"
+        android:id="@+id/addWordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:inputType="text"
-        android:hint="Kategorian nimi..." />
+        android:textAllCaps="true"
+        android:hint="@string/word_to_ignore_add_hint" />
 
     <Button
-        android:id="@+id/addCategoryConfirmButton"
+        android:id="@+id/addWordConfirmButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginVertical="10dp"
-        android:text="Lisää" />
+        android:text="@string/camera_alert_positive" />
 </LinearLayout>

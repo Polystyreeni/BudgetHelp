@@ -49,6 +49,7 @@ import kotlin.math.abs
 import androidx.activity.addCallback
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
+import com.poly.budgethelp.config.UserConfig
 
 class NewReceiptActivity : AppCompatActivity() {
 
@@ -267,7 +268,7 @@ class NewReceiptActivity : AppCompatActivity() {
             price += product.productPrice
         }
 
-        totalPriceText.text = resources.getString(R.string.receipt_total_price, price)
+        totalPriceText.text = resources.getString(R.string.receipt_total_price, price, UserConfig.currency)
         receiptPrice = price
     }
 

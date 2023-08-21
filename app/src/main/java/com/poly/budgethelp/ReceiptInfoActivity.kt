@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.adapter.ProductAdapter
+import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.utility.DateUtils
 import com.poly.budgethelp.viewmodel.CategoryViewModel
 import com.poly.budgethelp.viewmodel.CategoryViewModelFactory
@@ -91,7 +92,7 @@ class ReceiptInfoActivity : AppCompatActivity() {
                 productAdapter.submitList(r.products)
                 receiptNameView.text = r.receipt.receiptName
                 receiptDateView.text = DateUtils.longToDateString(r.receipt.receiptDate)
-                receiptPriceView.text = resources.getString(R.string.receipt_total_price, r.receipt.receiptPrice)
+                receiptPriceView.text = resources.getString(R.string.receipt_total_price, r.receipt.receiptPrice, UserConfig.currency)
             }
         }
     }

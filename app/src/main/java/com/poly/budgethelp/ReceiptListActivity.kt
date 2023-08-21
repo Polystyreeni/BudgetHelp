@@ -16,6 +16,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.adapter.ReceiptListAdapter
+import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.data.Receipt
 import com.poly.budgethelp.viewmodel.ReceiptViewModel
 import com.poly.budgethelp.viewmodel.ReceiptViewModelFactory
@@ -52,7 +53,7 @@ class ReceiptListActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        receiptPriceText.text = resources.getString(R.string.receipt_list_total_price, 0f)
+        receiptPriceText.text = resources.getString(R.string.receipt_list_total_price, 0f, UserConfig.currency)
 
         receiptViewModel.allReceipts.observe(this) {receipts ->
             receipts.let {
@@ -94,7 +95,7 @@ class ReceiptListActivity : AppCompatActivity() {
             total += receipt.receiptPrice
         }
 
-        receiptPriceText.text = resources.getString(R.string.receipt_list_total_price, total)
+        receiptPriceText.text = resources.getString(R.string.receipt_list_total_price, total, UserConfig.currency)
     }
 
     private fun createPopup(startDate: Boolean) {

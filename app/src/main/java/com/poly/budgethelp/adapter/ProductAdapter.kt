@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.R
 import com.poly.budgethelp.ReceiptInfoActivity
+import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.data.Product
 
 class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ReceiptsComparator()) {
@@ -31,7 +32,7 @@ class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(Re
         fun bind(product: Product, context: ReceiptInfoActivity) {
             productNameView.text = product.productName
             productCategoryView.text = product.productCategory
-            productPriceView.text = String.format("%.2f €", product.productPrice)
+            productPriceView.text = String.format("%.2f %s", product.productPrice, UserConfig.currency)
         }
 
         companion object {

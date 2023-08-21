@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="220dp"
+    android:minHeight="300dp"
+    android:paddingHorizontal="5dp"
+    android:background="@drawable/rounded_corner"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/addItemPopupHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/setting_words_to_ignore_hint"
+        android:layout_gravity="center"
+        android:padding="6dp"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/setting_words_to_ignore_description"
+        android:layout_gravity="center"
+        android:textSize="12sp"
+        android:textColor="@color/black"
+        android:layout_marginBottom="6dp"
+        android:textAlignment="center"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/wordsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/item_word_to_ignore"
+        android:padding="6dp" />
+    <Button
+        android:id="@+id/wordsAddNewButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:text="@string/camera_alert_positive"
+        />
+</LinearLayout>

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.R
 import com.poly.budgethelp.ReceiptListActivity
+import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.data.Receipt
 import com.poly.budgethelp.utility.DateUtils
 
@@ -33,7 +34,7 @@ class ReceiptListAdapter : ListAdapter<Receipt, ReceiptListAdapter.ReceiptViewHo
         fun bind(receipt: Receipt, baseContext: ReceiptListActivity) {
             receiptNameView.text = receipt.receiptName
             receiptDateView.text = DateUtils.longToDateString(receipt.receiptDate)
-            receiptPriceView.text = String.format("%.2f €", receipt.receiptPrice)
+            receiptPriceView.text = String.format("%.2f %s", receipt.receiptPrice, UserConfig.currency)
 
             receiptListItemLayout.setOnClickListener {_ ->
                 baseContext.startReceiptInfoActivity(receipt)
