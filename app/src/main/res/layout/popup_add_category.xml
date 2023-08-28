@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:inputType="text"
-        android:hint="Kategorian nimi..." />
+        android:hint="@string/header_receipt_category" />
 
     <Button
         android:id="@+id/addCategoryConfirmButton"
@@ -37,5 +37,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginVertical="10dp"
-        android:text="Lisää" />
+        android:text="@string/new_product_confirm" />
 </LinearLayout>

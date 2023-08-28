@@ -163,6 +163,7 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun bind(item: AddItem) {
             val newButton: TextView = itemView.findViewById(R.id.productNameTextView)
             newButton.setOnClickListener {
+                item.context.disableSoftKeyboard()
                 val popupData = ActivityUtils.createPopup(R.layout.popup_add_item, item.context)
                 popupData.second.isFocusable = true
                 popupData.second.update()

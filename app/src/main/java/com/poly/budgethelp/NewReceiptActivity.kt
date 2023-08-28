@@ -110,11 +110,7 @@ class NewReceiptActivity : AppCompatActivity() {
         receiptDateButton.setOnClickListener {_ ->
             // Some hackery for hiding soft keyboard
             // https://stackoverflow.com/questions/1109022/how-to-close-hide-the-android-soft-keyboard-programmatically
-            this.currentFocus?.let { view ->
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                imm?.hideSoftInputFromWindow(view.windowToken, 0)
-            }
-
+            disableSoftKeyboard()
             createCalendarPopup()
         }
 
@@ -260,6 +256,16 @@ class NewReceiptActivity : AppCompatActivity() {
         val latest = currentPopups[currentPopups.size - 1]
         latest.dismiss()
         currentPopups.remove(latest)
+    }
+
+    fun disableSoftKeyboard() {
+        // Some hackery for hiding soft keyboard
+        // https://stackoverflow.com/questions/1109022/how-to-close-hide-the-android-soft-keyboard-programmatically
+        this.currentFocus?.let { view ->
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+        this.currentFocus?.clearFocus()
     }
 
     private fun calculateTotalPrice() {
