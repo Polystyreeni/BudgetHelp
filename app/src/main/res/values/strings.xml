@@ -23,6 +23,8 @@
     <string name="error_no_timestep">Aikaväliä ei ole määritetty</string>
     <string name="error_empty_word_to_ignore">Tyhjää sanaa ei voi lisätä!</string>
     <string name="error_word_to_ignore_exists">Tämä sana on jo lisätty!</string>
+    <string name="error_update_info_failed">Versiotiedon haku epäonnistui!</string>
+    <string name="error_update_message_failed">Viestipalveluun ei saatu yhteyttä!</string>
     <string name="receipt_info_products">Tuotteet kuitilla:</string>
     <string name="hint_receipt_date">Kuitin päivämäärä</string>
     <string name="load_process_camera_image">Luetaan tekstiä…</string>
@@ -67,6 +69,13 @@
         tulkita tuotteeksi (esimerkiksi "Yhteensä", "KPL" jne.)</string>
     <string name="word_to_ignore_add_header">Uusi ohitettava sana</string>
     <string name="word_to_ignore_add_hint">Sana…</string>
+    <string name="app_update_header">Päivitys saatavilla!</string>
+    <string name="app_update_info">Sovelluksen toiminnallisuus ja käytettävyys on läpikäynyt kehitystä.
+        \nUuden version voi ladata alla olevasta linkistä (etsi oikea versio ja lataa .apk-päätteinen tiedosto)</string>
+    <string name="app_update_version_compare">Asennettu versio: %1$s | Uusin versio: %2$s</string>
+    <string name="app_update_decline">EnVitussa</string>
+    <string name="app_update_changelog_header">Mitä uutta?</string>
+    <string name="app_update_changelog_version">Versio %1$s</string>
 
     <string-array name="spending_timestep_array">
         <item>Valitse aika-asteikko</item>

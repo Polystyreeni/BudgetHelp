@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+version.txt
+updatemessage.txt
+notes.txt

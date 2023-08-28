@@ -112,4 +112,7 @@ dependencies {
     // Livedata
     def live_data_version ="2.4.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$live_data_version"
+
+    // Volley
+    implementation 'com.android.volley:volley:1.2.1'
 }

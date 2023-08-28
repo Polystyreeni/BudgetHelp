@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/rounded_corner_no_border"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="220dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:layout_marginHorizontal="5dp"
+        android:textAlignment="center"
+        android:text="@string/app_update_changelog_header"
+        />
+
+    <TextView
+        android:id="@+id/updateVersionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:layout_marginVertical="5dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:text="@string/app_update_changelog_version"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minHeight="200dp"
+        >
+        <TextView
+            android:id="@+id/updateChangeLogText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="5dp"
+            android:textAlignment="center"
+            />
+    </ScrollView>
+
+    <Button
+        android:id="@+id/updateChangelogButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginVertical="10dp"
+        android:text="@string/generic_reply_positive" />
+</LinearLayout>
