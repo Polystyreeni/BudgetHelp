@@ -178,7 +178,11 @@ class NewReceiptActivity : AppCompatActivity() {
 
         val saveButton: Button = findViewById(R.id.newReceiptSaveButton)
         saveButton.setOnClickListener {_ ->
-            lifecycleScope.launch {saveReceipt()}
+            if (productsInReceipt.size <= 0) {
+                Toast.makeText(this, resources.getString(R.string.error_no_products_in_receipt), Toast.LENGTH_SHORT).show()
+            } else {
+                lifecycleScope.launch {saveReceipt()}
+            }
         }
 
         onBackPressedDispatcher.addCallback(this) {
@@ -287,7 +291,6 @@ class NewReceiptActivity : AppCompatActivity() {
 
     private suspend fun saveReceipt() {
         checkInput()
-
         createLoadPopup()
 
         Log.d(TAG, "Begin receipt save")

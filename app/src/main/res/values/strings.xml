@@ -21,6 +21,7 @@
     <string name="header_new_category">Uusi kategoria</string>
     <string name="header_new_receipt">Uusi kuitti</string>
     <string name="error_no_text_found">Yhtään tuotetta ei näkynyt!</string>
+    <string name="error_no_products_in_receipt">Tyhjää kuittia ei voi tallentaa!</string>
     <string name="error_empty_product">Tyhjää ei voi ostaa!</string>
     <string name="error_no_price">Tuotteella ei ole hintaa!</string>
     <string name="error_invalid_price">Tuotteen hinta on virheellinen!</string>
