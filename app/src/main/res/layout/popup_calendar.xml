@@ -15,7 +15,6 @@
         android:textColor="@color/black"
         android:layout_marginVertical="5dp"
         android:textAlignment="center"
-        android:text="ASETA_AIKA_OTSIKKO"
         />
     <CalendarView
         android:id="@+id/calendarPopupView"

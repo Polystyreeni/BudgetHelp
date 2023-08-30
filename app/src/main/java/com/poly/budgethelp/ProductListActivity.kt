@@ -3,6 +3,7 @@ package com.poly.budgethelp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -119,6 +120,13 @@ class ProductListActivity : AppCompatActivity() {
                 activePopup?.dismiss()
                 activePopup = null
             } else {
+                finish()
+            }
+        }
+
+        val returnButton: View = findViewById(R.id.productListReturnButton)
+        returnButton.setOnClickListener {_ ->
+            if (activePopup == null) {
                 finish()
             }
         }

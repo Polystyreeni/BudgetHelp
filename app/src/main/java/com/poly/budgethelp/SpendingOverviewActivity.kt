@@ -111,12 +111,19 @@ class SpendingOverviewActivity : AppCompatActivity() {
         val startEdit: EditText = findViewById(R.id.spendingStartDate)
         val endEdit: EditText = findViewById(R.id.spendingEndDate)
 
-        startEdit.setOnClickListener {view ->
+        startEdit.setOnClickListener {_ ->
             createPopup(true, startEdit)
         }
 
-        endEdit.setOnClickListener {view ->
+        endEdit.setOnClickListener {_ ->
             createPopup(false, endEdit)
+        }
+
+        val returnButton: View = findViewById(R.id.spendingReturnButton)
+        returnButton.setOnClickListener {_ ->
+            if (currentPopup == null) {
+                finish()
+            }
         }
     }
 

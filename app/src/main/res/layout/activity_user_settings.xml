@@ -70,6 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/setting_user_name_hint"
+                android:autofillHints="username"
                 />
             <TextView
                 android:layout_width="match_parent"
@@ -114,7 +115,7 @@
                 android:inputType="numberDecimal"
                 android:layout_marginBottom="4dp"
                 android:hint="@string/setting_max_price_hint"
-                />
+                android:autofillHints="" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,6 +130,7 @@
                 android:inputType="numberDecimal"
                 android:layout_marginBottom="4dp"
                 android:hint="@string/setting_vertical_offset_hint"
+                android:autofillHints=""
                 />
             <TextView
                 android:layout_width="match_parent"
@@ -142,7 +144,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:focusable="false"
-                android:hint="@string/setting_words_to_ignore_hint"/>
+                android:hint="@string/setting_words_to_ignore_hint"
+                android:autofillHints=""/>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

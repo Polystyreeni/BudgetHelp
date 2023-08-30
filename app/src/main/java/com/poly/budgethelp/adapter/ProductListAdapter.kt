@@ -36,8 +36,8 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
             val nameTextView: TextView = itemView.findViewById(R.id.productNameTextView)
             val categoryTextView: TextView = itemView.findViewById(R.id.productCategoryTextView)
             val priceTextView: TextView = itemView.findViewById(R.id.productPriceTextView)
-            val editButton: TextView = itemView.findViewById(R.id.productEditButton)
-            val deleteButton: TextView = itemView.findViewById(R.id.productDeleteButton)
+            val editButton: View = itemView.findViewById(R.id.productEditButton)
+            val deleteButton: View = itemView.findViewById(R.id.productDeleteButton)
 
             nameTextView.text = product.productName
             categoryTextView.text = product.productCategory

@@ -191,6 +191,13 @@ class NewReceiptActivity : AppCompatActivity() {
                 finish()
             }
         }
+
+        val returnButton: View = findViewById(R.id.newReceiptReturnButton)
+        returnButton.setOnClickListener {_ ->
+            if (currentPopups.size <= 0) {
+                finish()
+            }
+        }
     }
 
     override fun onDestroy() {

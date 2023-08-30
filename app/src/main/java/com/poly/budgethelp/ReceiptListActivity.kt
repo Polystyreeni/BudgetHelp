@@ -66,11 +66,13 @@ class ReceiptListActivity : AppCompatActivity() {
         dateEndEdit = findViewById(R.id.receiptListEndEdit)
 
         dateStartEdit.setOnClickListener {_ ->
-            createPopup(true)
+            if (currentPopup == null)
+                createPopup(true)
         }
 
         dateEndEdit.setOnClickListener {_ ->
-            createPopup(false)
+            if (currentPopup == null)
+                createPopup(false)
         }
 
         onBackPressedDispatcher.addCallback(this) {
@@ -79,6 +81,13 @@ class ReceiptListActivity : AppCompatActivity() {
                 currentPopup = null
             }
             else {
+                finish()
+            }
+        }
+
+        val returnButton: View = findViewById(R.id.receiptListReturnButton)
+        returnButton.setOnClickListener {_ ->
+            if (currentPopup == null) {
                 finish()
             }
         }

@@ -30,5 +30,11 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         android:text="123,45 €"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.5"
+        android:layout_marginVertical="6dp"
+        android:background="@color/black"/>
 
 </LinearLayout>

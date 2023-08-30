@@ -7,11 +7,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <View
+        android:id="@+id/receiptListReturnButton"
+        android:background="@drawable/baseline_arrow_back_24"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:layout_marginHorizontal="5dp"
+        android:textColor="@color/black"
+        />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Kuittihistoria"
-        android:textSize="24dp"
+        android:text="@string/header_receipt_list"
+        android:textSize="24sp"
+        android:textStyle="bold"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:gravity="center"
@@ -29,7 +40,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Rajaa hakua"
+        android:text="@string/receipt_list_limit_time"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="12sp"/>
@@ -47,7 +58,7 @@
             android:minWidth="180dp"
             android:inputType="datetime"
             android:focusable="false"
-            android:hint="Alkupvm..."/>
+            android:hint="@string/receipt_list_start_date"/>
         <EditText
             android:id="@+id/receiptListEndEdit"
             android:layout_width="wrap_content"
@@ -55,7 +66,7 @@
             android:minWidth="180dp"
             android:inputType="datetime"
             android:focusable="false"
-            android:hint="Loppupvm..."/>
+            android:hint="@string/receipt_list_end_date"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

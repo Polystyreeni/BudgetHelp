@@ -1,16 +1,11 @@
 package com.poly.budgethelp.adapter
 
-import android.content.Context
-import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.PopupWindow
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -68,7 +63,7 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val nameTextView: TextView = itemView.findViewById(R.id.productNameTextView)
             val categoryTextView: TextView = itemView.findViewById(R.id.productCategoryTextView)
             val priceTextView: TextView = itemView.findViewById(R.id.productPriceTextView)
-            val editButton: TextView = itemView.findViewById(R.id.productEditButton)
+            val editButton: View = itemView.findViewById(R.id.productEditButton)
 
             nameTextView.text = item.product.productName
             categoryTextView.text = item.product.productCategory

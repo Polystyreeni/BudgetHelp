@@ -5,14 +5,21 @@
     <string name="generic_reply_negative">Peruuta</string>
     <string name="generic_reply_clear">Tyhjennä</string>
     <string name="generic_reply_undo">Kumoa</string>
+    <string name="receipt_date_hint">Päivämäärä…</string>
+    <string name="receipt_name_hint">Kuitin nimi…</string>
+    <string name="receipt_save_button">Tallenna kuitti</string>
     <string name="receipt_total_price">Summa kuitilla: %1$.2f %2$s</string>
     <string name="receipt_list_total_price">Kuittien kokonaissumma: %1$.2f %2$s</string>
     <string name="receipt_save_successful">Kuitin tallennus onnistui!</string>
+    <string name="receipt_list_limit_time">Rajaa hakua:</string>
     <string name="receipt_list_start_date">Kuitit alkaen</string>
     <string name="receipt_list_end_date">Kuitit loppuen</string>
     <string name="header_receipt_name">Tuotenimi</string>
     <string name="header_receipt_category">Kategoria</string>
     <string name="header_receipt_price">Hinta</string>
+    <string name="header_receipt_list">Kuittihistoria</string>
+    <string name="header_new_category">Uusi kategoria</string>
+    <string name="header_new_receipt">Uusi kuitti</string>
     <string name="error_no_text_found">Yhtään tuotetta ei näkynyt!</string>
     <string name="error_empty_product">Tyhjää ei voi ostaa!</string>
     <string name="error_no_price">Tuotteella ei ole hintaa!</string>
@@ -26,16 +33,21 @@
     <string name="error_update_info_failed">Versiotiedon haku epäonnistui!</string>
     <string name="error_update_message_failed">Viestipalveluun ei saatu yhteyttä!</string>
     <string name="receipt_info_products">Tuotteet kuitilla:</string>
-    <string name="hint_receipt_date">Kuitin päivämäärä</string>
+    <string name="hint_receipt_date">Kuitin päivämäärä…</string>
+    <string name="hint_product_name">Tuotenimi…</string>
+    <string name="hint_product_price">Hinta…</string>
     <string name="load_process_camera_image">Luetaan tekstiä…</string>
     <string name="load_save_receipt">Tallennetaan kuittia…</string>
     <string name="product_list_limit_category">Näytettävät kategoriat</string>
+    <string name="spending_activity_header">Kulutustarkastelu</string>
+    <string name="spending_activity_info">Tarkastele kulutusta kategorian mukaan. Valitse aikaväli ja jakson pituus</string>
     <string name="spending_time_range">%1$s - %2$s</string>
     <string name="spending_total_price">Yhteensä: %1$.2f %2$s</string>
     <string name="spending_alert_positive">Jatka</string>
     <string name="spending_alert_negative">Peruuta</string>
     <string name="spending_time_warning">Pitkällä aikavälillä haku voi kestää kauan.
         Haluatko varmasti jatkaa?</string>
+    <string name="spending_generate_overview">Muodosta yhteenveto</string>
     <string name="camera_reading_complete">Kuitti luettu</string>
     <string name="camera_number_of_items">Löydettiin %1$d tuotetta kuitilta.
         Lisätäänkö tuotteet uudelle kuitille?</string>
@@ -76,6 +88,7 @@
     <string name="app_update_decline">EnVitussa</string>
     <string name="app_update_changelog_header">Mitä uutta?</string>
     <string name="app_update_changelog_version">Versio %1$s</string>
+    <string name="camera_orientation_hint">Pyri ottamaan kuva mahdollisimman suorassa.</string>
 
     <string-array name="spending_timestep_array">
         <item>Valitse aika-asteikko</item>

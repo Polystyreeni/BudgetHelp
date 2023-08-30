@@ -3,6 +3,7 @@ package com.poly.budgethelp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.TextView
@@ -32,7 +33,7 @@ class ReceiptInfoActivity : AppCompatActivity() {
     private lateinit var receiptNameView: TextView
     private lateinit var receiptDateView: TextView
     private lateinit var receiptPriceView: TextView
-    private lateinit var returnButton: TextView
+    private lateinit var returnButton: View
     private lateinit var deleteButton: Button
 
     // View models
