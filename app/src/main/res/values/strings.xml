@@ -55,7 +55,7 @@
     <string name="camera_alert_positive">Lisää</string>
     <string name="camera_alert_negative">Peruuta</string>
     <string name="delete_from_new_receipt">Poistettiin %1$s</string>
-    <string name="delete_product_header">Poista tuote</string>
+    <string name="delete_product_header">Poista tuote %1$s</string>
     <string name="delete_product_message">Haluatko varmasti poistaa tuotteen?
         Tuote poistuu kuittilistoista, mutta kuittien kokonaissummat pysyvät ennallaan</string>
     <string name="delete_receipt_header">Poista kuitti</string>

@@ -16,7 +16,7 @@ class VersionManager {
         }
     }
     companion object {
-        private const val VERSION_URL: String = "DUMMY_REPLACE_ME"
+        private const val VERSION_URL: String = "https://drive.google.com/uc?export=download&id=1DmYsg4Gg9dYsCpBpEHakehx-t8dJKrX1"
         const val RELEASE_URL: String = "GITHUB_LINK_HERE"
 
         var currentVersion: Version = Version(1, 0, 0)
