@@ -20,6 +20,10 @@ class CategoryViewModel(private val repository: CategoryRepository): ViewModel()
         val toAdd = Category(category.categoryName.uppercase())
         repository.insert(toAdd)
     }
+
+    fun delete(categoryName: String) = viewModelScope.launch {
+        repository.delete(categoryName)
+    }
 }
 
 class CategoryViewModelFactory (private val repository: CategoryRepository) : ViewModelProvider.Factory {

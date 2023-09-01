@@ -11,4 +11,9 @@ class CategoryRepository(private val categoryDao: CategoryDao) {
     suspend fun insert(category: Category) {
         categoryDao.insert(category)
     }
+
+    @WorkerThread
+    suspend fun delete(name: String) {
+        categoryDao.delete(name)
+    }
 }

@@ -22,6 +22,9 @@
         android:theme="@style/Theme.BudgetHelp"
         tools:targetApi="31">
         <activity
+            android:name=".CategoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".UserSettingsActivity"
             android:exported="false" />
         <activity

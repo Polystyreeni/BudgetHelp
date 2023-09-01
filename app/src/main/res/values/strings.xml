@@ -19,7 +19,9 @@
     <string name="header_receipt_price">Hinta</string>
     <string name="header_receipt_list">Kuittihistoria</string>
     <string name="header_new_category">Uusi kategoria</string>
+    <string name="header_modify_category">Muokkaa kategoriaa</string>
     <string name="header_new_receipt">Uusi kuitti</string>
+    <string name="header_all_categories">Kaikki kategoriat</string>
     <string name="error_no_text_found">Yhtään tuotetta ei näkynyt!</string>
     <string name="error_no_products_in_receipt">Tyhjää kuittia ei voi tallentaa!</string>
     <string name="error_empty_product">Tyhjää ei voi ostaa!</string>
@@ -33,12 +35,17 @@
     <string name="error_word_to_ignore_exists">Tämä sana on jo lisätty!</string>
     <string name="error_update_info_failed">Versiotiedon haku epäonnistui!</string>
     <string name="error_update_message_failed">Viestipalveluun ei saatu yhteyttä!</string>
+    <string name="error_delete_default_category">Vakiokategoriaa ei voida poistaa!</string>
+    <string name="error_modify_default_category">Vakiokategoriaa ei voida muokata!</string>
     <string name="receipt_info_products">Tuotteet kuitilla:</string>
     <string name="hint_receipt_date">Kuitin päivämäärä…</string>
     <string name="hint_product_name">Tuotenimi…</string>
     <string name="hint_product_price">Hinta…</string>
     <string name="load_process_camera_image">Luetaan tekstiä…</string>
     <string name="load_save_receipt">Tallennetaan kuittia…</string>
+    <string name="load_modify_category">Muutetaan kategoriaa…</string>
+    <string name="load_delete_category">Poistetaan kategoriaa…</string>
+    <string name="load_update_products">Päivitetään tuotteita…</string>
     <string name="product_list_limit_category">Näytettävät kategoriat</string>
     <string name="spending_activity_header">Kulutustarkastelu</string>
     <string name="spending_activity_info">Tarkastele kulutusta kategorian mukaan. Valitse aikaväli ja jakson pituus</string>
@@ -90,6 +97,13 @@
     <string name="app_update_changelog_header">Mitä uutta?</string>
     <string name="app_update_changelog_version">Versio %1$s</string>
     <string name="camera_orientation_hint">Pyri ottamaan kuva mahdollisimman suorassa.</string>
+    <string name="category_delete_header">Poista kategoria</string>
+    <string name="category_delete_warning">Haluatko varmasti poistaa kategorian %1$s?
+        \nKaikki kategoriaan kuuluvat tuotteet siirretään kategoriaan %2$s.</string>
+    <string name="category_edit_header">Muuta kategoria</string>
+    <string name="category_edit_warning"><![CDATA[
+    Muutetaanko kategoria <i>%1$s</i> kategoriaksi <i>%2$s</i>?<br>Kaikki kategoriaan kuuluvat tuotteet siirretään uuteen kategoriaan.
+    ]]></string>
 
     <string-array name="spending_timestep_array">
         <item>Valitse aika-asteikko</item>

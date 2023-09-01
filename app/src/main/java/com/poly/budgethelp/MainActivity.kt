@@ -96,6 +96,11 @@ class MainActivity : ComponentActivity() {
         this.startActivity(intent)
     }
 
+    private fun startCategoryActivity() {
+        val intent = Intent(this, CategoryActivity::class.java)
+        this.startActivity(intent)
+    }
+
     fun onVersionRetrieved(current: VersionManager.Version, fetched: VersionManager.Version) {
         if (current == fetched)
             return
@@ -175,6 +180,9 @@ class MainActivity : ComponentActivity() {
             }
             Button(onClick = { startSpendingActivity() }) {
                 Text(text = "Spending")
+            }
+            Button(onClick = {startCategoryActivity()}) {
+                Text(text = "Categories")
             }
             Button(onClick = { startSettingsActivity() }) {
                 Text(text = "Settings")

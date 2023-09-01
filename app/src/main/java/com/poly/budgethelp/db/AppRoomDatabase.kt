@@ -34,6 +34,7 @@ abstract class AppRoomDatabase : RoomDatabase() {
         private var INSTANCE: AppRoomDatabase? = null
 
         val DEFAULT_CATEGORY: String = "MÄÄRITTELEMÄTÖN"
+        val ADD_CATEGORY_TEXT: String = "+"
 
         fun getDatabase(context: Context, scope: CoroutineScope): AppRoomDatabase {
             return INSTANCE ?: synchronized(this) {
