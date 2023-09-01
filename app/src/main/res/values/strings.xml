@@ -104,6 +104,8 @@
     <string name="category_edit_warning"><![CDATA[
     Muutetaanko kategoria <i>%1$s</i> kategoriaksi <i>%2$s</i>?<br>Kaikki kategoriaan kuuluvat tuotteet siirretään uuteen kategoriaan.
     ]]></string>
+    <string name="new_receipt_request_exit_header">Keskeytä kuitin luonti?</string>
+    <string name="new_receipt_request_exit_message">Kuitilla on %1$d tuotetta. Hylätäänkö kuitti?</string>
 
     <string-array name="spending_timestep_array">
         <item>Valitse aika-asteikko</item>

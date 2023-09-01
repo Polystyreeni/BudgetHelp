@@ -47,9 +47,11 @@ import java.util.Calendar
 import java.util.Date
 import kotlin.math.abs
 import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import com.poly.budgethelp.config.UserConfig
+import com.poly.budgethelp.utility.TextUtils
 
 class NewReceiptActivity : AppCompatActivity() {
 
@@ -123,7 +125,7 @@ class NewReceiptActivity : AppCompatActivity() {
             categories.let {
                 it.forEach { category -> categoryList.add(category.categoryName) }
                 // Sum character = add new category button
-                categoryList.add("+")
+                categoryList.add(AppRoomDatabase.ADD_CATEGORY_TEXT)
                 itemListAdapter.notifyDataSetChanged()
             }
         }
@@ -167,9 +169,9 @@ class NewReceiptActivity : AppCompatActivity() {
 
                 // Possibility to undo this delete action
                 Snackbar.make(recyclerView, resources.getString(R.string.delete_from_new_receipt, toDelete.product.productName), Snackbar.LENGTH_LONG)
-                    .setAction(resources.getString(R.string.generic_reply_undo), View.OnClickListener {
+                    .setAction(resources.getString(R.string.generic_reply_undo)) {
                         addProductAtPosition(toDelete.product, position)
-                    }).show()
+                    }.show()
             }
         }).attachToRecyclerView(recyclerView)
 
@@ -192,14 +194,20 @@ class NewReceiptActivity : AppCompatActivity() {
                 popup.dismiss()
                 Log.d(TAG, "Popups size: " + currentPopups.size)
             } else {
-                finish()
+                if (productsInReceipt.size > 0)
+                    requestActivityFinish()
+                else
+                    finish()
             }
         }
 
         val returnButton: View = findViewById(R.id.newReceiptReturnButton)
         returnButton.setOnClickListener {_ ->
             if (currentPopups.size <= 0) {
-                finish()
+                if (productsInReceipt.size > 0)
+                    requestActivityFinish()
+                else
+                    finish()
             }
         }
     }
@@ -210,6 +218,24 @@ class NewReceiptActivity : AppCompatActivity() {
             popup.dismiss()
         }
         currentPopups.clear()
+    }
+
+    private fun requestActivityFinish() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(resources.getString(R.string.new_receipt_request_exit_header))
+        builder.setCancelable(false)
+
+        builder.setMessage(resources.getString(R.string.new_receipt_request_exit_message, productsInReceipt.size))
+        builder.setPositiveButton(resources.getString(R.string.generic_reply_positive)) {dialogInterface, _ ->
+            finish()
+            dialogInterface.dismiss()
+        }
+
+        builder.setNegativeButton(resources.getString(R.string.generic_reply_negative)) { dialogInterface, _ ->
+            dialogInterface.dismiss()
+        }
+
+        builder.show()
     }
 
     fun addNewProduct(product: Product) {
