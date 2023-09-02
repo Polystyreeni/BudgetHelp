@@ -2,6 +2,7 @@ package com.poly.budgethelp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -10,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -164,19 +166,32 @@ class CategoryActivity : AppCompatActivity() {
 
         headerText.text = resources.getString(R.string.load_update_products)
 
-        // Modify existing products to new category
-        productViewModel.productsInCategories(listOf(category.categoryName)).observe(this) {products ->
-            products.let {
-                lifecycleScope.launch {
-                    it.forEach {product ->
-                        val newProduct = Product(product.productId, product.productName, newName, product.productPrice)
-                        productViewModel.updateProduct(newProduct)
+        // Modify existing products to new category, observe once
+        val liveData = productViewModel.productsInCategories(listOf(category.categoryName))
+        liveData.observe(this, object: Observer<List<Product>> {
+            override fun onChanged(products: List<Product>?) {
+                liveData.removeObserver(this)
+                products.let {
+                    lifecycleScope.launch {
+                        it?.forEach { product ->
+                            val newProduct = Product(
+                                product.productId,
+                                product.productName,
+                                newName,
+                                product.productPrice
+                            )
+                            productViewModel.updateProduct(newProduct)
+                            Log.d(
+                                "CategoryActivity",
+                                "Changed category of product: " + product.productName
+                            )
+                        }
+
+                        activePopup?.dismiss()
                     }
                 }
             }
-
-            loadPopup.second.dismiss()
-        }
+        })
     }
 
     private fun deleteCategory(category: Category) {
@@ -187,21 +202,33 @@ class CategoryActivity : AppCompatActivity() {
         loadPopup.second.setOnDismissListener { activePopup = null }
         activePopup = loadPopup.second
 
-        productViewModel.productsInCategories(listOf(category.categoryName)).observe(this) {products ->
-            products.let {
-                lifecycleScope.launch {
-                    // Update all product categories to default category
-                    it.forEach { product ->
-                        val newProduct = Product(product.productId, product.productName, AppRoomDatabase.DEFAULT_CATEGORY, product.productPrice)
-                        productViewModel.updateProduct(newProduct)
-                    }
+        val liveData = productViewModel.productsInCategories(listOf(category.categoryName))
+        liveData.observe(this, object: Observer<List<Product>> {
+            override fun onChanged(products: List<Product>?) {
+                liveData.removeObserver(this)
+                products.let {
+                    lifecycleScope.launch {
+                        it?.forEach { product ->
+                            val newProduct = Product(
+                                product.productId,
+                                product.productName,
+                                AppRoomDatabase.DEFAULT_CATEGORY,
+                                product.productPrice
+                            )
+                            productViewModel.updateProduct(newProduct)
+                            Log.d(
+                                "CategoryActivity",
+                                "Changed category of product: " + product.productName
+                            )
+                        }
 
-                    // Delete category from database
-                    categoryViewModel.delete(category.categoryName)
-                    activePopup?.dismiss()
+                        // Delete category from database
+                        categoryViewModel.delete(category.categoryName)
+                        activePopup?.dismiss()
+                    }
                 }
             }
-        }
+        })
     }
 
     private fun addCategory(categoryName: String) {
