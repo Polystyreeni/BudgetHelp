@@ -51,11 +51,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import com.poly.budgethelp.config.UserConfig
+import com.poly.budgethelp.utility.DateUtils
 import com.poly.budgethelp.utility.TextUtils
 
 class NewReceiptActivity : AppCompatActivity() {
 
     private val TAG: String = "NewRecipeActivity"
+    private val BUNDLE_PRODUCT_DATA: String = "productData"
+    private val BUNDLE_RECEIPT_DATE: String = "receiptDate"
 
     private var receiptName: String = ""
     private var receiptDate: Long = 0L
@@ -103,11 +106,6 @@ class NewReceiptActivity : AppCompatActivity() {
 
         receiptNameEdit = findViewById(R.id.newReceiptNameEditText)
         receiptDateButton = findViewById(R.id.newReceiptDateButton)
-
-        receiptNameEdit.setOnFocusChangeListener {_, _ ->
-            Log.d(TAG, "Receipt name is: " + receiptNameEdit.text.toString())
-            receiptName = receiptNameEdit.text.toString()
-        }
 
         receiptDateButton.setOnClickListener {_ ->
             // Some hackery for hiding soft keyboard
@@ -175,8 +173,11 @@ class NewReceiptActivity : AppCompatActivity() {
             }
         }).attachToRecyclerView(recyclerView)
 
-        val text: String? = intent.extras?.getString(CameraActivity.EXTRA_MESSAGE)
-        parseProductsFromCamera(text)
+        // Parse products from camera only if state is null (otherwise we'll lose all product edits)
+        if (savedInstanceState == null) {
+            val text: String? = intent.extras?.getString(CameraActivity.EXTRA_MESSAGE)
+            parseProductsFromCamera(text)
+        }
 
         val saveButton: Button = findViewById(R.id.newReceiptSaveButton)
         saveButton.setOnClickListener {_ ->
@@ -210,6 +211,22 @@ class NewReceiptActivity : AppCompatActivity() {
                     finish()
             }
         }
+
+        // Read data from save bundle:
+        if (savedInstanceState != null) {
+            val productData: String? = savedInstanceState.getString(BUNDLE_PRODUCT_DATA)
+            parseProductBundleString(productData!!)
+
+            receiptDate = savedInstanceState.getLong(BUNDLE_PRODUCT_DATA)
+            receiptDateButton.setText(DateUtils.longToDateString(receiptDate))
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val productText: String = generateProductBundleString()
+        outState.putString(BUNDLE_PRODUCT_DATA, productText)
+        outState.putLong(BUNDLE_RECEIPT_DATE, receiptDate)
     }
 
     override fun onDestroy() {
@@ -218,6 +235,35 @@ class NewReceiptActivity : AppCompatActivity() {
             popup.dismiss()
         }
         currentPopups.clear()
+    }
+
+    private fun generateProductBundleString(): String {
+        val builder: StringBuilder = StringBuilder()
+        for ( i in productsInReceipt.indices) {
+            builder.append(productsInReceipt[i].productName).append("|")
+                .append(productsInReceipt[i].productCategory).append("|")
+                .append(productsInReceipt[i].productPrice)
+
+            if (i < productsInReceipt.size - 1)
+                builder.append(System.lineSeparator())
+        }
+
+        return builder.toString()
+    }
+
+    private fun parseProductBundleString(productData: String) {
+        val lines = productData.split(System.lineSeparator())
+        for (line in lines) {
+            val lineContents = line.split("|")
+            if (lineContents.size == 3) {
+                val productName = lineContents[0]
+                val productCategory = lineContents[1]
+                val productPrice = lineContents[2].toFloat()
+                addNewProduct(Product(productName, productCategory, productPrice))
+            }
+        }
+
+        calculateTotalPrice()
     }
 
     private fun requestActivityFinish() {
@@ -466,7 +512,7 @@ class NewReceiptActivity : AppCompatActivity() {
             calendar.set(Calendar.DAY_OF_MONTH, d)
             val date: Date = calendar.time
             receiptDate = date.time
-            receiptDateButton.setText(String.format("%d.%d %d", d, m + 1, y))
+            receiptDateButton.setText(DateUtils.longToDateString(receiptDate))
             popupWindow.dismiss()
         }
 

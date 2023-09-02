@@ -38,6 +38,9 @@ import java.util.Date
 class SpendingOverviewActivity : AppCompatActivity() {
 
     private val TAG = "SpendingOverviewActivity"
+    private val BUNDLE_START_DATE = "startDate"
+    private val BUNDLE_END_DATE = "endDate"
+    private val BUNDLE_TIME_STEP = "timeStep"
 
     // UI Components
     private lateinit var fetchButton: Button
@@ -125,6 +128,31 @@ class SpendingOverviewActivity : AppCompatActivity() {
                 finish()
             }
         }
+
+        // Load values from save state (when activity is rotated)
+        if (savedInstanceState != null) {
+            val newStartDate = savedInstanceState.getLong(BUNDLE_START_DATE, 0L)
+            val newEndDate = savedInstanceState.getLong(BUNDLE_END_DATE, 0L)
+            val newTimeStep = savedInstanceState.getLong(BUNDLE_TIME_STEP, 0L)
+
+            if (newStartDate > 0L)
+                startDate = newStartDate
+            if (newEndDate > 0L)
+                endDate = newEndDate
+            if (newTimeStep > 0L)
+                timeStep = newTimeStep
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        if (startDate != null)
+            outState.putLong(BUNDLE_START_DATE, startDate!!)
+        if (endDate != null)
+            outState.putLong(BUNDLE_END_DATE, endDate!!)
+        if (timeStep != null)
+            outState.putLong(BUNDLE_TIME_STEP, timeStep!!)
     }
 
     private fun onFetchButtonPressed() {

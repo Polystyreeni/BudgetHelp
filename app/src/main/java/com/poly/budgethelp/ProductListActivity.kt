@@ -10,12 +10,10 @@ import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.adapter.ProductListAdapter
-import com.poly.budgethelp.adapter.ReceiptListAdapter
 import com.poly.budgethelp.data.Product
 import com.poly.budgethelp.viewmodel.CategoryViewModel
 import com.poly.budgethelp.viewmodel.CategoryViewModelFactory
