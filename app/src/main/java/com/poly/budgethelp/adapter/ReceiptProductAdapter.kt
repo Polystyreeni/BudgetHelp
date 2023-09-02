@@ -1,5 +1,6 @@
 package com.poly.budgethelp.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -98,15 +99,18 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             val categoryText: EditText = categoryPopupData.first.findViewById(R.id.addCategoryNameEditText)
                             item.context.currentPopups.add(categoryPopupData.second)
                             categoryPopupData.second.isFocusable = true
+                            categoryPopupData.second.setOnDismissListener {
+                                item.context.removePopup(categoryPopupData.second)
+                            }
                             categoryPopupData.second.update()
                             categoryConfirmButton.setOnClickListener {_ ->
                                 val categoryName = categoryText.text.toString()
                                 item.context.addNewCategory(categoryName)
-                                item.context.removePopup(categoryPopupData.second)
-
-                                // Refresh category spinner
-                                categorySpinner.setSelection(0)
+                                // item.context.removePopup(categoryPopupData.second)
                             }
+
+                            // Refresh category spinner
+                            categorySpinner.setSelection(0)
                         }
                     }
 
@@ -145,10 +149,6 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                                 Toast.LENGTH_SHORT).show()
                         }
                     }
-
-                    // item.context.removePopup(popupData.second)
-                    // item.context.currentPopups.remove(popupData.second)
-                    // popupData.second.dismiss()
                 }
             }
         }
@@ -179,11 +179,16 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 categorySpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         if (position == categorySpinner.adapter.count - 1) {
+                            // Refresh category spinner
+                            categorySpinner.setSelection(0)
+
                             val categoryPopupData = ActivityUtils.createPopup(R.layout.popup_add_category, item.context)
                             val categoryConfirmButton: Button = categoryPopupData.first.findViewById(R.id.addCategoryConfirmButton)
                             val categoryText: EditText = categoryPopupData.first.findViewById(R.id.addCategoryNameEditText)
 
-                            categoryPopupData.second.setOnDismissListener { item.context.removePopup(categoryPopupData.second) }
+                            categoryPopupData.second.setOnDismissListener {
+                                item.context.removePopup(categoryPopupData.second)
+                            }
 
                             item.context.currentPopups.add(categoryPopupData.second)
                             categoryPopupData.second.isFocusable = true
@@ -192,9 +197,6 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                                 val categoryName = categoryText.text.toString()
                                 item.context.addNewCategory(categoryName)
                                 categoryPopupData.second.dismiss()
-
-                                // Refresh category spinner
-                                categorySpinner.setSelection(0)
                             }
                         }
                     }
