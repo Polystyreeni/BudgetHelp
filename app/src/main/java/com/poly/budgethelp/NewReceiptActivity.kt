@@ -327,12 +327,13 @@ class NewReceiptActivity : AppCompatActivity() {
     }
 
     fun addNewCategory(categoryName: String) {
-        if (categoryName.isEmpty() || categoryName.isBlank() || categoryName == "+") {
+        if (categoryName.isEmpty() || categoryName.isBlank() || categoryName == AppRoomDatabase.ADD_CATEGORY_TEXT) {
             Toast.makeText(this, resources.getString(R.string.error_invalid_category), Toast.LENGTH_SHORT).show()
             return
         }
         val category = Category(categoryName)
         categoryViewModel.insert(category)
+        Toast.makeText(this, resources.getString(R.string.new_category_added), Toast.LENGTH_SHORT).show()
     }
 
     fun removePopup(popup: PopupWindow) {

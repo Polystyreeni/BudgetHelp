@@ -102,6 +102,7 @@
     <string name="category_delete_warning">Haluatko varmasti poistaa kategorian %1$s?
         \nKaikki kategoriaan kuuluvat tuotteet siirretään kategoriaan %2$s.</string>
     <string name="category_edit_header">Muuta kategoria</string>
+    <string name="new_category_added">Uusi kategoria lisätty!</string>
     <string name="category_edit_warning"><![CDATA[
     Muutetaanko kategoria <i>%1$s</i> kategoriaksi <i>%2$s</i>?<br>Kaikki kategoriaan kuuluvat tuotteet siirretään uuteen kategoriaan.
     ]]></string>

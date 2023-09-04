@@ -194,9 +194,9 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             categoryPopupData.second.isFocusable = true
                             categoryPopupData.second.update()
                             categoryConfirmButton.setOnClickListener {_ ->
+                                categoryPopupData.second.dismiss()
                                 val categoryName = categoryText.text.toString()
                                 item.context.addNewCategory(categoryName)
-                                categoryPopupData.second.dismiss()
                             }
                         }
                     }
