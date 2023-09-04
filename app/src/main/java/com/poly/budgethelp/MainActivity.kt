@@ -231,7 +231,7 @@ class MainActivity : ComponentActivity() {
     }
 
     fun onVersionRetrieved(current: VersionManager.Version, fetched: VersionManager.Version) {
-        fetchedAppVersion = current
+        fetchedAppVersion = fetched
         if (current == fetched)
             return
 
