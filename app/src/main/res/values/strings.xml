@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BudgetHelp</string>
+    <string name="app_name">Kuittailija</string>
     <string name="item_price">%1$.2f %2$s</string>
     <string name="generic_reply_positive">Okei</string>
     <string name="generic_reply_negative">Peruuta</string>
