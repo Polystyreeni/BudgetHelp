@@ -78,7 +78,7 @@ class ReceiptListActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this) {
             if (currentPopup != null) {
                 currentPopup?.dismiss()
-                currentPopup = null
+                // currentPopup = null
             }
             else {
                 finish()
@@ -114,6 +114,7 @@ class ReceiptListActivity : AppCompatActivity() {
 
         val popupWindow = PopupWindow(popupView, width, height, true)
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0)
+        popupWindow.setOnDismissListener { currentPopup = null }
 
         val popupHeader: TextView = popupView.findViewById(R.id.calendarPopupHeader)
         val calendarView: CalendarView = popupView.findViewById(R.id.calendarPopupView)
