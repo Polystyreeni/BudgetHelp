@@ -23,6 +23,7 @@ class MessageService {
         private const val TAG = "MessageService"
         private const val MESSAGE_URL = "DUMMY_REPLACE_ME"
         private const val MESSAGE_SAVE_FILE = "versionData"
+        var currentMessage: UpdateMessage = UpdateMessage("0", VersionManager.currentVersion, "null")
         var currentMessageId: String? = null
 
         fun fetchMessage(context: MainActivity) {

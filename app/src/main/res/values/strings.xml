@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">BudgetHelp</string>
-    <string name="item_price">%1$02d €</string>
+    <string name="item_price">%1$.2f %2$s</string>
     <string name="generic_reply_positive">Okei</string>
     <string name="generic_reply_negative">Peruuta</string>
     <string name="generic_reply_clear">Tyhjennä</string>
@@ -91,8 +91,9 @@
     <string name="word_to_ignore_add_hint">Sana…</string>
     <string name="app_update_header">Päivitys saatavilla!</string>
     <string name="app_update_info">Sovelluksen toiminnallisuus ja käytettävyys on läpikäynyt kehitystä.
-        \nUuden version voi ladata alla olevasta linkistä (etsi oikea versio ja lataa .apk-päätteinen tiedosto)</string>
+        Uuden version voi sovelluksen GitHubista (etsi viimeisin versio ja lataa .apk-päätteinen tiedosto)</string>
     <string name="app_update_version_compare">Asennettu versio: %1$s | Uusin versio: %2$s</string>
+    <string name="app_update_link_short">GitHubista</string>
     <string name="app_update_decline">EnVitussa</string>
     <string name="app_update_changelog_header">Mitä uutta?</string>
     <string name="app_update_changelog_version">Versio %1$s</string>
@@ -106,6 +107,16 @@
     ]]></string>
     <string name="new_receipt_request_exit_header">Keskeytä kuitin luonti?</string>
     <string name="new_receipt_request_exit_message">Kuitilla on %1$d tuotetta. Hylätäänkö kuitti?</string>
+    <string name="main_text_greeting">Hei %1$s!</string>
+    <string name="main_text_spending_current_header">Kulutus tässä kuussa:</string>
+    <string name="main_text_spending_previous_header">Edellisellä ajanjaksolla:</string>
+    <string name="main_text_management_header">Hallinta</string>
+    <string name="main_text_new_receipt_header">Luo uusi kuitti</string>
+    <string name="main_text_spending_header">Ostotarkastelu</string>
+    <string name="main_button_product_list">Tuotelista</string>
+    <string name="main_button_category_list">Kategorialista</string>
+    <string name="main_button_new_receipt_camera">Kuvaa uusi kuitti</string>
+    <string name="main_button_new_receipt_manual">Uusi tyhjä kuitti</string>
 
     <string-array name="spending_timestep_array">
         <item>Valitse aika-asteikko</item>
@@ -130,5 +141,26 @@
         <item>€</item>
         <item>$</item>
         <item>£</item>
+    </string-array>
+
+    <string-array name="reinforcement_negative_strong">
+        <item>Aijai! Nyt näyttää uusi elämä pahalta :(</item>
+        <item>Nyt on palanut rahaa kuin roskaa!</item>
+        <item>Tätä kaikkea ei voida laittaa inflaation piikkiin…</item>
+    </string-array>
+    <string-array name="reinforcement_negative">
+        <item>Voi ei! Rahaa on kulunut enemmän. Mutta toivoa ei vielä kannata menettää.</item>
+        <item>Onkos tässä kuussa osteltu vähän enemmän?</item>
+        <item>Nyt kannattaa olla tarkkana, jottei rahat karkaa käsistä!</item>
+    </string-array>
+    <string-array name="reinforcement_positive">
+        <item>Ei huono! Kulutus on hieman laskenut edellisestä kuukaudesta.</item>
+        <item>Nyt saattaa jäädä hiluja säästöönkin.</item>
+        <item>Ollaan edellisellä tasolla. Näillä näkymin rahaa ei ainakaan kulu enemmän kuin ennen.</item>
+    </string-array>
+    <string-array name="reinforcement_positive_strong">
+        <item>Ilmiömäistä! Tällä vauhdilla pankki räjähtää näillä näppäimillä!</item>
+        <item>Onkohan edellinen kuukausi varmasti kirjattu oikein, kun näyttää näin edistyneeltä?</item>
+        <item>Lopetitteko kaupassa käynnin kokonaan?</item>
     </string-array>
 </resources>

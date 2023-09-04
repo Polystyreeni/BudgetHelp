@@ -37,5 +37,14 @@ class DateUtils {
             calendar.set(Calendar.HOUR_OF_DAY, 0)
             return calendar.timeInMillis
         }
+
+        // TODO: This implementation should be checked for dates
+        // What happens if we attempt to check 31st from a month that has 30 days?
+        fun getDayLastMonth(time: Long): Long {
+            val calendar: Calendar = Calendar.getInstance(Locale("en", "UK"))
+            calendar.timeInMillis = time
+            calendar.add(Calendar.MONTH, -1)
+            return calendar.timeInMillis
+        }
     }
 }

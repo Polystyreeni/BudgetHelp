@@ -11,26 +11,75 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.config.VersionManager
 import com.poly.budgethelp.messageservice.MessageService
 import com.poly.budgethelp.ui.theme.BudgetHelpTheme
+import com.poly.budgethelp.ui.theme.DarkGreen
+import com.poly.budgethelp.ui.theme.HyperlinkText
 import com.poly.budgethelp.utility.ActivityUtils
+import com.poly.budgethelp.utility.DateUtils
 import com.poly.budgethelp.utility.TextUtils
+import com.poly.budgethelp.viewmodel.ReceiptViewModel
+import com.poly.budgethelp.viewmodel.ReceiptViewModelFactory
+import java.util.Random
+import kotlin.math.abs
 
 
 class MainActivity : ComponentActivity() {
 
+    private val BUNDLE_UPDATE = "updateShown"
+    private val BUNDLE_MESSAGE = "messageShown"
+
+    // Mutable states
+    private val userName = mutableStateOf(UserConfig.DEFAULTUSERNAME)
+    private val spendingThisMonth = mutableStateOf(0f)
+    private val spendingLastMonth = mutableStateOf(0f)
+    private val additionalText = mutableStateOf("")
+
+    // Popup states
+    private val showNewReceiptPopup = mutableStateOf(false)
+    private val showSpendingPopup = mutableStateOf(false)
+    private val showManagementPopup = mutableStateOf(false)
+    private val showUpdatePopup = mutableStateOf(false)
+    private val showMessagePopup = mutableStateOf(false)
+
     private val activePopups: ArrayList<PopupWindow> = arrayListOf()
+    private var updateAcknowledged = false
+    private var messageAcknowledged = false
+
+    private var fetchedAppVersion: VersionManager.Version? = null
+
+    // viewModels
+    private val receiptViewModel: ReceiptViewModel by viewModels {
+        ReceiptViewModelFactory((application as BudgetApplication).receiptRepository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +89,17 @@ class MainActivity : ComponentActivity() {
             startSettingsActivity()
         }
 
-        VersionManager.fetchLatestVersion(this)
-        MessageService.fetchMessage(this)
+        userName.value = UserConfig.userName
+
+        if (savedInstanceState == null) {
+            VersionManager.fetchLatestVersion(this)
+            MessageService.fetchMessage(this)
+        } else {
+            if (!savedInstanceState.getBoolean(BUNDLE_UPDATE))
+                VersionManager.fetchLatestVersion(this)
+            if (!savedInstanceState.getBoolean(BUNDLE_MESSAGE))
+                MessageService.fetchMessage(this)
+        }
 
         onBackPressedDispatcher.addCallback(this) {
             if (activePopups.size > 0) {
@@ -53,6 +111,9 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        // Fetch receipt data to display -> spending this month & spending last month
+        getSpendingData()
+
         setContent {
             BudgetHelpTheme {
                 // A surface container using the 'background' color from the theme
@@ -60,10 +121,77 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    Greeting()
                 }
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(BUNDLE_UPDATE, updateAcknowledged)
+        outState.putBoolean(BUNDLE_MESSAGE, messageAcknowledged)
+    }
+
+    private fun getSpendingData() {
+        val currentTime = System.currentTimeMillis()
+        val firstDayOfCurrent = DateUtils.getFirstDayOfMonth(currentTime)
+        val currentLastMonth = DateUtils.getDayLastMonth(currentTime)
+        val firstDayLastMonth = DateUtils.getFirstDayOfMonth(currentLastMonth)
+
+        receiptViewModel.receiptsInRange(firstDayOfCurrent, currentTime).observe(this) { receipts ->
+            receipts.let {
+                var price = 0f
+                it.forEach {receipt -> price += receipt.receiptPrice}
+                spendingThisMonth.value = price
+                updateSpendingInfoText()
+            }
+        }
+
+        receiptViewModel.receiptsInRange(firstDayLastMonth, currentLastMonth).observe(this) { receipts ->
+            receipts.let {
+                var price = 0f
+                it.forEach {receipt -> price += receipt.receiptPrice}
+                spendingLastMonth.value = price
+            }
+        }
+    }
+
+    private fun updateSpendingInfoText() {
+        val currentSpending = spendingThisMonth.value
+        val lastSpending = spendingLastMonth.value
+
+        // No previous data available -> no reinforcement possible
+        if (lastSpending < 0.01f) {
+            return
+        }
+
+        val diff = currentSpending - lastSpending
+        val aLotLimit = 10f
+
+        var text: String = ""
+        val rand = Random(System.currentTimeMillis())
+        if (diff > 0) {
+            // More money spent this month
+            text = if (diff > aLotLimit) {
+                val textArr = resources.getStringArray(R.array.reinforcement_negative_strong)
+                textArr[rand.nextInt(textArr.size)]
+            } else {
+                val textArr = resources.getStringArray(R.array.reinforcement_negative)
+                textArr[rand.nextInt(textArr.size)]
+            }
+        } else {
+            // Less money spent this month
+            text = if (abs(diff) > aLotLimit) {
+                val textArr = resources.getStringArray(R.array.reinforcement_positive_strong)
+                textArr[rand.nextInt(textArr.size)]
+            } else {
+                val textArr = resources.getStringArray(R.array.reinforcement_positive)
+                textArr[rand.nextInt(textArr.size)]
+            }
+        }
+
+        additionalText.value = text
     }
 
     private fun startCamera() {
@@ -102,26 +230,22 @@ class MainActivity : ComponentActivity() {
     }
 
     fun onVersionRetrieved(current: VersionManager.Version, fetched: VersionManager.Version) {
+        fetchedAppVersion = current
         if (current == fetched)
             return
 
-        val popupData = ActivityUtils.createPopup(R.layout.popup_update_available, this)
+        // Close popups, show update popup
+        showNewReceiptPopup.value = false
+        showSpendingPopup.value = false
+        showManagementPopup.value = false
+        showMessagePopup.value = false
+        showUpdatePopup.value = true
+    }
 
-        val versionText: TextView = popupData.first.findViewById(R.id.updateVersionText)
-        val versionLink: TextView = popupData.first.findViewById(R.id.updateDirectLink)
-        val declineButton: Button = popupData.first.findViewById(R.id.updateDeclineButton)
-        versionText.text = resources.getString(R.string.app_update_version_compare,
-            current.toString(), fetched.toString())
-        versionLink.text = VersionManager.RELEASE_URL
-        Linkify.addLinks(versionLink, Linkify.WEB_URLS)
-
-        declineButton.setOnClickListener { popupData.second.dismiss() }
-
-        popupData.second.setOnDismissListener {
-            activePopups.remove(popupData.second)
-        }
-        popupData.second.isFocusable = false
-        activePopups.add(popupData.second)
+    private fun getSpendingTextColor(): Color {
+        if (spendingLastMonth.value < 0.01f)
+            return Color.Black
+        return if (spendingThisMonth.value < spendingLastMonth.value) {DarkGreen} else {Color.Red}
     }
 
     fun onLatestMessageRetrieved(message: MessageService.UpdateMessage?) {
@@ -139,53 +263,102 @@ class MainActivity : ComponentActivity() {
 
         // Save message id to file, so we don't get the message every time we launch the app
         MessageService.currentMessageId = message.messageId
+        MessageService.currentMessage = message
         MessageService.saveLatestMessageId(this)
 
-        val popupData = ActivityUtils.createPopup(R.layout.popup_update_changelog, this)
-        val versionTextView: TextView = popupData.first.findViewById(R.id.updateVersionText)
-        val contentTextView: TextView = popupData.first.findViewById(R.id.updateChangeLogText)
-        val okButton: Button = popupData.first.findViewById(R.id.updateChangelogButton)
-
-        versionTextView.text = resources.getString(R.string.app_update_changelog_version,
-            message.requiredVersion.toString())
-
-        contentTextView.text = TextUtils.getSpannedText(message.messageContent)
-        okButton.setOnClickListener { popupData.second.dismiss() }
-
-        popupData.second.isFocusable = false
-        activePopups.add(popupData.second)
-        popupData.second.setOnDismissListener {
-            activePopups.remove(popupData.second)
+        // Don't display message if update popup is visible
+        if (showUpdatePopup.value) {
+            return
         }
+        showNewReceiptPopup.value = false
+        showSpendingPopup.value = false
+        showManagementPopup.value = false
+        showMessagePopup.value = true
     }
 
     @Composable
-    fun Greeting(name: String, modifier: Modifier = Modifier) {
-        Column {
+    fun Greeting(modifier: Modifier = Modifier) {
+        Column (
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+                ){
             Text(
-                text = "Hello ${UserConfig.userName}!",
-                modifier = modifier
+                text = resources.getString(R.string.main_text_greeting, userName.value),
+                modifier = Modifier.padding(6.dp),
+                fontSize = 24.sp
             )
-            Button(onClick = { startCamera() }) {
-                Text(text = "Start camera")
+            Text(
+                text = resources.getString(R.string.main_text_spending_current_header)
+            )
+            Text(
+                text = resources.getString(R.string.item_price, spendingThisMonth.value, UserConfig.currency),
+                fontSize = 20.sp,
+                color = getSpendingTextColor(),
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    shadow = Shadow(
+                        color = Color.Black,
+                        offset = Offset(1f, 1f),
+                        blurRadius = 6f
+                    )
+                )
+            )
+            Text(
+                text = resources.getString(R.string.main_text_spending_previous_header)
+            )
+            Text(
+                text = resources.getString(R.string.item_price, spendingLastMonth.value, UserConfig.currency),
+                fontSize = 20.sp,
+            )
+            Text(
+                text = additionalText.value
+            )
+
+            // New receipt actions (camera, create new)
+            Button(onClick = {
+                showNewReceiptPopup.value = true
+            }) {
+                Text(text = resources.getString(R.string.header_new_receipt))
             }
-            Button(onClick = { startNewReceipt() }) {
-                Text(text = "New receipt")
+
+            // Spending activities (receipt list, spending overview)
+            Button(onClick = {
+                showSpendingPopup.value = true
+            }) {
+                Text(text = resources.getString(R.string.main_text_spending_header))
             }
-            Button(onClick = { startReceiptList() }) {
-                Text(text = "Receipt list")
+
+            // Management activities (category list, product list, settings)
+            Button(onClick = {
+                showManagementPopup.value = true
+            }) {
+                Text(text = resources.getString(R.string.main_text_management_header))
             }
-            Button(onClick = { startProductList() }) {
-                Text(text = "Product list")
+
+            if (showNewReceiptPopup.value) {
+                NewReceiptPopup {
+                    showNewReceiptPopup.value = false
+                }
             }
-            Button(onClick = { startSpendingActivity() }) {
-                Text(text = "Spending")
+            if (showSpendingPopup.value) {
+                SpendingPopup {
+                    showSpendingPopup.value = false
+                }
             }
-            Button(onClick = {startCategoryActivity()}) {
-                Text(text = "Categories")
+            if (showManagementPopup.value) {
+                ManagementPopup {
+                    showManagementPopup.value = false
+                }
             }
-            Button(onClick = { startSettingsActivity() }) {
-                Text(text = "Settings")
+            if (showUpdatePopup.value) {
+                UpdatePopup {
+                    showUpdatePopup.value = false
+                }
+            }
+            if (showMessagePopup.value) {
+                MessagePopup {
+                    showMessagePopup.value = false
+                }
             }
         }
     }
@@ -194,7 +367,208 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun GreetingPreview() {
         BudgetHelpTheme {
-            Greeting("Android")
+            Greeting()
+        }
+    }
+
+    @Composable
+    fun NewReceiptPopup(onDismiss: () -> Unit) {
+        Dialog(
+            onDismissRequest = {
+                onDismiss()
+            }
+        ) {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shadowElevation = 4.dp
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = resources.getString(R.string.main_text_new_receipt_header),
+                        fontSize = 20.sp
+                    )
+                    Button(onClick = {
+                        startCamera()
+                        onDismiss()
+                    }) {
+                        Text(text = resources.getString(R.string.main_button_new_receipt_camera))
+                    }
+                    Button(onClick = {
+                        startNewReceipt()
+                        onDismiss()
+                    }) {
+                        Text(text = resources.getString(R.string.main_button_new_receipt_manual))
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun SpendingPopup(onDismiss: () -> Unit) {
+        Dialog(
+            onDismissRequest = {
+                onDismiss()
+            }
+        ) {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shadowElevation = 4.dp
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = resources.getString(R.string.main_text_spending_header),
+                        fontSize = 20.sp
+                    )
+                    Button(onClick = {
+                        startSpendingActivity()
+                        onDismiss()
+                    }) {
+                        Text(text = resources.getString(R.string.spending_activity_header))
+                    }
+                    Button(onClick = {
+                        startReceiptList()
+                        onDismiss()
+                    }) {
+                        Text(text = resources.getString(R.string.header_receipt_list))
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun ManagementPopup(onDismiss: () -> Unit) {
+        Dialog(
+            onDismissRequest = {
+                onDismiss()
+            }
+        ) {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shadowElevation = 4.dp
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = resources.getString(R.string.main_text_management_header),
+                        fontSize = 20.sp
+                    )
+                    Button(onClick = {
+                        startProductList()
+                        onDismiss()
+                    }) {
+                        Text(text = resources.getString(R.string.main_button_product_list))
+                    }
+                    Button(onClick = {
+                        startCategoryActivity()
+                        onDismiss()
+                    }) {
+                        Text(text = resources.getString(R.string.main_button_category_list))
+                    }
+                    Button(onClick = {
+                        startSettingsActivity()
+                        onDismiss()
+                    }) {
+                        Text(text = resources.getString(R.string.settings_header))
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun UpdatePopup(onDismiss: () -> Unit) {
+        Dialog(
+            onDismissRequest = {
+                onDismiss()
+            }
+        ) {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shadowElevation = 4.dp
+            ) {
+                Column (
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = resources.getString(R.string.app_update_header),
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                    Text(
+                        text = resources.getString(R.string.app_update_version_compare,
+                            VersionManager.currentVersion.toString(), fetchedAppVersion!!.toString()),
+                        fontSize = 16.sp
+                    )
+                    HyperlinkText(
+                        modifier = Modifier.padding(8.dp),
+                        fullText = resources.getString(R.string.app_update_info),
+                        linkText = listOf(resources.getString(R.string.app_update_link_short)),
+                        hyperlinks = listOf(VersionManager.RELEASE_URL)
+                    )
+
+                    Button(onClick = {
+                        updateAcknowledged = true
+                        onDismiss()
+                    }) {
+                        Text(text = resources.getString(R.string.app_update_decline))
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun MessagePopup(onDismiss: () -> Unit) {
+        Dialog(
+            onDismissRequest = {
+                onDismiss()
+            }
+        ) {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shadowElevation = 4.dp
+            ) {
+                Column (
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = resources.getString(R.string.app_update_changelog_header),
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                    Text(
+                        text = resources.getString(R.string.app_update_changelog_version,
+                            VersionManager.currentVersion.toString()),
+                        fontSize = 16.sp
+                    )
+                    Text(
+                        text = MessageService.currentMessage.messageContent,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(8.dp)
+                    )
+
+                    Button(onClick = {
+                        messageAcknowledged = true
+                        onDismiss()
+                    }) {
+                        Text(text = resources.getString(R.string.generic_reply_positive))
+                    }
+                }
+            }
         }
     }
 }
