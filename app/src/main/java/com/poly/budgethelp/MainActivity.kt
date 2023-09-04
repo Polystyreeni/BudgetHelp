@@ -32,6 +32,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -388,7 +389,9 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Text(
                         text = resources.getString(R.string.main_text_new_receipt_header),
-                        fontSize = 20.sp
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(6.dp)
                     )
                     Button(onClick = {
                         startCamera()
@@ -424,7 +427,9 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Text(
                         text = resources.getString(R.string.main_text_spending_header),
-                        fontSize = 20.sp
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(6.dp)
                     )
                     Button(onClick = {
                         startSpendingActivity()
@@ -460,7 +465,9 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Text(
                         text = resources.getString(R.string.main_text_management_header),
-                        fontSize = 20.sp
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(6.dp)
                     )
                     Button(onClick = {
                         startProductList()
