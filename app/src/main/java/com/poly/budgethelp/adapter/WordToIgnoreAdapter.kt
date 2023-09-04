@@ -8,24 +8,29 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.R
+import com.poly.budgethelp.UserSettingsActivity
 import com.poly.budgethelp.data.WordToIgnore
 
 class WordToIgnoreAdapter : ListAdapter<WordToIgnore, WordToIgnoreAdapter.WordToIgnoreViewHolder>(WordToIgnoreComparator()) {
 
+    lateinit var baseContext: UserSettingsActivity
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordToIgnoreViewHolder {
         return WordToIgnoreViewHolder.create(parent)
     }
 
     override fun onBindViewHolder(holder: WordToIgnoreViewHolder, position: Int) {
         val current = getItem(position)
-        holder.bind(current)
+        holder.bind(current, baseContext, position)
     }
 
     class WordToIgnoreViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val textView: TextView = itemView.findViewById(R.id.wordToIgnoreTextView)
+        private val deleteButton: View = itemView.findViewById(R.id.wordDeleteButton)
 
-        fun bind(word: WordToIgnore) {
+        fun bind(word: WordToIgnore, context: UserSettingsActivity, position: Int) {
             textView.text = word.word
+
+            deleteButton.setOnClickListener { context.requestWordDelete(word.word, position) }
         }
 
         companion object {

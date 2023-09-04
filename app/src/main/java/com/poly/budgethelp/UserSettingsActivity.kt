@@ -54,6 +54,7 @@ class UserSettingsActivity : AppCompatActivity() {
         wordsToIgnoreEdit = findViewById(R.id.wordsToIgnoreEditText)
 
         adapter = WordToIgnoreAdapter()
+        adapter.baseContext = this
 
         ArrayAdapter.createFromResource(this,
             R.array.settings_currency_symbol,
@@ -168,6 +169,7 @@ class UserSettingsActivity : AppCompatActivity() {
         addPopup(popupData.second)
         popupData.second.isFocusable = true
         popupData.second.setOnDismissListener { removePopup(popupData.second) }
+        popupData.second.update()
 
         val newButton: Button = popupData.first.findViewById(R.id.wordsAddNewButton)
         newButton.setOnClickListener { _ ->
@@ -213,5 +215,16 @@ class UserSettingsActivity : AppCompatActivity() {
         }
 
         window.dismiss()
+    }
+
+    fun requestWordDelete(word: String, position: Int) {
+        deleteWord(word, position)
+    }
+
+    private fun deleteWord(word: String, position: Int) {
+        lifecycleScope.launch {
+            wordToIgnoreViewModel.delete(word)
+            adapter.notifyItemRemoved(position)
+        }
     }
 }
