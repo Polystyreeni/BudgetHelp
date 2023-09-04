@@ -30,12 +30,9 @@ import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.databinding.ActivityCameraBinding
 import com.poly.budgethelp.utility.ActivityUtils
-import com.poly.budgethelp.validators.IProductValidator
-import com.poly.budgethelp.validators.NameLengthValidator
-import com.poly.budgethelp.viewmodel.ProductViewModel
-import com.poly.budgethelp.viewmodel.ProductViewModelFactory
 import com.poly.budgethelp.viewmodel.WordToIgnoreViewModel
 import com.poly.budgethelp.viewmodel.WordToIgnoreViewModelFactory
 import kotlinx.coroutines.launch
@@ -46,8 +43,6 @@ import kotlin.math.abs
 
 class CameraActivity : AppCompatActivity() {
 
-    private var TAG: String = "CameraActivity"
-
     private lateinit var viewBinding: ActivityCameraBinding
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraExecutor: ExecutorService
@@ -55,7 +50,6 @@ class CameraActivity : AppCompatActivity() {
 
     private lateinit var textRecognizer: TextRecognizer
 
-    private lateinit var productValidators: ArrayList<IProductValidator>
     private lateinit var wordsToIgnore: ArrayList<String>
     private var currentPopup: PopupWindow? = null
 
@@ -87,9 +81,6 @@ class CameraActivity : AppCompatActivity() {
 
         captureButton = findViewById(R.id.fab)
         captureButton.setOnClickListener { view -> takePicture() }
-
-        // Initialize data validators
-        productValidators = arrayListOf(NameLengthValidator())
 
         wordsToIgnore = arrayListOf()
         // Set words to ignore
@@ -216,7 +207,8 @@ class CameraActivity : AppCompatActivity() {
                         continue
 
                     val text = line.text.replace(",", ".").replace(":", " ")
-                    if (text.toFloatOrNull() != null) {
+                    val textValue: Float? = text.toFloatOrNull()
+                    if (textValue != null && textValue <= UserConfig.productMaxPrice) {
                         val y = line.boundingBox?.centerY()
                         if (y != null) {
                             val element = Pair(text.toFloat(), y)
@@ -227,22 +219,15 @@ class CameraActivity : AppCompatActivity() {
                     else {
                         val y = line.boundingBox?.centerY()
                         if (y != null) {
-                            var valid = true
-                            /*for (validator in productValidators) {
-                                if (!validator.isValidItem(line.text, 0f))
-                                    valid = false
-                            }*/
-                            if (valid) {
-                                val element = Pair(line.text, y)
-                                items.add(element)
-                            }
+                            val element = Pair(line.text, y)
+                            items.add(element)
                         }
                     }
                 }
             }
 
             // Connect items and prices based on coordinates
-            val maxOffset = 40
+            val maxOffset = UserConfig.priceNameMaxOffset
             for (pair in items) {
                 for (price in prices) {
                     if (abs(pair.second - price.second) < maxOffset) {
@@ -277,15 +262,16 @@ class CameraActivity : AppCompatActivity() {
         builder.setCancelable(false)
 
         builder.setMessage(resources.getString(R.string.camera_number_of_items, productCount))
-        builder.setPositiveButton(resources.getString(R.string.camera_alert_positive)) {dialogInterface, index ->
+        builder.setPositiveButton(resources.getString(R.string.camera_alert_positive)) {dialogInterface, _ ->
             // Start new activity
             val intent = Intent(this, NewReceiptActivity::class.java)
             intent.putExtra(EXTRA_MESSAGE, data.toString())
             startActivity(intent)
+            dialogInterface.dismiss()
             finish()
         }
 
-        builder.setNegativeButton(resources.getString(R.string.camera_alert_negative)) { dialogInterface, index ->
+        builder.setNegativeButton(resources.getString(R.string.camera_alert_negative)) { dialogInterface, _ ->
             dialogInterface.dismiss()
             currentPopup?.dismiss()
         }
@@ -302,13 +288,12 @@ class CameraActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "CameraXApp"
+        private const val TAG = "CameraActivity"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         const val EXTRA_MESSAGE = "CameraActivityProducts"
         private val REQUIRED_PERMISSIONS =
             mutableListOf (
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO
+                Manifest.permission.CAMERA
             ).apply {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
                     add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
