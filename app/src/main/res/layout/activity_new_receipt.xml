@@ -32,29 +32,29 @@
         />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginHorizontal="20dp"
         android:orientation="horizontal"
         >
 
         <EditText
             android:id="@+id/newReceiptNameEditText"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
             android:inputType="text"
-            android:minWidth="200dp"
             android:hint="@string/receipt_name_hint"
+            android:layout_weight="1"
             />
         <EditText
             android:id="@+id/newReceiptDateButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
             android:inputType="text"
             android:hint="@string/receipt_date_hint"
             android:focusable="false"
+            android:layout_weight="1"
             />
 
     </LinearLayout>
