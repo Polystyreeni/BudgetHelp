@@ -20,7 +20,6 @@
             android:textStyle="bold"
             android:textSize="30sp"
             android:layout_gravity="start"
-            android:textColor="@color/black"
             android:text="← "
             />
 
@@ -28,7 +27,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/settings_header"
-            android:textColor="@color/black"
             android:layout_gravity="center"
             android:textAlignment="center"
             android:textStyle="bold"
@@ -52,7 +50,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_header_general"
-                android:textColor="@color/black"
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:textStyle="bold"
@@ -63,8 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/setting_user_name_header"
-                android:textSize="14sp"
-                android:textColor="@color/black"/>
+                android:textSize="14sp" />
             <EditText
                 android:id="@+id/settingsNameEdit"
                 android:layout_width="match_parent"
@@ -76,8 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/setting_currency_header"
-                android:textSize="14sp"
-                android:textColor="@color/black"/>
+                android:textSize="14sp" />
             <Spinner
                 android:id="@+id/settingsCurrencySpinner"
                 android:layout_width="match_parent"
@@ -95,7 +90,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_header_camera"
-                android:textColor="@color/black"
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:textStyle="bold"
@@ -105,7 +99,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@color/black"
                 android:text="@string/setting_max_price_header"/>
 
             <EditText
@@ -120,7 +113,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@color/black"
                 android:text="@string/setting_vertical_offset_header"/>
 
             <EditText
@@ -136,7 +128,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@color/black"
                 android:text="@string/setting_words_to_ignore_hint"/>
             <EditText
                 android:id="@+id/wordsToIgnoreEditText"

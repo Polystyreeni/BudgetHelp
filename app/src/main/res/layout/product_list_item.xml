@@ -16,14 +16,12 @@
         android:paddingVertical="2dp"
         android:text="@string/hint_product_name"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="12sp" />
     <TextView
         android:id="@+id/productCategoryTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="40dp"
-        android:textColor="@color/black"
         android:text="Kategoria..."
         android:paddingVertical="2dp"
         android:textSize="12sp"
@@ -35,7 +33,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="40dp"
-        android:textColor="@color/black"
         android:text="@string/hint_product_price"
         android:textSize="12sp"
         android:paddingVertical="2dp"

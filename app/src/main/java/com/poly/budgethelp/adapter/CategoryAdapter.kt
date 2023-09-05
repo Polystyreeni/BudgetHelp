@@ -4,12 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.compose.ui.graphics.Color
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.CategoryActivity
 import com.poly.budgethelp.R
 import com.poly.budgethelp.data.Category
+import com.poly.budgethelp.utility.ActivityUtils
 
 class CategoryAdapter : ListAdapter<Category, CategoryAdapter.CategoryViewHolder>(ReceiptsComparator()) {
 
@@ -29,6 +31,11 @@ class CategoryAdapter : ListAdapter<Category, CategoryAdapter.CategoryViewHolder
             val categoryNameView: TextView = itemView.findViewById(R.id.categoryNameTextView)
             val editButton: View = itemView.findViewById(R.id.categoryEditButton)
             val deleteButton: View = itemView.findViewById(R.id.categoryDeleteButton)
+
+            if (ActivityUtils.isUsingNightModeResources(baseContext)) {
+                editButton.setBackgroundColor(android.graphics.Color.WHITE)
+                deleteButton.setBackgroundColor(android.graphics.Color.WHITE)
+            }
 
             categoryNameView.text = category.categoryName
             editButton.setOnClickListener { view ->

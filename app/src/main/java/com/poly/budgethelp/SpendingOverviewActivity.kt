@@ -1,6 +1,7 @@
 package com.poly.budgethelp
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -127,6 +128,11 @@ class SpendingOverviewActivity : AppCompatActivity() {
             if (currentPopup == null) {
                 finish()
             }
+        }
+
+        // Dark mode
+        if (ActivityUtils.isUsingNightModeResources(this)) {
+            returnButton.setBackgroundColor(Color.WHITE)
         }
 
         // Load values from save state (when activity is rotated)

@@ -15,14 +15,12 @@
         android:scrollbars="horizontal"
         android:text="@string/hint_product_name"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="14sp" />
     <TextView
         android:id="@+id/productCategoryTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="40dp"
-        android:textColor="@color/black"
         android:text="@string/new_product_category"
         android:textSize="14sp"
         android:textAlignment="center"
@@ -33,7 +31,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="40dp"
-        android:textColor="@color/black"
         android:text="@string/hint_product_price"
         android:textSize="14sp"
         android:textAlignment="center"

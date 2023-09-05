@@ -1,6 +1,7 @@
 package com.poly.budgethelp
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.adapter.ReceiptListAdapter
 import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.data.Receipt
+import com.poly.budgethelp.utility.ActivityUtils
 import com.poly.budgethelp.viewmodel.ReceiptViewModel
 import com.poly.budgethelp.viewmodel.ReceiptViewModelFactory
 import java.util.Calendar
@@ -90,6 +92,10 @@ class ReceiptListActivity : AppCompatActivity() {
             if (currentPopup == null) {
                 finish()
             }
+        }
+
+        if (ActivityUtils.isUsingNightModeResources(this)) {
+            returnButton.setBackgroundColor(Color.WHITE)
         }
     }
 

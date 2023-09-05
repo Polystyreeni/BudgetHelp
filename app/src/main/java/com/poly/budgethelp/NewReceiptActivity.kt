@@ -1,6 +1,7 @@
 package com.poly.budgethelp
 
 import android.content.Context
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -210,6 +211,10 @@ class NewReceiptActivity : AppCompatActivity() {
                 else
                     finish()
             }
+        }
+
+        if (ActivityUtils.isUsingNightModeResources(this)) {
+            returnButton.setBackgroundColor(Color.WHITE)
         }
 
         // Read data from save bundle:

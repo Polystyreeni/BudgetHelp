@@ -39,6 +39,11 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
             val editButton: View = itemView.findViewById(R.id.productEditButton)
             val deleteButton: View = itemView.findViewById(R.id.productDeleteButton)
 
+            if (ActivityUtils.isUsingNightModeResources(baseContext)) {
+                editButton.setBackgroundColor(android.graphics.Color.WHITE)
+                deleteButton.setBackgroundColor(android.graphics.Color.WHITE)
+            }
+
             nameTextView.text = product.productName
             categoryTextView.text = product.productCategory
             priceTextView.text = String.format("%.2f %s", product.productPrice, UserConfig.currency)
@@ -56,6 +61,11 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
                 val categorySpinner: Spinner = popupData.first.findViewById(R.id.addProductCategorySpinner)
                 val priceEdit: EditText = popupData.first.findViewById(R.id.addProductPriceEditText)
                 val confirmButton: Button = popupData.first.findViewById(R.id.addProductConfirmButton)
+
+                if (ActivityUtils.isUsingNightModeResources(baseContext)) {
+                    nameEdit.setTextColor(android.graphics.Color.BLACK)
+                    priceEdit.setTextColor(android.graphics.Color.BLACK)
+                }
 
                 nameEdit.setText(product.productName)
                 priceEdit.setText(product.productPrice.toString())

@@ -1,5 +1,6 @@
 package com.poly.budgethelp
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -108,6 +109,10 @@ class UserSettingsActivity : AppCompatActivity() {
             for (popup in activePopups)
                 popup.dismiss()
             finish()
+        }
+
+        if (ActivityUtils.isUsingNightModeResources(this)) {
+            returnButton.setTextColor(Color.WHITE)
         }
     }
 

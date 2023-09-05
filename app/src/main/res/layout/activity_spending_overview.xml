@@ -58,17 +58,16 @@
             android:focusable="false"
             android:hint="@string/receipt_list_end_date"
             />
-        <Spinner
-            android:id="@+id/spendingTimeStepSpinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="40dp"
-            android:layout_marginEnd="6dp"
-            android:layout_marginBottom="10dp"
-            android:spinnerMode="dialog"
-            android:layout_weight="1"
-            />
     </LinearLayout>
+    <Spinner
+        android:id="@+id/spendingTimeStepSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="40dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginBottom="6dp"
+        android:spinnerMode="dialog"
+        />
     <Button
         android:id="@+id/spendingSearchButton"
         android:layout_width="match_parent"

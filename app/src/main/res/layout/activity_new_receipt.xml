@@ -16,7 +16,6 @@
         android:layout_height="30dp"
         android:gravity="center"
         android:layout_marginHorizontal="5dp"
-        android:textColor="@color/black"
         />
 
     <TextView
@@ -27,7 +26,6 @@
         android:textStyle="bold"
         android:gravity="center"
         android:textSize="24sp"
-        android:textColor="@color/black"
         android:textAlignment="center"
         />
 
@@ -65,7 +63,7 @@
         android:id="@+id/productRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="8"
+        android:layout_weight="5"
         tools:listitem="@layout/product_list_item"
         android:padding="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -78,7 +76,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="18sp"
         android:gravity="center"
         android:text="@string/receipt_total_price"/>

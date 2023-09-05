@@ -13,6 +13,7 @@ import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -246,9 +247,10 @@ class MainActivity : ComponentActivity() {
         showUpdatePopup.value = true
     }
 
+    @Composable
     private fun getSpendingTextColor(): Color {
         if (spendingLastMonth.value < 0.01f)
-            return Color.Black
+            return if (isSystemInDarkTheme()) {Color.White} else {Color.Black}
         return if (spendingThisMonth.value < spendingLastMonth.value) {DarkGreen} else {Color.Red}
     }
 

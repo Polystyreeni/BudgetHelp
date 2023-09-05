@@ -1,5 +1,6 @@
 package com.poly.budgethelp.utility
 
+import android.content.res.Configuration
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +31,16 @@ class ActivityUtils {
             popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0)
 
             return Pair(popupView, popupWindow)
+        }
+
+        fun isUsingNightModeResources(activity: AppCompatActivity): Boolean {
+            return when (activity.resources.configuration.uiMode and
+                    Configuration.UI_MODE_NIGHT_MASK) {
+                Configuration.UI_MODE_NIGHT_YES -> true
+                Configuration.UI_MODE_NIGHT_NO -> false
+                Configuration.UI_MODE_NIGHT_UNDEFINED -> false
+                else -> false
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.poly.budgethelp
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.adapter.ProductListAdapter
 import com.poly.budgethelp.data.Product
+import com.poly.budgethelp.utility.ActivityUtils
 import com.poly.budgethelp.viewmodel.CategoryViewModel
 import com.poly.budgethelp.viewmodel.CategoryViewModelFactory
 import com.poly.budgethelp.viewmodel.ProductViewModel
@@ -127,6 +129,10 @@ class ProductListActivity : AppCompatActivity() {
             if (activePopup == null) {
                 finish()
             }
+        }
+
+        if (ActivityUtils.isUsingNightModeResources(this)) {
+            returnButton.setBackgroundColor(Color.WHITE)
         }
     }
 
