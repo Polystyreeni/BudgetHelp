@@ -164,7 +164,7 @@ class ProductListActivity : AppCompatActivity() {
     }
 
     fun requestDeleteProduct(toDelete: Product) {
-        val builder = AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this, R.style.AlertDialog)
         builder.setTitle(resources.getString(R.string.delete_product_header, toDelete.productName))
         builder.setCancelable(false)
 

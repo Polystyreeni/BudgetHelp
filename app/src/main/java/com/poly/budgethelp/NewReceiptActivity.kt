@@ -272,7 +272,7 @@ class NewReceiptActivity : AppCompatActivity() {
     }
 
     private fun requestActivityFinish() {
-        val builder = AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this, R.style.AlertDialog)
         builder.setTitle(resources.getString(R.string.new_receipt_request_exit_header))
         builder.setCancelable(false)
 

@@ -104,7 +104,7 @@ class ReceiptInfoActivity : AppCompatActivity() {
     }
 
     private fun requestReceiptDelete() {
-        val builder = AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this, R.style.AlertDialog)
         builder.setTitle(resources.getString(R.string.delete_receipt_header))
         builder.setCancelable(false)
 

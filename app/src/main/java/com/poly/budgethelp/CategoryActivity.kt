@@ -113,7 +113,7 @@ class CategoryActivity : AppCompatActivity() {
     }
 
     private fun requestCategoryEdit(category: Category, newName: String, position: Int) {
-        val builder = AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this, R.style.AlertDialog)
         builder.setTitle(resources.getString(R.string.category_edit_header))
         builder.setCancelable(false)
 
@@ -138,7 +138,7 @@ class CategoryActivity : AppCompatActivity() {
             Toast.makeText(this, resources.getString(R.string.error_delete_default_category), Toast.LENGTH_SHORT).show()
             return
         }
-        val builder = AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this, R.style.AlertDialog)
         builder.setTitle(resources.getString(R.string.category_delete_header))
         builder.setCancelable(false)
 

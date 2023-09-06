@@ -189,7 +189,7 @@ class SpendingOverviewActivity : AppCompatActivity() {
     }
 
     private fun createTimeWarningAlert() {
-        val builder = AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this, R.style.AlertDialog)
         builder.setTitle(resources.getString(R.string.camera_reading_complete))
         builder.setCancelable(false)
 
