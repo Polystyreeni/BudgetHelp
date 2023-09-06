@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.adapter.SpendingItemAdapter
@@ -276,9 +277,22 @@ class SpendingOverviewActivity : AppCompatActivity() {
 
         Log.d(TAG, "Number of receipts:  ${receiptIds.size}")
 
-        receiptProductViewModel.productsInReceipt(receiptIds).observe(this) { crossRef ->
+        val liveData = receiptProductViewModel.productsInReceipt(receiptIds)
+        liveData.observe(this, object: Observer<List<ReceiptWithProducts>> {
+            override fun onChanged(t: List<ReceiptWithProducts>?) {
+                liveData.removeObserver(this)
+                if (t != null) {
+                    populateSpendingData(t, timeStep)
+                } else {
+                    Toast.makeText(baseContext, resources.getString(R.string.error_spending_overview_create_failed), Toast.LENGTH_SHORT).show()
+                    fetchButton.isClickable = true
+                }
+            }
+        })
+
+        /*receiptProductViewModel.productsInReceipt(receiptIds).observe(this) { crossRef ->
             populateSpendingData(crossRef, timeStep)
-        }
+        }*/
     }
 
     private fun populateSpendingData(crossRef: List<ReceiptWithProducts>, timeStep: Long) {
@@ -319,6 +333,8 @@ class SpendingOverviewActivity : AppCompatActivity() {
 
         Log.d(TAG, "Product map contains ${productBlocks.size} elements")
 
+        var fetchedCount = 0
+
         for (kvp in productBlocks) {
             val begin =
                 if (currentTimeStepIndex == 1) DateUtils.getFirstDayOfWeek(startDate!! + timeStep * kvp.key)
@@ -330,13 +346,30 @@ class SpendingOverviewActivity : AppCompatActivity() {
                 end = endDate!!
 
             val productIds: List<Long> = kvp.value.map { item -> item.productId }
-            productViewModel.pricesInCategory(productIds).observe(this) { list ->
-                list.let {
-                    val blockData = SpendingTimeBlock(begin, end, it)
-                    spendingBlockList.add(blockData)
-                    recyclerViewAdapter.notifyDataSetChanged()
+            val liveData = productViewModel.pricesInCategory(productIds)
+            liveData.observe(this, object: Observer<List<CategoryPricePojo>> {
+                override fun onChanged(list: List<CategoryPricePojo>?) {
+                    fetchedCount++
+                    liveData.removeObserver(this)
+                    if (list != null) {
+                        list.let {
+                            val blockData = SpendingTimeBlock(begin, end, it)
+                            spendingBlockList.add(blockData)
+
+                            if (fetchedCount >= productBlocks.count()) {
+                                // Log.d(TAG, "$fetchedCount > prodictBlocks count ${productBlocks.count()}")
+                                val sorted = spendingBlockList.sortedWith(Comparator {a: SpendingTimeBlock, b: SpendingTimeBlock -> b.startTime.compareTo(a.startTime) })
+                                spendingBlockList.clear()
+                                spendingBlockList.addAll(sorted)
+                                recyclerViewAdapter.notifyDataSetChanged()
+                            }
+                        }
+                    } else {
+                        Toast.makeText(baseContext, resources.getString(R.string.error_spending_overview_create_failed), Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
+
+            })
         }
 
         // Re-enable fetch button

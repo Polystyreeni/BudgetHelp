@@ -37,6 +37,7 @@
     <string name="error_update_message_failed">Viestipalveluun ei saatu yhteyttä!</string>
     <string name="error_delete_default_category">Vakiokategoriaa ei voida poistaa!</string>
     <string name="error_modify_default_category">Vakiokategoriaa ei voida muokata!</string>
+    <string name="error_spending_overview_create_failed">Yhteenvedon muodostus epäonnistui!</string>
     <string name="receipt_info_products">Tuotteet kuitilla:</string>
     <string name="hint_receipt_date">Kuitin päivämäärä…</string>
     <string name="hint_product_name">Tuotenimi…</string>
