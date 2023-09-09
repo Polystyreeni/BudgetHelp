@@ -151,7 +151,7 @@ class ReceiptListActivity : AppCompatActivity() {
             }
 
             currentPopup?.dismiss()
-            currentPopup = null
+            // currentPopup = null
 
             resetReceiptAdapter()
         }

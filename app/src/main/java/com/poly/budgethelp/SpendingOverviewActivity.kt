@@ -15,6 +15,7 @@ import android.widget.PopupWindow
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.BlendModeColorFilterCompat
@@ -138,6 +139,15 @@ class SpendingOverviewActivity : AppCompatActivity() {
             returnButton.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(Color.WHITE, BlendModeCompat.SRC_ATOP)
         }
 
+        // Back button functionality
+        onBackPressedDispatcher.addCallback(this) {
+            if (currentPopup != null) {
+                currentPopup?.dismiss()
+            } else {
+                finish()
+            }
+        }
+
         // Load values from save state (when activity is rotated)
         if (savedInstanceState != null) {
             val newStartDate = savedInstanceState.getLong(BUNDLE_START_DATE, 0L)
@@ -234,6 +244,8 @@ class SpendingOverviewActivity : AppCompatActivity() {
         calendarView.maxDate = System.currentTimeMillis()
         calendarView.date = System.currentTimeMillis()
 
+        popupData.second.setOnDismissListener { currentPopup = null }
+
         calendarView.setOnDateChangeListener {_, y, m, d ->
             val calendar: Calendar = Calendar.getInstance()
             calendar.set(Calendar.YEAR, y)
@@ -265,7 +277,7 @@ class SpendingOverviewActivity : AppCompatActivity() {
         if (startDate == null || endDate == null)
             return
 
-        val diff: Long = endDate!! - startDate!!
+        // val diff: Long = endDate!! - startDate!!
         val add: Long = timeStepRange[selectedTimeStep]!!
         // val step: Long = diff / add
         timeStep = add
