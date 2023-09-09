@@ -72,16 +72,16 @@ abstract class AppRoomDatabase : RoomDatabase() {
 
             // Populate with dummy data
             val category0 = Category(DEFAULT_CATEGORY)
-            val category1 = Category("RUOKA")
-            val product0 = Product("Maito", DEFAULT_CATEGORY, 1.39f)
-            val receipt0 = Receipt("Kuitti", 1687881451716, 10.0f)
+            // val category1 = Category("RUOKA")
+            // val product0 = Product("Maito", DEFAULT_CATEGORY, 1.39f)
+            // val receipt0 = Receipt("Kuitti", 1687881451716, 10.0f)
             val wordToIgnore0 = WordToIgnore("YHTEENSÄ")
             val wordToIgnore1 = WordToIgnore("YHTEENSA")
 
             categoryDao.insert(category0)
-            categoryDao.insert(category1)
-            productDao.insert(product0)
-            receiptDao.insertReceipt(receipt0)
+            // categoryDao.insert(category1)
+            // productDao.insert(product0)
+            // receiptDao.insertReceipt(receipt0)
             wordToIgnoreDao.insert(wordToIgnore0)
             wordToIgnoreDao.insert(wordToIgnore1)
 
