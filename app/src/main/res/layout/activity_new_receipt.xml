@@ -1,93 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <View
         android:id="@+id/newReceiptReturnButton"
-        android:background="@drawable/baseline_arrow_back_24"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:gravity="center"
         android:layout_marginHorizontal="5dp"
-        />
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/baseline_arrow_back_24"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/newReceiptHeaderText"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="@string/header_new_receipt"
-        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:gravity="center"
-        android:textSize="24sp"
+        android:text="@string/header_new_receipt"
         android:textAlignment="center"
-        />
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/newReceiptEditTextContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginHorizontal="20dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:orientation="horizontal"
-        >
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/newReceiptHeaderText"
+        app:layout_constraintStart_toEndOf="@+id/newReceiptReturnButton">
 
         <EditText
             android:id="@+id/newReceiptNameEditText"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:inputType="text"
-            android:hint="@string/receipt_name_hint"
             android:layout_weight="1"
-            />
+            android:hint="@string/receipt_name_hint"
+            android:inputType="text" />
+
         <EditText
             android:id="@+id/newReceiptDateButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:inputType="text"
-            android:hint="@string/receipt_date_hint"
-            android:focusable="false"
             android:layout_weight="1"
-            />
-
+            android:focusable="false"
+            android:hint="@string/receipt_date_hint"
+            android:inputType="text" />
     </LinearLayout>
 
-    <include layout="@layout/add_item_header" />
+    <LinearLayout
+        android:id="@+id/newReceiptItemHeaderContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newReceiptEditTextContainer">
+
+        <TextView
+            android:id="@+id/productNameEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:minHeight="40dp"
+            android:text="@string/header_receipt_name"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/productCategorySpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:minHeight="40dp"
+            android:text="@string/header_receipt_category"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/productPriceEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:minHeight="40dp"
+            android:text="@string/header_receipt_price"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:minHeight="40dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="30sp" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/productRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
         tools:listitem="@layout/product_list_item"
         android:padding="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/receiptPriceTextView"
+        app:layout_constraintTop_toBottomOf="@+id/newReceiptItemHeaderContainer" />
+
     <TextView
         android:id="@+id/receiptPriceTextView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textSize="18sp"
         android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/newReceiptSaveButton"
         android:text="@string/receipt_total_price"/>
 
     <Button
         android:id="@+id/newReceiptSaveButton"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
         android:layout_marginVertical="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/receipt_save_button"
         android:textSize="14sp"
-        android:text="@string/receipt_save_button" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="pico_void">#192a56</color>
     <color name="black_20">#33000000</color>
+    <color name="edit_text_grey">#55000000</color>
+
 </resources>

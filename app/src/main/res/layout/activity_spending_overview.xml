@@ -13,7 +13,6 @@
         android:layout_height="30dp"
         android:gravity="center"
         android:layout_marginHorizontal="5dp"
-        android:textColor="@color/black"
         />
 
     <TextView
@@ -22,7 +21,6 @@
         android:text="@string/spending_activity_header"
         android:textStyle="bold"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="24sp"
         />
     <TextView
@@ -30,7 +28,6 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:text="@string/spending_activity_info"
         android:layout_marginBottom="6dp"
         />

@@ -1,17 +1,14 @@
 package com.poly.budgethelp.adapter
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.R
 import com.poly.budgethelp.config.UserConfig
-import com.poly.budgethelp.data.CategoryPricePojo
 import com.poly.budgethelp.data.SpendingTimeBlock
 import com.poly.budgethelp.utility.DateUtils
 
@@ -47,7 +44,6 @@ class SpendingItemAdapter (private var dataSet: List<SpendingTimeBlock>) : Recyc
         for (category in dataSet[position].spending) {
             val textView: TextView = LayoutInflater.from(baseContext).inflate(R.layout.item_spending_category, null) as TextView
             textView.text = String.format("%s: %.2f %s", category.category, category.totalPrice, UserConfig.currency)
-            textView.setTextColor(Color.BLACK)
             holder.categoryLayout.addView(textView)
         }
     }

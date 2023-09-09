@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.compose.ui.graphics.Color
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -33,15 +35,17 @@ class CategoryAdapter : ListAdapter<Category, CategoryAdapter.CategoryViewHolder
             val deleteButton: View = itemView.findViewById(R.id.categoryDeleteButton)
 
             if (ActivityUtils.isUsingNightModeResources(baseContext)) {
-                editButton.setBackgroundColor(android.graphics.Color.WHITE)
-                deleteButton.setBackgroundColor(android.graphics.Color.WHITE)
+                editButton.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                    android.graphics.Color.WHITE, BlendModeCompat.SRC_ATOP)
+                deleteButton.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                    android.graphics.Color.WHITE, BlendModeCompat.SRC_ATOP)
             }
 
             categoryNameView.text = category.categoryName
-            editButton.setOnClickListener { view ->
+            editButton.setOnClickListener { _ ->
                 baseContext.createEditCategoryPopup(category, position)
             }
-            deleteButton.setOnClickListener { view ->
+            deleteButton.setOnClickListener { _ ->
                 baseContext.requestCategoryDelete(category, position)
             }
         }

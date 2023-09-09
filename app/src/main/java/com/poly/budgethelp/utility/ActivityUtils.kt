@@ -33,6 +33,10 @@ class ActivityUtils {
             return Pair(popupView, popupWindow)
         }
 
+        /***
+         * Checks to see if the device is using dark mode, or light mode.
+         * For android versions that don't support dark mode, this is always false
+         */
         fun isUsingNightModeResources(activity: AppCompatActivity): Boolean {
             return when (activity.resources.configuration.uiMode and
                     Configuration.UI_MODE_NIGHT_MASK) {

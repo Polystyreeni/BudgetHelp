@@ -203,7 +203,7 @@ class CameraActivity : AppCompatActivity() {
         lifecycleScope.launch {
             for (block in visionText.textBlocks) {
                 for (line in block.lines) {
-                    if (wordsToIgnore.contains(line.text))
+                    if (wordsToIgnore.contains(line.text.uppercase()))
                         continue
 
                     val text = line.text.replace(",", ".").replace(":", " ")

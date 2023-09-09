@@ -2,6 +2,8 @@ package com.poly.budgethelp
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -49,6 +51,8 @@ import java.util.Date
 import kotlin.math.abs
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import com.poly.budgethelp.config.UserConfig
@@ -214,7 +218,8 @@ class NewReceiptActivity : AppCompatActivity() {
         }
 
         if (ActivityUtils.isUsingNightModeResources(this)) {
-            returnButton.setBackgroundColor(Color.WHITE)
+            returnButton.background.colorFilter =
+                BlendModeColorFilterCompat.createBlendModeColorFilterCompat(Color.WHITE, BlendModeCompat.SRC_ATOP)
         }
 
         // Read data from save bundle:

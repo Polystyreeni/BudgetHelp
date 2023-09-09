@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/rounded_corner"
+    android:background="@drawable/rounded_corner_app_background"
     android:orientation="vertical">
 
     <TextView
@@ -14,7 +14,6 @@
         android:textSize="18sp"
         android:layout_marginVertical="5dp"
         android:textAlignment="center"
-        android:textColor="@color/black"
         />
     <CalendarView
         android:id="@+id/calendarPopupView"

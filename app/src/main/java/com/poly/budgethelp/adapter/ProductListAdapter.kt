@@ -1,5 +1,6 @@
 package com.poly.budgethelp.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +9,13 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.ProductListActivity
 import com.poly.budgethelp.R
-import com.poly.budgethelp.ReceiptInfoActivity
 import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.data.Product
 import com.poly.budgethelp.utility.ActivityUtils
@@ -40,8 +42,9 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
             val deleteButton: View = itemView.findViewById(R.id.productDeleteButton)
 
             if (ActivityUtils.isUsingNightModeResources(baseContext)) {
-                editButton.setBackgroundColor(android.graphics.Color.WHITE)
-                deleteButton.setBackgroundColor(android.graphics.Color.WHITE)
+                editButton.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                    Color.WHITE, BlendModeCompat.SRC_ATOP)
+                deleteButton.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(Color.WHITE, BlendModeCompat.SRC_ATOP)
             }
 
             nameTextView.text = product.productName

@@ -30,6 +30,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:inputType="text"
+        android:textColor="@color/black"
+        android:textColorHint="@color/edit_text_grey"
+        android:backgroundTint="@color/edit_text_grey"
         android:hint="@string/header_receipt_category" />
 
     <Button

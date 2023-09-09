@@ -30,6 +30,9 @@
         android:layout_gravity="center"
         android:inputType="text"
         android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textColorHint="@color/edit_text_grey"
+        android:backgroundTint="@color/edit_text_grey"
         android:hint="@string/word_to_ignore_add_hint" />
 
     <Button

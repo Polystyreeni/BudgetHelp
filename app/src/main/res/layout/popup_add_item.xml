@@ -32,6 +32,8 @@
         android:layout_marginBottom="10dp"
         android:inputType="text"
         android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textColorHint="@color/edit_text_grey"
         android:hint="@string/new_product_name" />
 
     <TextView
@@ -59,7 +61,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:inputType="numberDecimal"
+        android:inputType="numberSigned|numberDecimal"
+        android:textColor="@color/black"
+        android:textColorHint="@color/edit_text_grey"
+        android:backgroundTint="@color/edit_text_grey"
         android:hint="@string/new_product_price" />
 
     <Button

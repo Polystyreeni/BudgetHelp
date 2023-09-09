@@ -37,6 +37,7 @@
         android:drawablePadding="16dp"
         android:textColor="@color/black"
         android:hint="Näytettävät kategoriat..."
+        android:textColorHint="@color/black"
         android:padding="12dp"
         />
 

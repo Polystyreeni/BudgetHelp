@@ -17,6 +17,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -133,7 +135,7 @@ class SpendingOverviewActivity : AppCompatActivity() {
 
         // Dark mode
         if (ActivityUtils.isUsingNightModeResources(this)) {
-            returnButton.setBackgroundColor(Color.WHITE)
+            returnButton.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(Color.WHITE, BlendModeCompat.SRC_ATOP)
         }
 
         // Load values from save state (when activity is rotated)

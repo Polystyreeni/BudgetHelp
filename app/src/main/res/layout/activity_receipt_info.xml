@@ -1,42 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <View
         android:id="@+id/receiptInfoReturnButton"
-        android:background="@drawable/baseline_arrow_back_24"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/baseline_arrow_back_24"
         android:gravity="center"
-        android:layout_marginHorizontal="5dp"
         android:textColor="@color/black"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/receiptInfoNameText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="KUITIN NIMI"
-        android:textSize="24sp"
-        android:textAlignment="center"
-        android:textStyle="bold"
+        android:layout_width="134dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="5dp"
         android:gravity="center"
         android:orientation="horizontal"
-        />
+        android:text="KUITIN NIMI"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/receiptInfoDateText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textAlignment="center"
-        android:layout_marginBottom="5dp"
         android:text="PVM"
-        />
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/receiptInfoNameText" />
+
     <TextView
         android:id="@+id/receiptInfoPriceText"
         android:layout_width="match_parent"
@@ -45,30 +51,47 @@
         android:textAlignment="center"
         android:layout_marginBottom="5dp"
         android:text="@string/receipt_total_price"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/receiptInfoDateText"
         />
+
     <TextView
+        android:id="@+id/receiptInfoProductsHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
         android:textSize="16sp"
         android:textAlignment="center"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         android:text="@string/receipt_info_products"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/receiptInfoPriceText"
         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/receiptItemsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/item_receipt_product"
-        android:padding="6dp" />
+        android:layout_height="0dp"
+        android:padding="6dp"
+        app:layout_constraintBottom_toTopOf="@id/receiptInfoDeleteButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/receiptInfoProductsHeader"
+        tools:listitem="@layout/item_receipt_product" />
+
     <Button
         android:id="@+id/receiptInfoDeleteButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
-        android:text="Poista kuitti"
-        />
+        android:layout_marginVertical="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/delete_receipt_header"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
