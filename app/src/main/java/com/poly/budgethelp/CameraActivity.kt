@@ -274,6 +274,7 @@ class CameraActivity : AppCompatActivity() {
         builder.setNegativeButton(resources.getString(R.string.camera_alert_negative)) { dialogInterface, _ ->
             dialogInterface.dismiss()
             currentPopup?.dismiss()
+            captureButton.isClickable = true
         }
 
         builder.show()
