@@ -5,6 +5,7 @@ import android.util.Log
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.poly.budgethelp.MainActivity
+import com.poly.budgethelp.config.NetworkConfig
 import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.config.VersionManager
 import com.poly.budgethelp.volleyExtensions.Utf8StringRequest
@@ -21,15 +22,17 @@ class MessageService {
     )
     companion object {
         private const val TAG = "MessageService"
-        private const val MESSAGE_URL = "DUMMY_REPLACE_ME"
         private const val MESSAGE_SAVE_FILE = "versionData"
         var currentMessage: UpdateMessage = UpdateMessage("0", VersionManager.currentVersion, "null")
         var currentMessageId: String? = null
 
         fun fetchMessage(context: MainActivity) {
+            if (!NetworkConfig.ALLOW_NETWORK_ACCESS)
+                return
+
             getLatestMessageId(context)
             val queue = Volley.newRequestQueue(context)
-            val request = Utf8StringRequest(Request.Method.GET, MESSAGE_URL, {response ->
+            val request = Utf8StringRequest(Request.Method.GET, NetworkConfig.MESSAGE_URL, {response ->
                 Log.d(TAG, response)
                 val contents = response.split("|")
                 if (contents.size != 3) {

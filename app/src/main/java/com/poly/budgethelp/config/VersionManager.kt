@@ -16,14 +16,13 @@ class VersionManager {
         }
     }
     companion object {
-        private const val VERSION_URL: String = "DUMMY_REPLACE_ME"
-        const val RELEASE_URL: String = "GITHUB_LINK_HERE"
-
-        var currentVersion: Version = Version(1, 0, 0)
+        var currentVersion: Version = Version(0, 9, 9)
 
         fun fetchLatestVersion(context: MainActivity) {
+            if (!NetworkConfig.ALLOW_NETWORK_ACCESS)
+                return
             val queue = Volley.newRequestQueue(context)
-            val stringRequest = StringRequest(Request.Method.GET, VERSION_URL,
+            val stringRequest = StringRequest(Request.Method.GET, NetworkConfig.VERSION_URL,
                 {response ->
                     val versionData: Version = stringToVersionOrNull(response) ?: return@StringRequest
                     context.onVersionRetrieved(currentVersion, versionData)

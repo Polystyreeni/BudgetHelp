@@ -9,6 +9,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.TextUnit
+import com.poly.budgethelp.config.NetworkConfig
 import com.poly.budgethelp.config.VersionManager
 
 // Author: Stefan Jovanovic
@@ -22,7 +23,7 @@ fun HyperlinkText(
     linkTextColor: Color = Color.Blue,
     linkTextFontWeight: FontWeight = FontWeight.Medium,
     linkTextDecoration: TextDecoration = TextDecoration.Underline,
-    hyperlinks: List<String> = listOf(VersionManager.RELEASE_URL),
+    hyperlinks: List<String> = listOf(NetworkConfig.RELEASE_URL),
     fontSize: TextUnit = TextUnit.Unspecified
 ) {
     val annotatedString = buildAnnotatedString {

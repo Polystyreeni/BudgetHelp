@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.poly.budgethelp.config.NetworkConfig
 import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.config.VersionManager
 import com.poly.budgethelp.messageservice.MessageService
@@ -527,7 +528,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(8.dp),
                         fullText = resources.getString(R.string.app_update_info),
                         linkText = listOf(resources.getString(R.string.app_update_link_short)),
-                        hyperlinks = listOf(VersionManager.RELEASE_URL)
+                        hyperlinks = listOf(NetworkConfig.RELEASE_URL)
                     )
 
                     Button(onClick = {
