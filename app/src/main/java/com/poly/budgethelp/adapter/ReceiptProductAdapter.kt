@@ -106,6 +106,7 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             categoryConfirmButton.setOnClickListener {_ ->
                                 val categoryName = categoryText.text.toString()
                                 item.context.addNewCategory(categoryName)
+                                categoryPopupData.second.dismiss()
                                 // item.context.removePopup(categoryPopupData.second)
                             }
 
