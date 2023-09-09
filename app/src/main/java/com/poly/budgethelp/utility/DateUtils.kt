@@ -46,5 +46,12 @@ class DateUtils {
             calendar.add(Calendar.MONTH, -1)
             return calendar.timeInMillis
         }
+
+        fun getDayLastHour(time: Long): Long {
+            val calendar: Calendar = Calendar.getInstance(Locale("en", "UK"))
+            calendar.timeInMillis = time
+            calendar.set(Calendar.HOUR_OF_DAY, calendar.getActualMaximum(Calendar.HOUR_OF_DAY))
+            return calendar.timeInMillis
+        }
     }
 }

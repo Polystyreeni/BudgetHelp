@@ -139,7 +139,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun getSpendingData() {
-        val currentTime = System.currentTimeMillis()
+        val currentTime = DateUtils.getDayLastHour(System.currentTimeMillis())
         val firstDayOfCurrent = DateUtils.getFirstDayOfMonth(currentTime)
         val currentLastMonth = DateUtils.getDayLastMonth(currentTime)
         val firstDayLastMonth = DateUtils.getFirstDayOfMonth(currentLastMonth)
