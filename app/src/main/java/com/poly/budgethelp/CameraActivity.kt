@@ -189,7 +189,8 @@ class CameraActivity : AppCompatActivity() {
                 permissionGranted = false
         }
         if (!permissionGranted) {
-            Toast.makeText(baseContext, "Permission request denied", Toast.LENGTH_SHORT).show()
+            Toast.makeText(baseContext, resources.getString(R.string.error_camera_permissions_not_granted), Toast.LENGTH_SHORT).show()
+            finish()
         } else {
             startCamera()
         }
