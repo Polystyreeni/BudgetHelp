@@ -353,6 +353,7 @@ class NewReceiptActivity : AppCompatActivity() {
         productsInReceipt.add(position, product)
         dataSet.add(position, ContentItem(product, this))
         itemListAdapter.notifyItemInserted(position)
+        itemListAdapter.notifyItemRangeChanged(position, dataSet.size)
         calculateTotalPrice()
     }
 
