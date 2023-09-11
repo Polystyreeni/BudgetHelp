@@ -60,6 +60,9 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
                 popupData.second.isFocusable = true
                 baseContext.activePopup = popupData.second
 
+                val headerTextView: TextView = popupData.first.findViewById(R.id.addItemPopupHeader)
+                headerTextView.text = baseContext.resources.getString(R.string.edit_product_header)
+
                 val nameEdit: EditText = popupData.first.findViewById(R.id.addProductNameEditText)
                 val categorySpinner: Spinner = popupData.first.findViewById(R.id.addProductCategorySpinner)
                 val priceEdit: EditText = popupData.first.findViewById(R.id.addProductPriceEditText)
@@ -109,7 +112,6 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
                         baseContext.saveProduct(newProduct)
 
                         popupData.second.dismiss()
-                        baseContext.activePopup = null
                     }
                 }
 
