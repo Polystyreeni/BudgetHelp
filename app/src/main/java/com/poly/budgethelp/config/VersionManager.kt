@@ -16,7 +16,7 @@ class VersionManager {
         }
     }
     companion object {
-        var currentVersion: Version = Version(0, 9, 9)
+        var currentVersion: Version = Version(1, 0, 0)
 
         fun fetchLatestVersion(context: MainActivity) {
             if (!NetworkConfig.ALLOW_NETWORK_ACCESS)
@@ -27,7 +27,7 @@ class VersionManager {
                     val versionData: Version = stringToVersionOrNull(response) ?: return@StringRequest
                     context.onVersionRetrieved(currentVersion, versionData)
                 },
-                {error ->
+                {_ ->
                     context.onVersionRetrieved(currentVersion, currentVersion)
                 })
             queue.add(stringRequest)

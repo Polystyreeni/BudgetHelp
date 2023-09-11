@@ -380,7 +380,6 @@ class NewReceiptActivity : AppCompatActivity() {
         productsInReceipt.forEach {prod -> dataSet.add(ContentItem(prod, this))}
         dataSet.add(AddItem(this))
         itemListAdapter.notifyItemChanged(position)
-        Log.d(TAG, "Modify item at position ${position}")
         calculateTotalPrice()
     }
 

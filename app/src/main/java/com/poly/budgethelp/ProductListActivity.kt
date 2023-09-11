@@ -66,7 +66,6 @@ class ProductListActivity : AppCompatActivity() {
                 // it.forEach { category -> categoryList.add(category.categoryName) }
                 selectedCategories = BooleanArray(it.count())
                 it.forEach {category -> categoryArrayList.add(category.categoryName)}
-                Log.d("ProductListActivity", "CategoryAdapter count: " + categoryAdapter.count)
             }
         }
 
@@ -144,7 +143,6 @@ class ProductListActivity : AppCompatActivity() {
         // Start new observe
         productViewModel.productsInCategories(products).observe(this) { productsInCategory ->
             productsInCategory.let {
-                Log.d("ProductListActivity", "Refresh products list")
                 productAdapter.submitList(productsInCategory)
             }
         }

@@ -271,7 +271,6 @@ class SpendingOverviewActivity : AppCompatActivity() {
     }
 
     private fun generateTimeSteps(selectedTimeStep: String) {
-        Log.d(TAG, "Selected timestep is: $selectedTimeStep")
         timeSteps.clear()
 
         if (startDate == null || endDate == null)
@@ -282,7 +281,6 @@ class SpendingOverviewActivity : AppCompatActivity() {
         // val step: Long = diff / add
         timeStep = add
 
-        // Log.d(TAG, "Step is: $step")
     }
 
     private fun getReceiptCrossRefData(receipts: List<Receipt>, timeStep: Long) {
@@ -310,11 +308,6 @@ class SpendingOverviewActivity : AppCompatActivity() {
     }
 
     private fun populateSpendingData(crossRef: List<ReceiptWithProducts>, timeStep: Long) {
-        //val products: ArrayList<Product> = arrayListOf()
-        // crossRef.forEach {ref -> products.addAll(ref.products)}
-
-        // Log.d(TAG, "Number of products:  ${products.size}")
-
         // Clear previous data
         spendingBlockList.clear()
 
@@ -344,8 +337,6 @@ class SpendingOverviewActivity : AppCompatActivity() {
             currentDate = upperLimit
             blockIndex++
         }
-
-        Log.d(TAG, "Product map contains ${productBlocks.size} elements")
 
         var fetchedCount = 0
 
