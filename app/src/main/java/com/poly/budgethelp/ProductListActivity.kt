@@ -100,14 +100,6 @@ class ProductListActivity : AppCompatActivity() {
             builder.setNegativeButton(resources.getString(R.string.generic_reply_negative)) { dialogInterface, _ ->
                 dialogInterface.dismiss()
             }
-            builder.setNeutralButton(resources.getString(R.string.generic_reply_clear)) { _, _ ->
-                for (i in selectedCategories.indices) {
-                    selectedCategories[i] = false
-                    categoryList.clear()
-                    categorySelectView.text = ""
-                }
-            }
-
             builder.show()
         }
 
