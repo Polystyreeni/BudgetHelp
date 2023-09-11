@@ -1,6 +1,8 @@
 package com.poly.budgethelp
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.ColorFilter
 import android.graphics.PorterDuff
@@ -53,15 +55,20 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.utility.DateUtils
 import com.poly.budgethelp.utility.TextUtils
+import java.io.BufferedReader
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InputStreamReader
+import kotlin.streams.toList
 
 class NewReceiptActivity : AppCompatActivity() {
 
-    private val TAG: String = "NewRecipeActivity"
     private val BUNDLE_PRODUCT_DATA: String = "productData"
     private val BUNDLE_RECEIPT_DATE: String = "receiptDate"
 
@@ -113,8 +120,6 @@ class NewReceiptActivity : AppCompatActivity() {
         receiptDateButton = findViewById(R.id.newReceiptDateButton)
 
         receiptDateButton.setOnClickListener {_ ->
-            // Some hackery for hiding soft keyboard
-            // https://stackoverflow.com/questions/1109022/how-to-close-hide-the-android-soft-keyboard-programmatically
             disableSoftKeyboard()
             createCalendarPopup()
         }
@@ -178,8 +183,15 @@ class NewReceiptActivity : AppCompatActivity() {
             }
         }).attachToRecyclerView(recyclerView)
 
-        // Parse products from camera only if state is null (otherwise we'll lose all product edits)
+        // Parse products from camera/file only if state is null (otherwise we'll lose all product edits)
         if (savedInstanceState == null) {
+            val loadTempFile: Boolean? = intent.extras?.getBoolean(EXTRA_LOAD_PRODUCTS)
+            if (loadTempFile!!) {
+                val products = loadTemporaryReceipt(this)
+                productsInReceipt.addAll(products)
+                refreshProductList()
+            }
+
             val text: String? = intent.extras?.getString(CameraActivity.EXTRA_MESSAGE)
             parseProductsFromCamera(text)
         }
@@ -217,6 +229,13 @@ class NewReceiptActivity : AppCompatActivity() {
             }
         }
 
+        val cameraButton: View = findViewById(R.id.newReceiptCameraActivity)
+        cameraButton.setOnClickListener { _ ->
+            if (currentPopups.size <= 0) {
+                requestCameraActivity()
+            }
+        }
+
         if (ActivityUtils.isUsingNightModeResources(this)) {
             returnButton.background.colorFilter =
                 BlendModeColorFilterCompat.createBlendModeColorFilterCompat(Color.WHITE, BlendModeCompat.SRC_ATOP)
@@ -225,7 +244,9 @@ class NewReceiptActivity : AppCompatActivity() {
         // Read data from save bundle:
         if (savedInstanceState != null) {
             val productData: String? = savedInstanceState.getString(BUNDLE_PRODUCT_DATA)
-            parseProductBundleString(productData!!)
+            val products = parseProductSaveString(productData!!)
+            productsInReceipt.addAll(products)
+            refreshProductList()
 
             receiptDate = savedInstanceState.getLong(BUNDLE_PRODUCT_DATA)
             receiptDateButton.setText(DateUtils.longToDateString(receiptDate))
@@ -250,8 +271,8 @@ class NewReceiptActivity : AppCompatActivity() {
     private fun generateProductBundleString(): String {
         val builder: StringBuilder = StringBuilder()
         for ( i in productsInReceipt.indices) {
-            builder.append(productsInReceipt[i].productName).append("|")
-                .append(productsInReceipt[i].productCategory).append("|")
+            builder.append(productsInReceipt[i].productName).append(saveFileDelimiter)
+                .append(productsInReceipt[i].productCategory).append(saveFileDelimiter)
                 .append(productsInReceipt[i].productPrice)
 
             if (i < productsInReceipt.size - 1)
@@ -259,21 +280,6 @@ class NewReceiptActivity : AppCompatActivity() {
         }
 
         return builder.toString()
-    }
-
-    private fun parseProductBundleString(productData: String) {
-        val lines = productData.split(System.lineSeparator())
-        for (line in lines) {
-            val lineContents = line.split("|")
-            if (lineContents.size == 3) {
-                val productName = lineContents[0]
-                val productCategory = lineContents[1]
-                val productPrice = lineContents[2].toFloat()
-                addNewProduct(Product(productName, productCategory, productPrice))
-            }
-        }
-
-        calculateTotalPrice()
     }
 
     private fun requestActivityFinish() {
@@ -291,11 +297,52 @@ class NewReceiptActivity : AppCompatActivity() {
             dialogInterface.dismiss()
         }
 
+        builder.setNeutralButton(resources.getString(R.string.new_receipt_create_temp_receipt)) { dialogInterface, _ ->
+            val success: Boolean = saveTemporaryReceipt(this, productsInReceipt,
+                receiptNameEdit.text.toString(), receiptDate)
+            dialogInterface.dismiss()
+
+            if (success) {
+                Toast.makeText(this, resources.getString(R.string.new_receipt_temp_receipt_created), Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                Toast.makeText(this, resources.getString(R.string.error_creating_temporary_receipt), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        builder.show()
+    }
+
+    private fun requestCameraActivity() {
+        val builder = AlertDialog.Builder(this, R.style.AlertDialog)
+        builder.setTitle(R.string.new_receipt_continue_with_camera_header)
+        builder.setMessage(R.string.new_receipt_continue_with_camera_message)
+        builder.setPositiveButton(R.string.new_product_confirm) {dialogInterface, _ ->
+            saveTemporaryReceipt(this, productsInReceipt, receiptNameEdit.text.toString(), receiptDate)
+            dialogInterface.dismiss()
+
+            val intent = Intent(this, CameraActivity::class.java)
+            intent.putExtra(EXTRA_LOAD_PRODUCTS, true)
+            this.startActivity(intent)
+            finish()
+        }
+        builder.setNegativeButton(R.string.generic_reply_negative) {dialogInterface, _ ->
+            dialogInterface.dismiss()
+        }
+
         builder.show()
     }
 
     fun addNewProduct(product: Product) {
         productsInReceipt.add(product)
+        dataSet.clear()
+        productsInReceipt.forEach {prod -> dataSet.add(ContentItem(prod, this))}
+        dataSet.add(AddItem(this))
+        itemListAdapter.notifyDataSetChanged()
+        calculateTotalPrice()
+    }
+
+    private fun refreshProductList() {
         dataSet.clear()
         productsInReceipt.forEach {prod -> dataSet.add(ContentItem(prod, this))}
         dataSet.add(AddItem(this))
@@ -436,7 +483,7 @@ class NewReceiptActivity : AppCompatActivity() {
     private fun checkInput() {
         receiptName = receiptNameEdit.text.toString()
         if (receiptName.isBlank())
-            receiptName = "Kuitti"
+            receiptName = "Kuitti ${DateUtils.longToDateString(System.currentTimeMillis())}"
         if (receiptDate <= 0)
             receiptDate = System.currentTimeMillis()
     }
@@ -447,6 +494,10 @@ class NewReceiptActivity : AppCompatActivity() {
             calculateTotalPrice()
             return
         }
+
+        /*val previousProducts: List<String> = productsInReceipt.map {product ->
+            product.productName
+        }*/
 
         Log.d(TAG, "Parsing products from camera")
         val pairs: List<String> = text.split(System.lineSeparator())
@@ -467,7 +518,31 @@ class NewReceiptActivity : AppCompatActivity() {
             prices.add(price)
         }
 
-        productViewModel.productsWithNames(productNames).observe(this) {products ->
+        val liveData = productViewModel.productsWithNames(productNames)
+        liveData.observe(this, object: Observer<List<Product>> {
+            override fun onChanged(products: List<Product>?) {
+                liveData.removeObserver(this)
+                if (products == null)
+                    return
+                products.let {
+                    for (product in it) {
+                        if (productNames.contains(product.productName)) {
+                            nameWithCategory[product.productName] = product.productCategory
+                        }
+                    }
+
+                    // Populate products list
+                    for (i in 0 until productNames.size) {
+                        var category: String? = nameWithCategory[productNames[i]]
+                        if (category == null) category = AppRoomDatabase.DEFAULT_CATEGORY
+                        val product = Product(productNames[i], category, prices[i])
+                        Log.d(TAG, "Adding product from camera: " + product.productName)
+                        addNewProduct(product)
+                    }
+                }
+            }
+        })
+        /*productViewModel.productsWithNames(productNames).observe(this) {products ->
             products.let {
                 for (product in it) {
                     if (productNames.contains(product.productName)) {
@@ -484,7 +559,7 @@ class NewReceiptActivity : AppCompatActivity() {
                     addNewProduct(product)
                 }
             }
-        }
+        }*/
     }
 
     private fun createLoadPopup() {
@@ -532,5 +607,109 @@ class NewReceiptActivity : AppCompatActivity() {
         }
 
         currentPopups.add(popupWindow)
+    }
+
+    companion object {
+        private const val TAG = "NewReceiptActivity"
+        const val EXTRA_LOAD_PRODUCTS: String = "NewReceiptSavedProducts"
+        private const val tempSaveFileName: String = "tempReceipt"
+        const val saveFileDelimiter: String = "|"
+        fun saveTemporaryReceipt(context: AppCompatActivity, products: List<Product>, name: String, date: Long): Boolean {
+            val outputStream: FileOutputStream
+            try {
+                outputStream = context.openFileOutput(tempSaveFileName, Context.MODE_PRIVATE)
+                val settingsBuilder = StringBuilder()
+
+                // Receipt file header: Storing receipt name and date
+                settingsBuilder.append(name).append(saveFileDelimiter).append(date).append(System.lineSeparator())
+
+                // Save products
+                for (i in products.indices) {
+                    Log.d(TAG, "Saving product: ${products[i].productName}")
+                    settingsBuilder.append(products[i].productName).append(saveFileDelimiter)
+                        .append(products[i].productCategory).append(saveFileDelimiter)
+                        .append(products[i].productPrice)
+                        if (i < products.size - 1)
+                            settingsBuilder.append(System.lineSeparator())
+                }
+
+                outputStream.write(settingsBuilder.toString().encodeToByteArray())
+                outputStream.close()
+                Log.d(TAG, "Saved temporary receipt successfully")
+                return true
+            }
+            catch(ex: Exception) {
+                ex.printStackTrace()
+                return false
+            }
+        }
+
+        fun loadTemporaryReceipt(context: AppCompatActivity): List<Product> {
+            val products: ArrayList<Product> = arrayListOf()
+            val inputStream: FileInputStream
+            try {
+                inputStream = context.openFileInput(tempSaveFileName)
+                val inputReader = InputStreamReader(inputStream)
+                val bufferedReader = BufferedReader(inputReader)
+
+                val fileContent = bufferedReader.readLines()
+                for (i in fileContent.indices) {
+                    Log.d(TAG, "Reading line: ${fileContent[i]}")
+
+                    if (i == 0) {
+                        // Line 0 -> Header for receipt
+                        val lineData = fileContent[i].split(saveFileDelimiter)
+                        if (lineData.size == 2) {
+                            val name = lineData[0]
+                            val date: Long? = lineData[1].toLongOrNull()
+
+                            val activity = context as NewReceiptActivity
+                            activity.receiptNameEdit.setText(name)
+                            if (date != null && date > 0) {
+                                activity.receiptDate = date
+                                activity.receiptDateButton.setText(DateUtils.longToDateString(date))
+                            }
+                        }
+
+                    } else {
+                        // Line 1..n -> Products on receipt
+                        val lineData = fileContent[i].split(saveFileDelimiter)
+                        if (lineData.size == 3) {
+                            val productName = lineData[0]
+                            val productCategory = lineData[1]
+                            val productPrice = lineData[2].toFloat()
+                            products.add(Product(productName, productCategory, productPrice))
+                        }
+                    }
+                }
+
+                // Delete temporary file on load
+                inputStream.close()
+                context.deleteFile(tempSaveFileName)
+
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+
+            Log.d(TAG, "Load temporary receipt complete, found ${products.size} products")
+            return products
+        }
+
+        private fun parseProductSaveString(productData: String): List<Product> {
+            // save data is in format product|category|price, one product per line
+            val products: ArrayList<Product> = arrayListOf()
+            val lines = productData.split(System.lineSeparator())
+            for (line in lines) {
+                val lineContents = line.split(saveFileDelimiter)
+                if (lineContents.size == 3) {
+                    val productName = lineContents[0]
+                    val productCategory = lineContents[1]
+                    val productPrice = lineContents[2].toFloat()
+                    products.add(Product(productName, productCategory, productPrice))
+                }
+            }
+
+            return products
+        }
     }
 }

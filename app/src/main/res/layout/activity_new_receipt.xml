@@ -17,6 +17,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <View
+        android:id="@+id/newReceiptCameraActivity"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/baseline_photo_camera_24"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/newReceiptHeaderText"
         android:layout_width="match_parent"

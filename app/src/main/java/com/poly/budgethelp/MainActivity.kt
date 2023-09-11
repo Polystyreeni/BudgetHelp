@@ -205,8 +205,9 @@ class MainActivity : ComponentActivity() {
         this.startActivity(intent)
     }
 
-    private fun startNewReceipt() {
+    private fun startNewReceipt(loadTemporary: Boolean = false) {
         val intent = Intent(this, NewReceiptActivity::class.java)
+        intent.putExtra(NewReceiptActivity.EXTRA_LOAD_PRODUCTS, loadTemporary)
         this.startActivity(intent)
     }
 
@@ -277,6 +278,7 @@ class MainActivity : ComponentActivity() {
         if (showUpdatePopup.value) {
             return
         }
+
         showNewReceiptPopup.value = false
         showSpendingPopup.value = false
         showManagementPopup.value = false
@@ -410,6 +412,12 @@ class MainActivity : ComponentActivity() {
                         onDismiss()
                     }) {
                         Text(text = resources.getString(R.string.main_button_new_receipt_manual))
+                    }
+                    Button(onClick = {
+                        startNewReceipt(true)
+                        onDismiss()
+                    }) {
+                        Text(text = resources.getString(R.string.main_button_continue_receipt))
                     }
                 }
             }

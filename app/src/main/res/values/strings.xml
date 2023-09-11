@@ -39,6 +39,7 @@
     <string name="error_modify_default_category">Vakiokategoriaa ei voida muokata!</string>
     <string name="error_spending_overview_create_failed">Yhteenvedon muodostus epäonnistui!</string>
     <string name="error_camera_permissions_not_granted">Kameran käyttöoikeuksia ei sallittu!</string>
+    <string name="error_creating_temporary_receipt">Keskeneräisen kuitin tallennus epäonnistui!</string>
     <string name="receipt_info_products">Tuotteet kuitilla:</string>
     <string name="hint_receipt_date">Kuitin päivämäärä…</string>
     <string name="hint_product_name">Tuotenimi…</string>
@@ -61,6 +62,8 @@
     <string name="camera_reading_complete">Kuitti luettu</string>
     <string name="camera_number_of_items">Löydettiin %1$d tuotetta kuitilta.
         Lisätäänkö tuotteet uudelle kuitille?</string>
+    <string name="camera_number_of_items_existing">Löydettiin %1$d tuotetta kuitilta.
+        Lisätäänkö tuotteet viimeisimmälle keskeneräiselle kuitille?</string>
     <string name="camera_alert_positive">Lisää</string>
     <string name="camera_alert_negative">Peruuta</string>
     <string name="delete_from_new_receipt">Poistettiin %1$s</string>
@@ -110,6 +113,10 @@
     ]]></string>
     <string name="new_receipt_request_exit_header">Keskeytä kuitin luonti?</string>
     <string name="new_receipt_request_exit_message">Kuitilla on %1$d tuotetta. Hylätäänkö kuitti?</string>
+    <string name="new_receipt_create_temp_receipt">Tall. keskeneräisenä</string>
+    <string name="new_receipt_temp_receipt_created">Kuitti tallennettu keskeneräisenä</string>
+    <string name="new_receipt_continue_with_camera_header">Lisää uusia tuotteita kamerasta</string>
+    <string name="new_receipt_continue_with_camera_message">Haluatko lisätä kuitille uusia tuotteita kuvan perusteella?</string>
     <string name="main_text_greeting">Hei %1$s!</string>
     <string name="main_text_spending_current_header">Kulutus tässä kuussa:</string>
     <string name="main_text_spending_previous_header">Edellisellä ajanjaksolla:</string>
@@ -120,6 +127,8 @@
     <string name="main_button_category_list">Kategorialista</string>
     <string name="main_button_new_receipt_camera">Kuvaa uusi kuitti</string>
     <string name="main_button_new_receipt_manual">Uusi tyhjä kuitti</string>
+    <string name="main_button_continue_receipt">Jatka keskeytettyä</string>
+
 
     <string-array name="spending_timestep_array">
         <item>Valitse aika-asteikko</item>

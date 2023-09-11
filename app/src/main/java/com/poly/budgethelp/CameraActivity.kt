@@ -53,6 +53,8 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var wordsToIgnore: ArrayList<String>
     private var currentPopup: PopupWindow? = null
 
+    private var addToExistingReceipt = false
+
     // Viewmodels
     private val wordToIgnoreViewModel: WordToIgnoreViewModel by viewModels {
         WordToIgnoreViewModelFactory((application as BudgetApplication).wordToIgnoreRepository)
@@ -80,7 +82,7 @@ class CameraActivity : AppCompatActivity() {
         textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
         captureButton = findViewById(R.id.fab)
-        captureButton.setOnClickListener { view -> takePicture() }
+        captureButton.setOnClickListener { _ -> takePicture() }
 
         wordsToIgnore = arrayListOf()
         // Set words to ignore
@@ -89,6 +91,11 @@ class CameraActivity : AppCompatActivity() {
                 it.forEach {toIgnore -> wordsToIgnore.add(toIgnore.word)}
             }
         }
+
+        // Is this activity continuing an existing receipt
+        val existingReceipt: Boolean? = intent.extras?.getBoolean(NewReceiptActivity.EXTRA_LOAD_PRODUCTS)
+        if (existingReceipt != null)
+            addToExistingReceipt = true
     }
 
     override fun onStop() {
@@ -152,7 +159,6 @@ class CameraActivity : AppCompatActivity() {
             imageCapture = ImageCapture.Builder().build()
 
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
             try {
                 // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
@@ -207,7 +213,8 @@ class CameraActivity : AppCompatActivity() {
                     if (wordsToIgnore.contains(line.text.uppercase()))
                         continue
 
-                    val text = line.text.replace(",", ".").replace(":", " ")
+                    val text = line.text.replace(",", ".")
+                        .replace(":", " ").replace(NewReceiptActivity.saveFileDelimiter, " ")
                     val textValue: Float? = text.toFloatOrNull()
                     if (textValue != null && textValue <= UserConfig.productMaxPrice) {
                         val y = line.boundingBox?.centerY()
@@ -262,11 +269,16 @@ class CameraActivity : AppCompatActivity() {
         builder.setTitle(resources.getString(R.string.camera_reading_complete))
         builder.setCancelable(false)
 
-        builder.setMessage(resources.getString(R.string.camera_number_of_items, productCount))
+        if (addToExistingReceipt) {
+            builder.setMessage(resources.getString(R.string.camera_number_of_items_existing, productCount))
+        } else {
+            builder.setMessage(resources.getString(R.string.camera_number_of_items, productCount))
+        }
         builder.setPositiveButton(resources.getString(R.string.camera_alert_positive)) {dialogInterface, _ ->
             // Start new activity
             val intent = Intent(this, NewReceiptActivity::class.java)
             intent.putExtra(EXTRA_MESSAGE, data.toString())
+            intent.putExtra(NewReceiptActivity.EXTRA_LOAD_PRODUCTS, addToExistingReceipt)
             startActivity(intent)
             dialogInterface.dismiss()
             finish()
