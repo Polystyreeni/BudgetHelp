@@ -40,6 +40,7 @@
     <string name="error_spending_overview_create_failed">Yhteenvedon muodostus epäonnistui!</string>
     <string name="error_camera_permissions_not_granted">Kameran käyttöoikeuksia ei sallittu!</string>
     <string name="error_creating_temporary_receipt">Keskeneräisen kuitin tallennus epäonnistui!</string>
+    <string name="error_loading_temporary_receipt">Keskeneräisen kuitin lataus epäonnistui!</string>
     <string name="receipt_info_products">Tuotteet kuitilla:</string>
     <string name="hint_receipt_date">Kuitin päivämäärä…</string>
     <string name="hint_product_name">Tuotenimi…</string>
@@ -113,7 +114,7 @@
     ]]></string>
     <string name="new_receipt_request_exit_header">Keskeytä kuitin luonti?</string>
     <string name="new_receipt_request_exit_message">Kuitilla on %1$d tuotetta. Hylätäänkö kuitti?</string>
-    <string name="new_receipt_create_temp_receipt">Tall. keskeneräisenä</string>
+    <string name="new_receipt_create_temp_receipt">Tall. keskener.</string>
     <string name="new_receipt_temp_receipt_created">Kuitti tallennettu keskeneräisenä</string>
     <string name="new_receipt_continue_with_camera_header">Lisää uusia tuotteita kamerasta</string>
     <string name="new_receipt_continue_with_camera_message">Haluatko lisätä kuitille uusia tuotteita kuvan perusteella?</string>

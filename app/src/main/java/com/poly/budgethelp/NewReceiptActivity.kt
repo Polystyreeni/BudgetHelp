@@ -1,18 +1,14 @@
 package com.poly.budgethelp
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.ColorFilter
-import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -60,12 +56,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.utility.DateUtils
-import com.poly.budgethelp.utility.TextUtils
 import java.io.BufferedReader
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.InputStreamReader
-import kotlin.streams.toList
 
 class NewReceiptActivity : AppCompatActivity() {
 
@@ -188,8 +182,13 @@ class NewReceiptActivity : AppCompatActivity() {
             val loadTempFile: Boolean? = intent.extras?.getBoolean(EXTRA_LOAD_PRODUCTS)
             if (loadTempFile!!) {
                 val products = loadTemporaryReceipt(this)
-                productsInReceipt.addAll(products)
-                refreshProductList()
+                if (products.isEmpty()) {
+                    Toast.makeText(this, resources.getString(R.string.error_loading_temporary_receipt),
+                        Toast.LENGTH_SHORT).show()
+                } else {
+                    productsInReceipt.addAll(products)
+                    refreshProductList()
+                }
             }
 
             val text: String? = intent.extras?.getString(CameraActivity.EXTRA_MESSAGE)
@@ -379,7 +378,6 @@ class NewReceiptActivity : AppCompatActivity() {
         productsInReceipt.forEach {prod -> dataSet.add(ContentItem(prod, this))}
         dataSet.add(AddItem(this))
         itemListAdapter.notifyItemChanged(position)
-        // itemListAdapter.notifyDataSetChanged()
         calculateTotalPrice()
     }
 
@@ -495,9 +493,9 @@ class NewReceiptActivity : AppCompatActivity() {
             return
         }
 
-        /*val previousProducts: List<String> = productsInReceipt.map {product ->
+        val previousProducts: List<String> = productsInReceipt.map {product ->
             product.productName
-        }*/
+        }
 
         Log.d(TAG, "Parsing products from camera")
         val pairs: List<String> = text.split(System.lineSeparator())
@@ -533,33 +531,21 @@ class NewReceiptActivity : AppCompatActivity() {
 
                     // Populate products list
                     for (i in 0 until productNames.size) {
+
+                        // Don't re-add product if it was already added before (from save state)
+                        if (previousProducts.contains(productNames[i]))
+                            continue
+
                         var category: String? = nameWithCategory[productNames[i]]
                         if (category == null) category = AppRoomDatabase.DEFAULT_CATEGORY
                         val product = Product(productNames[i], category, prices[i])
                         Log.d(TAG, "Adding product from camera: " + product.productName)
+
                         addNewProduct(product)
                     }
                 }
             }
         })
-        /*productViewModel.productsWithNames(productNames).observe(this) {products ->
-            products.let {
-                for (product in it) {
-                    if (productNames.contains(product.productName)) {
-                        nameWithCategory[product.productName] = product.productCategory
-                    }
-                }
-
-                // Populate products list
-                for (i in 0 until productNames.size) {
-                    var category: String? = nameWithCategory[productNames[i]]
-                    if (category == null) category = AppRoomDatabase.DEFAULT_CATEGORY
-                    val product = Product(productNames[i], category, prices[i])
-                    Log.d(TAG, "Adding product from camera: " + product.productName)
-                    addNewProduct(product)
-                }
-            }
-        }*/
     }
 
     private fun createLoadPopup() {
