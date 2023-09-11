@@ -36,6 +36,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -500,6 +501,15 @@ class MainActivity : ComponentActivity() {
                         onDismiss()
                     }) {
                         Text(text = resources.getString(R.string.settings_header))
+                    }
+
+                    val uriHandler = LocalUriHandler.current
+                    Button(onClick = {
+                        if (NetworkConfig.ALLOW_NETWORK_ACCESS) {
+                            uriHandler.openUri(NetworkConfig.GUIDE_URL)
+                        }
+                    }) {
+                        Text(text = resources.getString(R.string.main_button_user_guide))
                     }
                 }
             }

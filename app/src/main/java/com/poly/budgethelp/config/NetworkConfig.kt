@@ -6,5 +6,6 @@ class NetworkConfig {
         const val VERSION_URL: String = "DUMMY_REPLACE_ME"
         const val RELEASE_URL: String = "DUMMY_REPLACE_ME"
         const val MESSAGE_URL = "DUMMY_REPLACE_ME"
+        const val GUIDE_URL = "DUMMY_REPLACE_ME"
     }
 }

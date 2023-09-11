@@ -129,7 +129,7 @@
     <string name="main_button_new_receipt_camera">Kuvaa uusi kuitti</string>
     <string name="main_button_new_receipt_manual">Uusi tyhjä kuitti</string>
     <string name="main_button_continue_receipt">Jatka keskeytettyä</string>
-
+    <string name="main_button_user_guide">Käyttöohje</string>
 
     <string-array name="spending_timestep_array">
         <item>Valitse aika-asteikko</item>
