@@ -71,7 +71,7 @@ class ProductListActivity : AppCompatActivity() {
 
         // Category dropdown
         categorySelectView.setOnClickListener {view ->
-            val builder = AlertDialog.Builder(this)
+            val builder = AlertDialog.Builder(this, R.style.AlertDialog)
             builder.setTitle(resources.getString(R.string.product_list_limit_category))
             builder.setCancelable(false)
 
