@@ -8,6 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.poly.budgethelp.data.Category
 import com.poly.budgethelp.data.CategoryRepository
+import com.poly.budgethelp.utility.TextUtils
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
@@ -17,7 +18,7 @@ class CategoryViewModel(private val repository: CategoryRepository): ViewModel()
     // fun categoryWithId(id: Int): Category = repository.categoryWithId(id)
 
     fun insert(category: Category) = viewModelScope.launch {
-        val toAdd = Category(category.categoryName.uppercase())
+        val toAdd = Category(TextUtils.sanitizeText(category.categoryName.uppercase()))
         repository.insert(toAdd)
     }
 

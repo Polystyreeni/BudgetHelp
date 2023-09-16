@@ -28,6 +28,7 @@ class TextUtils {
          */
         fun sanitizeText(text: String): String {
             return text.replace(NewReceiptActivity.saveFileDelimiter, " ")
+                .replace(System.lineSeparator(), " ")
         }
     }
 }

@@ -56,6 +56,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.utility.DateUtils
+import com.poly.budgethelp.utility.TextUtils
 import java.io.BufferedReader
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -291,7 +292,7 @@ class NewReceiptActivity : AppCompatActivity() {
 
         builder.setNeutralButton(resources.getString(R.string.new_receipt_create_temp_receipt)) { dialogInterface, _ ->
             val success: Boolean = saveTemporaryReceipt(this, productsInReceipt,
-                receiptNameEdit.text.toString(), receiptDate)
+                TextUtils.sanitizeText(receiptNameEdit.text.toString()), receiptDate)
             dialogInterface.dismiss()
 
             if (success) {
@@ -310,7 +311,8 @@ class NewReceiptActivity : AppCompatActivity() {
         builder.setTitle(R.string.new_receipt_continue_with_camera_header)
         builder.setMessage(R.string.new_receipt_continue_with_camera_message)
         builder.setPositiveButton(R.string.new_product_confirm) {dialogInterface, _ ->
-            saveTemporaryReceipt(this, productsInReceipt, receiptNameEdit.text.toString(), receiptDate)
+            saveTemporaryReceipt(this, productsInReceipt,
+                TextUtils.sanitizeText(receiptNameEdit.text.toString()), receiptDate)
             dialogInterface.dismiss()
 
             val intent = Intent(this, CameraActivity::class.java)
@@ -474,7 +476,7 @@ class NewReceiptActivity : AppCompatActivity() {
     }
 
     private fun checkInput() {
-        receiptName = receiptNameEdit.text.toString()
+        receiptName = TextUtils.sanitizeText(receiptNameEdit.text.toString())
         if (receiptName.isBlank())
             receiptName = resources.getString(R.string.receipt_default_name,
                 DateUtils.longToDateString(System.currentTimeMillis()))

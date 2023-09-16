@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.poly.budgethelp.data.CategoryPricePojo
 import com.poly.budgethelp.data.Product
 import com.poly.budgethelp.data.ProductRepository
+import com.poly.budgethelp.utility.TextUtils
 import kotlinx.coroutines.withContext
 
 class ProductViewModel (private val repository: ProductRepository) : ViewModel() {
@@ -26,7 +27,9 @@ class ProductViewModel (private val repository: ProductRepository) : ViewModel()
 
     suspend fun insert(product: Product): Long =
         withContext(viewModelScope.coroutineContext) {
-            val toAdd = Product(product.productName.uppercase(), product.productCategory.uppercase(), product.productPrice)
+            val toAdd = Product(TextUtils.sanitizeText(product.productName.uppercase()),
+                TextUtils.sanitizeText(product.productCategory.uppercase()),
+                product.productPrice)
             repository.insert(toAdd)
         }
 
