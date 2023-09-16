@@ -168,6 +168,7 @@ class ReceiptListActivity : AppCompatActivity() {
         receiptViewModel.receiptsInRange(dateStart!!, dateEnd!!).observe(this) { receipts ->
             receipts.let {
                 adapter.submitList(it)
+                calculateReceiptTotalPrice(it)
             }
         }
     }
