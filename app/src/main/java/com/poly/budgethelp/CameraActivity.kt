@@ -33,6 +33,7 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.databinding.ActivityCameraBinding
 import com.poly.budgethelp.utility.ActivityUtils
+import com.poly.budgethelp.utility.TextUtils
 import com.poly.budgethelp.viewmodel.WordToIgnoreViewModel
 import com.poly.budgethelp.viewmodel.WordToIgnoreViewModelFactory
 import kotlinx.coroutines.launch
@@ -213,13 +214,14 @@ class CameraActivity : AppCompatActivity() {
                     if (wordsToIgnore.contains(line.text.uppercase()))
                         continue
 
+                    // Force possible floats to use decimal point instead of a comma
                     val text = line.text.replace(",", ".")
-                        .replace(":", " ").replace(NewReceiptActivity.saveFileDelimiter, " ")
-                    val textValue: Float? = text.toFloatOrNull()
+
+                    val textValue: Float? = text.replace(" ", "").toFloatOrNull()
                     if (textValue != null && textValue <= UserConfig.productMaxPrice) {
                         val y = line.boundingBox?.centerY()
                         if (y != null) {
-                            val element = Pair(text.toFloat(), y)
+                            val element = Pair(text.replace(" ", "").toFloat(), y)
                             prices.add(element)
                         }
                     }
@@ -227,7 +229,7 @@ class CameraActivity : AppCompatActivity() {
                     else {
                         val y = line.boundingBox?.centerY()
                         if (y != null) {
-                            val element = Pair(line.text, y)
+                            val element = Pair(TextUtils.sanitizeText(line.text), y)
                             items.add(element)
                         }
                     }
@@ -235,6 +237,9 @@ class CameraActivity : AppCompatActivity() {
             }
 
             // Connect items and prices based on coordinates
+            // FUTURE IMPROVEMENTS TO TEST:
+            // - Sort prices based on offset, select one with least offset
+            // - Take into account image rotation
             val maxOffset = UserConfig.priceNameMaxOffset
             for (pair in items) {
                 for (price in prices) {
@@ -258,14 +263,14 @@ class CameraActivity : AppCompatActivity() {
         for(pair in itemWithPrice) {
             productCount++
             Log.d(TAG, pair.first + " : " + pair.second)
-            builder.append(pair.first.uppercase()).append(":").append(pair.second).append(System.lineSeparator())
+            builder.append(pair.first.uppercase()).append(NewReceiptActivity.saveFileDelimiter).append(pair.second).append(System.lineSeparator())
         }
 
         createAlert(productCount, builder)
     }
 
     private fun createAlert(productCount: Int, data: StringBuilder) {
-        val builder = AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this, R.style.AlertDialog)
         builder.setTitle(resources.getString(R.string.camera_reading_complete))
         builder.setCancelable(false)
 

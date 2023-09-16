@@ -3,6 +3,7 @@ package com.poly.budgethelp.utility
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
+import com.poly.budgethelp.NewReceiptActivity
 
 class TextUtils {
     companion object {
@@ -18,6 +19,15 @@ class TextUtils {
             } else {
                 Html.fromHtml(text)
             }
+        }
+
+        /**
+         * Removes all "forbidden" characters from the text provided
+         * Forbidden characters mean such characters that are used in save file parsing
+         *
+         */
+        fun sanitizeText(text: String): String {
+            return text.replace(NewReceiptActivity.saveFileDelimiter, " ")
         }
     }
 }

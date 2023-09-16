@@ -507,7 +507,7 @@ class NewReceiptActivity : AppCompatActivity() {
         val nameWithCategory: HashMap<String, String> = HashMap()
 
         for (pair in pairs) {
-            val nameAndPrice: List<String> = pair.split(":")
+            val nameAndPrice: List<String> = pair.split(saveFileDelimiter)
             if (nameAndPrice.size != 2)
                 continue
 
