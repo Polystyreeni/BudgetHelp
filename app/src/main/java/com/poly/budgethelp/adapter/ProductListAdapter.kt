@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -64,7 +65,7 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
                 headerTextView.text = baseContext.resources.getString(R.string.edit_product_header)
 
                 val nameEdit: EditText = popupData.first.findViewById(R.id.addProductNameEditText)
-                val categorySpinner: Spinner = popupData.first.findViewById(R.id.addProductCategorySpinner)
+                val categoryText: TextView = popupData.first.findViewById(R.id.addProductCategoryTextView)
                 val priceEdit: EditText = popupData.first.findViewById(R.id.addProductPriceEditText)
                 val confirmButton: Button = popupData.first.findViewById(R.id.addProductConfirmButton)
 
@@ -75,10 +76,31 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
 
                 nameEdit.setText(product.productName)
                 priceEdit.setText(product.productPrice.toString())
+                categoryText.text = product.productCategory
 
-                baseContext.categoryAdapter.setDropDownViewResource(R.layout.spinner_item)
-                categorySpinner.adapter = baseContext.categoryAdapter
-                categorySpinner.setSelection(baseContext.categoryAdapter.getPosition(product.productCategory))
+                categoryText.setOnClickListener { _ ->
+                    val builder = AlertDialog.Builder(baseContext, R.style.AlertDialog)
+                    builder.setTitle(baseContext.resources.getString(R.string.new_product_category))
+                    builder.setCancelable(true)
+
+                    builder.setMultiChoiceItems(baseContext.categoryArray,
+                        BooleanArray(baseContext.categoryArray.size)) {  dialogInterface, index, value ->
+                        if (value) {
+                            categoryText.text = baseContext.categoryArray[index]
+                            dialogInterface.dismiss()
+                        }
+                    }
+
+                    builder.setNegativeButton(baseContext.resources.getString(R.string.generic_reply_negative)) {dialogInterface, _ ->
+                        dialogInterface.dismiss()
+                    }
+
+                    builder.show()
+                }
+
+                // baseContext.categoryAdapter.setDropDownViewResource(R.layout.spinner_item)
+                // categorySpinner.adapter = baseContext.categoryAdapter
+                // categorySpinner.setSelection(baseContext.categoryAdapter.getPosition(product.productCategory))
 
                 popupData.second.update()
 
@@ -94,21 +116,14 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
                             Toast.LENGTH_SHORT).show()
                     }
 
-                    else if (categorySpinner.selectedItemPosition < 0
-                        || baseContext.categoryAdapter.getItem(categorySpinner.selectedItemPosition) == null) {
-                        Toast.makeText(baseContext,
-                            baseContext.resources.getString(R.string.error_invalid_category),
-                            Toast.LENGTH_SHORT).show()
-                    }
-
                     // Valid product data
                     else {
                         val id = product.productId
                         val newName = nameEdit.text.toString()
-                        val category = baseContext.categoryAdapter.getItem(categorySpinner.selectedItemPosition)
+                        val category = categoryText.text.toString()
                         val price = priceEdit.text.toString().toFloat()
 
-                        val newProduct = Product(id, newName, category!!, price)
+                        val newProduct = Product(id, newName, category, price)
                         baseContext.saveProduct(newProduct)
 
                         popupData.second.dismiss()

@@ -31,7 +31,7 @@ class ProductListActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private val categoryList: ArrayList<Int> = arrayListOf()
-    private lateinit var categoryArray: Array<String>
+    lateinit var categoryArray: Array<String>
     private lateinit var categoryArrayList: ArrayList<String>
     private lateinit var productAdapter: ProductListAdapter
     lateinit var categoryAdapter: ArrayAdapter<String>

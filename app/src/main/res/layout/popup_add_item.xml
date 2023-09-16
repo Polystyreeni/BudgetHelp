@@ -46,15 +46,18 @@
         android:layout_marginBottom="10dp"
         android:text="@string/new_product_category" />
 
-    <Spinner
-        android:id="@+id/addProductCategorySpinner"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/addProductCategoryTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="40dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:spinnerMode="dialog"
-        android:popupBackground="@color/white"
+        android:background="@android:drawable/editbox_background"
+        app:drawableEndCompat="@android:drawable/arrow_down_float"
+        android:drawablePadding="16dp"
+        android:textColor="@color/black"
+        android:hint="MÄÄRITTELEMÄTÖN"
+        android:textColorHint="@color/black"
+        android:padding="12dp"
         />
 
     <EditText

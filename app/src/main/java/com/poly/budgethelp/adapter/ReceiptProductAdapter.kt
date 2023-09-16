@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.NewReceiptActivity
 import com.poly.budgethelp.R
@@ -75,7 +76,7 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val popupData = ActivityUtils.createPopup(R.layout.popup_add_item, item.context)
                 val headerText: TextView = popupData.first.findViewById(R.id.addItemPopupHeader)
                 val nameEditText: EditText = popupData.first.findViewById(R.id.addProductNameEditText)
-                val categorySpinner: Spinner = popupData.first.findViewById(R.id.addProductCategorySpinner)
+                val categoryTextEdit: TextView = popupData.first.findViewById(R.id.addProductCategoryTextView)
                 val priceEditText: EditText = popupData.first.findViewById(R.id.addProductPriceEditText)
                 val confirmButton: Button = popupData.first.findViewById(R.id.addProductConfirmButton)
 
@@ -87,39 +88,47 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
                 headerText.text = item.context.resources.getString(R.string.edit_product_header)
                 nameEditText.setText(item.product.productName)
-                categorySpinner.adapter = item.context.categoryAdapter
-                categorySpinner.setSelection(item.context.categoryAdapter.getPosition(item.product.productCategory))
+                categoryTextEdit.text = item.product.productCategory
                 priceEditText.setText(item.product.productPrice.toString())
 
-                categorySpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        if (position == categorySpinner.adapter.count - 1) {
-                            val categoryPopupData = ActivityUtils.createPopup(R.layout.popup_add_category, item.context)
-                            val categoryConfirmButton: Button = categoryPopupData.first.findViewById(R.id.addCategoryConfirmButton)
-                            val categoryText: EditText = categoryPopupData.first.findViewById(R.id.addCategoryNameEditText)
-                            item.context.currentPopups.add(categoryPopupData.second)
-                            categoryPopupData.second.isFocusable = true
-                            categoryPopupData.second.setOnDismissListener {
-                                item.context.removePopup(categoryPopupData.second)
-                            }
-                            categoryPopupData.second.update()
-                            categoryConfirmButton.setOnClickListener {_ ->
-                                val categoryName = categoryText.text.toString()
-                                item.context.addNewCategory(categoryName)
-                                categoryPopupData.second.dismiss()
-                                // item.context.removePopup(categoryPopupData.second)
-                            }
+                categoryTextEdit.setOnClickListener { _ ->
+                    val builder = AlertDialog.Builder(item.context, R.style.AlertDialog)
+                    builder.setTitle(item.context.resources.getString(R.string.new_product_category))
+                    builder.setCancelable(true)
 
-                            // Refresh category spinner
-                            categorySpinner.setSelection(0)
+                    builder.setMultiChoiceItems(item.context.categoryArray,
+                        BooleanArray(item.context.categoryArray.size)) {  dialogInterface, index, value ->
+                        if (value) {
+                            categoryTextEdit.text = item.context.categoryArray[index]
+                            dialogInterface.dismiss()
                         }
                     }
 
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-                        if (categorySpinner.selectedItemPosition >= categorySpinner.adapter.count - 1) {
-                            categorySpinner.setSelection(0)
+                    builder.setPositiveButton(item.context.resources.getString(R.string.header_new_category)) { dialogInterface, _ ->
+                        val categoryPopupData = ActivityUtils.createPopup(R.layout.popup_add_category, item.context)
+                        val categoryConfirmButton: Button = categoryPopupData.first.findViewById(R.id.addCategoryConfirmButton)
+                        val categoryText: EditText = categoryPopupData.first.findViewById(R.id.addCategoryNameEditText)
+
+                        categoryPopupData.second.setOnDismissListener {
+                            item.context.removePopup(categoryPopupData.second)
                         }
+
+                        item.context.currentPopups.add(categoryPopupData.second)
+                        categoryPopupData.second.isFocusable = true
+                        categoryPopupData.second.update()
+                        categoryConfirmButton.setOnClickListener {_ ->
+                            categoryPopupData.second.dismiss()
+                            val categoryName = categoryText.text.toString()
+                            item.context.addNewCategory(categoryName)
+                        }
+                        dialogInterface.dismiss()
                     }
+
+                    builder.setNegativeButton(item.context.resources.getString(R.string.generic_reply_negative)) {dialogInterface, _ ->
+                        dialogInterface.dismiss()
+                    }
+
+                    builder.show()
                 }
 
                 confirmButton.text = item.context.resources.getString(R.string.edit_product_confirm)
@@ -137,7 +146,7 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     else {
                         val name: String = nameEditText.text.toString().uppercase()
                         val price: Float? = priceEditText.text.toString().toFloatOrNull()
-                        val category: String = categorySpinner.selectedItem as String
+                        val category: String = categoryTextEdit.text.toString()
 
                         if (price != null) {
                             val newData = Product(name, category, price)
@@ -170,43 +179,49 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
                 // Set popupView item stuff
                 val nameEditText: EditText = popupData.first.findViewById(R.id.addProductNameEditText)
-                val categorySpinner: Spinner = popupData.first.findViewById(R.id.addProductCategorySpinner)
+                val categoryTextView: TextView = popupData.first.findViewById(R.id.addProductCategoryTextView)
+
                 val priceEditText: EditText = popupData.first.findViewById(R.id.addProductPriceEditText)
                 val confirmButton: Button = popupData.first.findViewById(R.id.addProductConfirmButton)
 
-                item.context.categoryAdapter.setDropDownViewResource(R.layout.spinner_item)
-                categorySpinner.adapter = item.context.categoryAdapter
+                categoryTextView.setOnClickListener { _ ->
+                    val builder = AlertDialog.Builder(item.context, R.style.AlertDialog)
+                    builder.setTitle(item.context.resources.getString(R.string.new_product_category))
+                    builder.setCancelable(true)
 
-                categorySpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        if (position == categorySpinner.adapter.count - 1) {
-                            // Refresh category spinner
-                            categorySpinner.setSelection(0)
-
-                            val categoryPopupData = ActivityUtils.createPopup(R.layout.popup_add_category, item.context)
-                            val categoryConfirmButton: Button = categoryPopupData.first.findViewById(R.id.addCategoryConfirmButton)
-                            val categoryText: EditText = categoryPopupData.first.findViewById(R.id.addCategoryNameEditText)
-
-                            categoryPopupData.second.setOnDismissListener {
-                                item.context.removePopup(categoryPopupData.second)
-                            }
-
-                            item.context.currentPopups.add(categoryPopupData.second)
-                            categoryPopupData.second.isFocusable = true
-                            categoryPopupData.second.update()
-                            categoryConfirmButton.setOnClickListener {_ ->
-                                categoryPopupData.second.dismiss()
-                                val categoryName = categoryText.text.toString()
-                                item.context.addNewCategory(categoryName)
-                            }
+                    builder.setMultiChoiceItems(item.context.categoryArray,
+                        BooleanArray(item.context.categoryArray.size)) {  dialogInterface, index, value ->
+                        if (value) {
+                            categoryTextView.text = item.context.categoryArray[index]
+                            dialogInterface.dismiss()
                         }
                     }
 
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-                        if (categorySpinner.selectedItemPosition >= categorySpinner.adapter.count - 1) {
-                            categorySpinner.setSelection(0)
+                    builder.setPositiveButton(item.context.resources.getString(R.string.header_new_category)) { dialogInterface, _ ->
+                        val categoryPopupData = ActivityUtils.createPopup(R.layout.popup_add_category, item.context)
+                        val categoryConfirmButton: Button = categoryPopupData.first.findViewById(R.id.addCategoryConfirmButton)
+                        val categoryText: EditText = categoryPopupData.first.findViewById(R.id.addCategoryNameEditText)
+
+                        categoryPopupData.second.setOnDismissListener {
+                            item.context.removePopup(categoryPopupData.second)
                         }
+
+                        item.context.currentPopups.add(categoryPopupData.second)
+                        categoryPopupData.second.isFocusable = true
+                        categoryPopupData.second.update()
+                        categoryConfirmButton.setOnClickListener {_ ->
+                            categoryPopupData.second.dismiss()
+                            val categoryName = categoryText.text.toString()
+                            item.context.addNewCategory(categoryName)
+                        }
+                        dialogInterface.dismiss()
                     }
+
+                    builder.setNegativeButton(item.context.resources.getString(R.string.generic_reply_negative)) {dialogInterface, _ ->
+                        dialogInterface.dismiss()
+                    }
+
+                    builder.show()
                 }
 
                 confirmButton.setOnClickListener {
@@ -223,7 +238,7 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     else {
                         val name: String = nameEditText.text.toString().uppercase()
                         val price: Float? = priceEditText.text.toString().toFloatOrNull()
-                        val category: String = categorySpinner.selectedItem as String
+                        val category: String = categoryTextView.text.toString()
                         if (price != null) {
                             val product = Product(name, category, price)
                             item.context.addNewProduct(product)

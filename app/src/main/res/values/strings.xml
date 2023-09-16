@@ -5,6 +5,7 @@
     <string name="generic_reply_negative">Peruuta</string>
     <string name="generic_reply_clear">Tyhjennä</string>
     <string name="generic_reply_undo">Kumoa</string>
+    <string name="receipt_default_name">Kuitti %1$s</string>
     <string name="receipt_date_hint">Päivämäärä…</string>
     <string name="receipt_name_hint">Kuitin nimi…</string>
     <string name="receipt_save_button">Tallenna kuitti</string>

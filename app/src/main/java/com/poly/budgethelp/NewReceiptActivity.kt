@@ -73,7 +73,7 @@ class NewReceiptActivity : AppCompatActivity() {
     private val dataSet = arrayListOf<RecyclerViewItem>()
 
     private lateinit var itemListAdapter: ReceiptProductAdapter
-    lateinit var categoryAdapter: ArrayAdapter<String>
+    lateinit var categoryArray: Array<String>
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var totalPriceText: TextView
@@ -119,20 +119,14 @@ class NewReceiptActivity : AppCompatActivity() {
         }
 
         itemListAdapter = ReceiptProductAdapter()
-        val categoryList: ArrayList<String> = ArrayList()
-        categoryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoryList)
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
         categoryViewModel.allCategories.observe(this) { categories ->
-            categoryList.clear()
             categories.let {
-                it.forEach { category -> categoryList.add(category.categoryName) }
-                // Sum character = add new category button
-                categoryList.add(AppRoomDatabase.ADD_CATEGORY_TEXT)
+                categoryArray = Array(it.count()) { i -> it[i].categoryName }
                 itemListAdapter.notifyDataSetChanged()
             }
         }
 
-        // val dataSet = arrayListOf<RecyclerViewItem>()
         itemListAdapter.data = dataSet
         recyclerView.adapter = itemListAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -209,7 +203,6 @@ class NewReceiptActivity : AppCompatActivity() {
                 val popup = currentPopups[currentPopups.size - 1]
                 currentPopups.remove(popup)
                 popup.dismiss()
-                Log.d(TAG, "Popups size: " + currentPopups.size)
             } else {
                 if (productsInReceipt.size > 0)
                     requestActivityFinish()
@@ -483,7 +476,8 @@ class NewReceiptActivity : AppCompatActivity() {
     private fun checkInput() {
         receiptName = receiptNameEdit.text.toString()
         if (receiptName.isBlank())
-            receiptName = "Kuitti ${DateUtils.longToDateString(System.currentTimeMillis())}"
+            receiptName = resources.getString(R.string.receipt_default_name,
+                DateUtils.longToDateString(System.currentTimeMillis()))
         if (receiptDate <= 0)
             receiptDate = System.currentTimeMillis()
     }
