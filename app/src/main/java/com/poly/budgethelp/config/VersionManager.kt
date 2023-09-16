@@ -16,7 +16,7 @@ class VersionManager {
         }
     }
     companion object {
-        var currentVersion: Version = Version(1, 0, 0)
+        var currentVersion: Version = Version(1, 0, 1)
 
         fun fetchLatestVersion(context: MainActivity) {
             if (!NetworkConfig.ALLOW_NETWORK_ACCESS)
