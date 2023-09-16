@@ -26,5 +26,4 @@
     android:minHeight="32dp"
     android:textSize="20sp"
     android:ellipsize="marquee"
-    android:textColor="@color/black"
     android:textAlignment="inherit"/>
