@@ -1,5 +1,6 @@
 package com.poly.budgethelp
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -39,6 +40,7 @@ class ReceiptInfoActivity : AppCompatActivity() {
     private lateinit var receiptPriceView: TextView
     private lateinit var returnButton: View
     private lateinit var deleteButton: Button
+    private lateinit var copyButton: View
 
     // View models
     private val categoryViewModel: CategoryViewModel by viewModels {
@@ -62,6 +64,7 @@ class ReceiptInfoActivity : AppCompatActivity() {
         receiptPriceView = findViewById(R.id.receiptInfoPriceText)
         returnButton = findViewById(R.id.receiptInfoReturnButton)
         deleteButton = findViewById(R.id.receiptInfoDeleteButton)
+        copyButton = findViewById(R.id.receiptInfoCopyButton)
 
         productAdapter = ProductAdapter()
         productAdapter.context = this
@@ -85,6 +88,7 @@ class ReceiptInfoActivity : AppCompatActivity() {
 
         returnButton.setOnClickListener { finish() }
         deleteButton.setOnClickListener { requestReceiptDelete() }
+        copyButton.setOnClickListener { requestReceiptCopy() }
 
         if (ActivityUtils.isUsingNightModeResources(this)) {
             returnButton.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(Color.WHITE, BlendModeCompat.SRC_ATOP)
@@ -121,6 +125,41 @@ class ReceiptInfoActivity : AppCompatActivity() {
         }
 
         builder.show()
+    }
+
+    private fun requestReceiptCopy() {
+        val builder = AlertDialog.Builder(this, R.style.AlertDialog)
+        builder.setTitle(resources.getString(R.string.copy_receipt_products_header))
+        builder.setCancelable(false)
+
+        builder.setMessage(resources.getString(R.string.copy_receipt_products_message))
+        builder.setPositiveButton(resources.getString(R.string.generic_reply_positive)) {dialogInterface, _ ->
+            startNewReceiptActivity()
+            dialogInterface.dismiss()
+        }
+
+        builder.setNegativeButton(resources.getString(R.string.generic_reply_negative)) { dialogInterface, _ ->
+            dialogInterface.dismiss()
+        }
+
+        builder.show()
+    }
+
+    private fun startNewReceiptActivity() {
+        val productData = StringBuilder()
+        val productList = productAdapter.currentList
+
+        productList.forEach { product ->
+            productData.append(product.productName)
+                .append(NewReceiptActivity.saveFileDelimiter)
+                .append(product.productPrice)
+                .append(System.lineSeparator())
+        }
+
+        val intent = Intent(this, NewReceiptActivity::class.java)
+        intent.putExtra(CameraActivity.EXTRA_MESSAGE, productData.toString())
+        startActivity(intent)
+        finish()
     }
 
     private fun deleteReceipt() {

@@ -131,6 +131,8 @@
     <string name="main_button_new_receipt_manual">Uusi tyhjä kuitti</string>
     <string name="main_button_continue_receipt">Jatka keskeytettyä</string>
     <string name="main_button_user_guide">Käyttöohje</string>
+    <string name="copy_receipt_products_header">Kopioi tuotteet</string>
+    <string name="copy_receipt_products_message">Kopioi tuotteet uudelle kuitille?</string>
 
     <string-array name="spending_timestep_array">
         <item>Valitse aika-asteikko</item>
