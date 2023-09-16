@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.NewReceiptActivity
 import com.poly.budgethelp.R
 import com.poly.budgethelp.data.Product
+import com.poly.budgethelp.db.AppRoomDatabase
 import com.poly.budgethelp.utility.ActivityUtils
 
 const val VIEW_TYPE_ITEM = 0
@@ -184,6 +185,7 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val priceEditText: EditText = popupData.first.findViewById(R.id.addProductPriceEditText)
                 val confirmButton: Button = popupData.first.findViewById(R.id.addProductConfirmButton)
 
+                categoryTextView.text = AppRoomDatabase.DEFAULT_CATEGORY
                 categoryTextView.setOnClickListener { _ ->
                     val builder = AlertDialog.Builder(item.context, R.style.AlertDialog)
                     builder.setTitle(item.context.resources.getString(R.string.new_product_category))
