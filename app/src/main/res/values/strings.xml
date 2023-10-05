@@ -133,6 +133,7 @@
     <string name="main_button_user_guide">Käyttöohje</string>
     <string name="copy_receipt_products_header">Kopioi tuotteet</string>
     <string name="copy_receipt_products_message">Kopioi tuotteet uudelle kuitille?</string>
+    <string name="warning_overview_price_mismatch">Tuotteiden yhteishinta %1$.2f %2$s ei vastaa kuittien hintaa %3$.2f %2$s. Olet ehkä poistanut joitain tuotteita, jolloin ne eivät näy yhteenvedossa!</string>
 
     <string-array name="spending_timestep_array">
         <item>Valitse aika-asteikko</item>

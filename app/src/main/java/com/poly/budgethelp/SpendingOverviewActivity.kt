@@ -20,11 +20,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.adapter.SpendingItemAdapter
+import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.data.CategoryPricePojo
+import com.poly.budgethelp.data.DuplicateMapItem
 import com.poly.budgethelp.data.Product
 import com.poly.budgethelp.data.Receipt
 import com.poly.budgethelp.data.ReceiptWithProducts
@@ -39,6 +42,7 @@ import com.poly.budgethelp.viewmodel.ReceiptViewModel
 import com.poly.budgethelp.viewmodel.ReceiptViewModelFactory
 import java.util.Calendar
 import java.util.Date
+import kotlin.math.abs
 
 class SpendingOverviewActivity : AppCompatActivity() {
 
@@ -51,6 +55,7 @@ class SpendingOverviewActivity : AppCompatActivity() {
     private lateinit var fetchButton: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewAdapter: SpendingItemAdapter
+    private lateinit var warningTextView: TextView
 
     private var startDate: Long? = null
     private var endDate: Long? = null
@@ -133,6 +138,9 @@ class SpendingOverviewActivity : AppCompatActivity() {
                 finish()
             }
         }
+
+        warningTextView = findViewById(R.id.spendingWarningTextView)
+        warningTextView.isVisible = false
 
         // Dark mode
         if (ActivityUtils.isUsingNightModeResources(this)) {
@@ -301,56 +309,78 @@ class SpendingOverviewActivity : AppCompatActivity() {
                 }
             }
         })
-
-        /*receiptProductViewModel.productsInReceipt(receiptIds).observe(this) { crossRef ->
-            populateSpendingData(crossRef, timeStep)
-        }*/
     }
 
     private fun populateSpendingData(crossRef: List<ReceiptWithProducts>, timeStep: Long) {
         // Clear previous data
         spendingBlockList.clear()
 
-        val productBlocks: HashMap<Int, ArrayList<Product>> = hashMapOf()
-        var blockIndex = 0
-        var currentDate: Long = startDate!!
-        while (currentDate < endDate!!)
+        val productBlocks: HashMap<String, ArrayList<Product>> = hashMapOf()
+
+        var totalProducts = 0
+        var totalPriceInReceipts = 0f
+        var totalPriceOfProducts = 0f
+
+        crossRef.forEach {elem ->
+            totalProducts += elem.products.size
+            totalPriceInReceipts += elem.receipt.receiptPrice
+        }
+
+        Log.d(TAG, "Total products: $totalProducts, price on receipt: $totalPriceInReceipts")
+
+        val timeSteps: ArrayList<Long> =
+            if (timeStep == timeStepRange["Viikko"]) DateUtils.getStartOfWeeksBetween(startDate!!, endDate!!)
+            else DateUtils.getStartOfMonthsBetween(startDate!!, endDate!!)
+
+        for (i in timeSteps.indices)
         {
-            val upperLimit =
-                if (currentTimeStepIndex == 1) DateUtils.getFirstDayOfWeek(currentDate + timeStep)
-                else DateUtils.getFirstDayOfMonth(currentDate + timeStep)
+            if (i == timeSteps.indices.last)
+                continue
+
+            val currentDate = timeSteps[i]
+            val upperLimit = timeSteps[i + 1]
+
+            // Generate map key based on times, will be used for fetching time range specific items
+            val key = "${currentDate}/${upperLimit}"
 
             for (ref in crossRef) {
                 if (ref.receipt.receiptDate in currentDate until upperLimit) {
-                    if (productBlocks[blockIndex] == null) {
-                        productBlocks.put(blockIndex, arrayListOf<Product>())
-                        productBlocks[blockIndex]?.addAll(ref.products)
+                    if (productBlocks[key] == null) {
+                        productBlocks.put(key, arrayListOf<Product>())
+                        productBlocks[key]?.addAll(ref.products)
                     }
                     else {
-                        productBlocks[blockIndex]?.addAll(ref.products)
+                        productBlocks[key]?.addAll(ref.products)
                     }
-                    // Log.d(TAG, "Added products to block with index: ${blockIndex}")
-                    Log.d(TAG, "Block with index ${blockIndex} contains ${productBlocks[blockIndex]?.size} products")
                 }
             }
-
-            currentDate = upperLimit
-            blockIndex++
         }
 
         var fetchedCount = 0
 
+        // Duplicate map is used for products that appear multiple times in a single block
+        // Database sum can't deal with duplicates, so these have to be added here manually
+        val duplicateMap: HashMap<String, ArrayList<DuplicateMapItem>> = hashMapOf()
         for (kvp in productBlocks) {
-            val begin =
-                if (currentTimeStepIndex == 1) DateUtils.getFirstDayOfWeek(startDate!! + timeStep * kvp.key)
-                else DateUtils.getFirstDayOfMonth(startDate!! + timeStep * kvp.key)
-            var end =
-                if (currentTimeStepIndex == 1) DateUtils.getFirstDayOfWeek(startDate!! + timeStep * (kvp.key + 1))
-                else DateUtils.getFirstDayOfMonth(startDate!! + timeStep * (kvp.key + 1))
-            if (end > endDate!!)
-                end = endDate!!
+            val params: List<String> = kvp.key.split("/")
+            val begin = params[0].toLong()
+            val end = params[1].toLong()
 
             val productIds: List<Long> = kvp.value.map { item -> item.productId }
+
+            // Populate duplicate map
+            val itemCounts: HashMap<Product, Int> = getProductCounts(kvp.value)
+            for (itemCountPair in itemCounts) {
+                if (itemCountPair.value > 1) {
+                    val dupItem = DuplicateMapItem(itemCountPair.key, itemCountPair.value)
+                    if (duplicateMap.containsKey(kvp.key)) {
+                        duplicateMap[kvp.key]?.add(dupItem)
+                    } else {
+                        duplicateMap[kvp.key] = arrayListOf(dupItem)
+                    }
+                }
+            }
+
             val liveData = productViewModel.pricesInCategory(productIds)
             liveData.observe(this, object: Observer<List<CategoryPricePojo>> {
                 override fun onChanged(list: List<CategoryPricePojo>?) {
@@ -358,26 +388,73 @@ class SpendingOverviewActivity : AppCompatActivity() {
                     liveData.removeObserver(this)
                     if (list != null) {
                         list.let {
-                            val blockData = SpendingTimeBlock(begin, end, it)
-                            spendingBlockList.add(blockData)
+                            // Feed duplicates
+                            val duplicates = duplicateMap[kvp.key]
+                            val duplicateFixedList: List<CategoryPricePojo> = fixDuplicatesForBlock(it, duplicates)
+                            val blockData = SpendingTimeBlock(begin, end, duplicateFixedList)
 
+                            // Update total price
+                            blockData.spending.forEach { pojo -> totalPriceOfProducts += pojo.totalPrice }
+
+                            spendingBlockList.add(blockData)
                             if (fetchedCount >= productBlocks.count()) {
-                                // Log.d(TAG, "$fetchedCount > prodictBlocks count ${productBlocks.count()}")
                                 val sorted = spendingBlockList.sortedWith(Comparator {a: SpendingTimeBlock, b: SpendingTimeBlock -> b.startTime.compareTo(a.startTime) })
                                 spendingBlockList.clear()
                                 spendingBlockList.addAll(sorted)
                                 recyclerViewAdapter.notifyDataSetChanged()
+                                updateWarningText(totalPriceInReceipts, totalPriceOfProducts)
                             }
                         }
                     } else {
                         Toast.makeText(baseContext, resources.getString(R.string.error_spending_overview_create_failed), Toast.LENGTH_SHORT).show()
                     }
                 }
-
             })
         }
 
         // Re-enable fetch button
         fetchButton.isClickable = true
+    }
+
+    private fun getProductCounts(productList: ArrayList<Product>): HashMap<Product, Int> {
+        val map: HashMap<Product, Int> = hashMapOf()
+
+        for (i in productList.indices) {
+            if (map.containsKey(productList[i])) {
+                val currentValue = map[productList[i]]
+                map[productList[i]] = currentValue!! + 1
+            } else {
+                map[productList[i]] = 1
+            }
+        }
+
+        return map
+    }
+
+    private fun fixDuplicatesForBlock(existing: List<CategoryPricePojo>, duplicates: ArrayList<DuplicateMapItem>?) : List<CategoryPricePojo> {
+        if (duplicates == null)
+            return existing
+
+        duplicates.forEach { duplicate ->
+            val category = duplicate.product.productCategory
+            val priceAddition = duplicate.product.productPrice * (duplicate.count - 1)
+
+            existing.forEach { pojo ->
+                if (pojo.category == category)
+                    pojo.totalPrice += priceAddition
+            }
+        }
+
+        return existing
+    }
+
+    private fun updateWarningText(receiptPrice: Float, productPrice: Float) {
+        if (abs(receiptPrice - productPrice) > 0.05f) {
+            warningTextView.isVisible = true
+            warningTextView.text = resources.getString(
+                R.string.warning_overview_price_mismatch, productPrice, UserConfig.currency, receiptPrice)
+        } else {
+            warningTextView.isVisible = false
+        }
     }
 }
