@@ -229,7 +229,9 @@ class CameraActivity : AppCompatActivity() {
                     else {
                         val y = line.boundingBox?.centerY()
                         if (y != null) {
-                            val element = Pair(TextUtils.sanitizeText(line.text), y)
+                            // Seems very common to misinterpret i with |, so do this replace here
+                            val receiptText = line.text.replace("|", "I")
+                            val element = Pair(TextUtils.sanitizeText(receiptText), y)
                             items.add(element)
                         }
                     }
