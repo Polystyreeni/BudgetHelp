@@ -432,25 +432,19 @@ class NewReceiptActivity : AppCompatActivity() {
         joinAll(existingProductsCheck)
 
         val job = lifecycleScope.launch {
-            Log.d(TAG, "Add products coroutine started")
             val newProducts: ArrayList<Product> = arrayListOf()
             newProducts.addAll(productsInReceipt)
             for (product in existingProducts) {
                 // Check for existing product
                 val toAdd: Product? = productsInReceipt.find { it.productName == product.productName }
                 if (toAdd != null && abs(toAdd.productPrice - product.productPrice) <= 0.01f) {
-                    Log.d(TAG, "Database already contains product " + product.productName)
                     newProducts.remove(toAdd)
                     val crossRef = ReceiptProductCrossRef(receiptId, product.productId)
                     receiptProductViewModel.insert(crossRef)
                 }
-                else {
-                    Log.d(TAG, "Inserting new product " + product.productName)
-                }
             }
 
             for (product in newProducts) {
-                Log.d(TAG, "Adding new item to database: " + product.productName)
                 val productId = productViewModel.insert(product)
                 val crossRef = ReceiptProductCrossRef(receiptId, productId)
                 receiptProductViewModel.insert(crossRef)
@@ -609,7 +603,6 @@ class NewReceiptActivity : AppCompatActivity() {
 
                 // Save products
                 for (i in products.indices) {
-                    Log.d(TAG, "Saving product: ${products[i].productName}")
                     settingsBuilder.append(products[i].productName).append(saveFileDelimiter)
                         .append(products[i].productCategory).append(saveFileDelimiter)
                         .append(products[i].productPrice)
@@ -638,8 +631,6 @@ class NewReceiptActivity : AppCompatActivity() {
 
                 val fileContent = bufferedReader.readLines()
                 for (i in fileContent.indices) {
-                    Log.d(TAG, "Reading line: ${fileContent[i]}")
-
                     if (i == 0) {
                         // Line 0 -> Header for receipt
                         val lineData = fileContent[i].split(saveFileDelimiter)

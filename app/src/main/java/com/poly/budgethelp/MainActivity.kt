@@ -188,8 +188,6 @@ class MainActivity : ComponentActivity() {
     private fun getReinforcementType(current: Float, last: Float): Array<out String> {
         val ratio = current / last
 
-        Log.d("MainActivity", "Spending ratio: ${ratio}")
-
         return if (ratio > 1) {
             if (ratio > 1.5f) resources.getStringArray(R.array.reinforcement_negative_strong)
             else resources.getStringArray(R.array.reinforcement_negative)
