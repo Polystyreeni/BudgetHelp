@@ -121,7 +121,7 @@
     <string name="new_receipt_continue_with_camera_message">Haluatko lisätä kuitille uusia tuotteita kuvan perusteella?</string>
     <string name="main_text_greeting">Hei %1$s!</string>
     <string name="main_text_spending_current_header">Kulutus tässä kuussa:</string>
-    <string name="main_text_spending_previous_header">Edellisellä ajanjaksolla:</string>
+    <string name="main_text_spending_previous_header">Tässä vaiheessa viime kuussa:</string>
     <string name="main_text_management_header">Hallinta</string>
     <string name="main_text_new_receipt_header">Luo uusi kuitti</string>
     <string name="main_text_spending_header">Ostotarkastelu</string>
@@ -164,20 +164,32 @@
         <item>Aijai! Nyt näyttää uusi elämä pahalta :(</item>
         <item>Nyt on palanut rahaa kuin roskaa!</item>
         <item>Tätä kaikkea ei voida laittaa inflaation piikkiin…</item>
+        <item>Nyt meni liian pitkälle!</item>
+        <item>Minkä kunniaksi tällä kertaa?</item>
+        <item>😱</item>
     </string-array>
     <string-array name="reinforcement_negative">
         <item>Voi ei! Rahaa on kulunut enemmän. Mutta toivoa ei vielä kannata menettää.</item>
         <item>Onkos tässä kuussa osteltu vähän enemmän?</item>
         <item>Nyt kannattaa olla tarkkana, jottei rahat karkaa käsistä!</item>
+        <item>Ehkäpä hinnat on vaan noussut edellisestä kuukaudesta… vai onko sittenkin ostettu enemmän?</item>
+        <item>Ahhh…</item>
+        <item>😬</item>
     </string-array>
     <string-array name="reinforcement_positive">
         <item>Ei huono! Kulutus on hieman laskenut edellisestä kuukaudesta.</item>
         <item>Nyt saattaa jäädä hiluja säästöönkin.</item>
-        <item>Ollaan edellisellä tasolla. Näillä näkymin rahaa ei ainakaan kulu enemmän kuin ennen.</item>
+        <item>Ollaan edellisellä tasolla. Näillä näkymin rahaa ei ainakaan kulu aiempaa enemmän.</item>
+        <item>Hyvä hyvä!</item>
+        <item>👌</item>
+        <item>👍</item>
     </string-array>
     <string-array name="reinforcement_positive_strong">
         <item>Ilmiömäistä! Tällä vauhdilla pankki räjähtää näillä näppäimillä!</item>
         <item>Onkohan edellinen kuukausi varmasti kirjattu oikein, kun näyttää näin edistyneeltä?</item>
-        <item>Lopetitteko kaupassa käynnin kokonaan?</item>
+        <item>Loppuiko kaupassa käynti kokonaan?</item>
+        <item>Kerrassaan mahtavaa!</item>
+        <item>Vihreää täynnä sekä yllä oleva numero, että pankkitili (jos oltaisiin Amerikassa)</item>
+        <item>😃</item>
     </string-array>
 </resources>

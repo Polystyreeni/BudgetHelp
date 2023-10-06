@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -134,6 +135,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        userName.value = UserConfig.userName
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(BUNDLE_UPDATE, updateAcknowledged)
@@ -160,6 +166,7 @@ class MainActivity : ComponentActivity() {
                 var price = 0f
                 it.forEach {receipt -> price += receipt.receiptPrice}
                 spendingLastMonth.value = price
+                updateSpendingInfoText()
             }
         }
     }
@@ -173,32 +180,23 @@ class MainActivity : ComponentActivity() {
             return
         }
 
-        val diff = currentSpending - lastSpending
-        val aLotLimit = 10f
-
-        var text: String = ""
         val rand = Random(System.currentTimeMillis())
-        if (diff > 0) {
-            // More money spent this month
-            text = if (diff > aLotLimit) {
-                val textArr = resources.getStringArray(R.array.reinforcement_negative_strong)
-                textArr[rand.nextInt(textArr.size)]
-            } else {
-                val textArr = resources.getStringArray(R.array.reinforcement_negative)
-                textArr[rand.nextInt(textArr.size)]
-            }
-        } else {
-            // Less money spent this month
-            text = if (abs(diff) > aLotLimit) {
-                val textArr = resources.getStringArray(R.array.reinforcement_positive_strong)
-                textArr[rand.nextInt(textArr.size)]
-            } else {
-                val textArr = resources.getStringArray(R.array.reinforcement_positive)
-                textArr[rand.nextInt(textArr.size)]
-            }
-        }
+        val textArr = getReinforcementType(currentSpending, lastSpending)
+        additionalText.value = textArr[rand.nextInt(textArr.size)]
+    }
 
-        additionalText.value = text
+    private fun getReinforcementType(current: Float, last: Float): Array<out String> {
+        val ratio = current / last
+
+        Log.d("MainActivity", "Spending ratio: ${ratio}")
+
+        return if (ratio > 1) {
+            if (ratio > 1.5f) resources.getStringArray(R.array.reinforcement_negative_strong)
+            else resources.getStringArray(R.array.reinforcement_negative)
+        } else {
+            if (ratio > 0.5f) resources.getStringArray(R.array.reinforcement_positive)
+            else resources.getStringArray(R.array.reinforcement_positive_strong)
+        }
     }
 
     private fun startCamera() {
@@ -303,13 +301,13 @@ class MainActivity : ComponentActivity() {
             )
             Text(
                 text = resources.getString(R.string.item_price, spendingThisMonth.value, UserConfig.currency),
-                fontSize = 20.sp,
+                fontSize = 22.sp,
                 color = getSpendingTextColor(),
                 style = MaterialTheme.typography.headlineMedium.copy(
                     shadow = Shadow(
                         color = Color.Black,
                         offset = Offset(1f, 1f),
-                        blurRadius = 6f
+                        blurRadius = 4f
                     )
                 )
             )
@@ -318,11 +316,15 @@ class MainActivity : ComponentActivity() {
             )
             Text(
                 text = resources.getString(R.string.item_price, spendingLastMonth.value, UserConfig.currency),
-                fontSize = 20.sp,
+                fontSize = 22.sp,
             )
             Text(
-                text = additionalText.value
-            )
+                text = additionalText.value,
+                fontSize = 14.sp,
+                fontStyle = FontStyle.Italic,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(6.dp)
+                )
 
             // New receipt actions (camera, create new)
             Button(onClick = {
