@@ -14,6 +14,8 @@ import kotlinx.coroutines.withContext
 class ProductViewModel (private val repository: ProductRepository) : ViewModel() {
     val allProducts: LiveData<List<Product>> = repository.allProducts.asLiveData()
 
+    val allProductsSorted: LiveData<List<Product>> = repository.allProductsSorted.asLiveData()
+
     fun productWithName(name: String): Product = repository.getProductByName(name)
 
     fun productsWithNames(names: List<String>): LiveData<List<Product>> =
@@ -21,6 +23,9 @@ class ProductViewModel (private val repository: ProductRepository) : ViewModel()
 
     fun productsInCategories(categories: List<String>): LiveData<List<Product>> =
         repository.getProductsInCategories(categories).asLiveData()
+
+    fun productsInCategoriesSorted(categories: List<String>): LiveData<List<Product>> =
+        repository.getProductsInCategoriesSorted(categories).asLiveData()
 
     fun pricesInCategory(productIds: List<Long>): LiveData<List<CategoryPricePojo>> =
         repository.getPricesInCategory(productIds).asLiveData()

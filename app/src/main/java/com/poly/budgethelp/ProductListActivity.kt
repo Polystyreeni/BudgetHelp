@@ -138,10 +138,10 @@ class ProductListActivity : AppCompatActivity() {
         }
 
         // Remove previous observers
-        productViewModel.productsInCategories(products).removeObservers(this)
+        productViewModel.productsInCategoriesSorted(products).removeObservers(this)
 
         // Start new observe
-        productViewModel.productsInCategories(products).observe(this) { productsInCategory ->
+        productViewModel.productsInCategoriesSorted(products).observe(this) { productsInCategory ->
             productsInCategory.let {
                 productAdapter.submitList(productsInCategory)
             }

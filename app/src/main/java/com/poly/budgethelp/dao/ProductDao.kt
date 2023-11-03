@@ -14,6 +14,9 @@ interface ProductDao {
     @Query("SELECT * FROM product")
     fun getAll(): Flow<List<Product>>
 
+    @Query("SELECT * FROM product ORDER BY productName")
+    fun getAllSorted(): Flow<List<Product>>
+
     @Query("SELECT * FROM product WHERE productId == (:id)")
     fun getProductById(id: Long): Product
 
@@ -25,6 +28,9 @@ interface ProductDao {
 
     @Query("SELECT * FROM product WHERE productCategory IN (:categoryNames)")
     fun getProductsInCategories(categoryNames: List<String>): Flow<List<Product>>
+
+    @Query("SELECT * FROM product WHERE productCategory IN (:categoryNames) ORDER BY productName")
+    fun getProductsInCategoriesSorted(categoryNames: List<String>): Flow<List<Product>>
 
     @Query("SELECT * FROM product WHERE productName LIKE :startStr")
     fun getProductsStartingWith(startStr: String): Flow<List<Product>>

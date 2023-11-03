@@ -1,12 +1,13 @@
 package com.poly.budgethelp.data
 
-import android.util.Log
 import androidx.annotation.WorkerThread
 import com.poly.budgethelp.dao.ProductDao
 import kotlinx.coroutines.flow.Flow
 
 class ProductRepository(private val productDao: ProductDao) {
     val allProducts: Flow<List<Product>> = productDao.getAll()
+
+    val allProductsSorted: Flow<List<Product>> = productDao.getAllSorted()
 
     fun getProductById(id: Long): Product = productDao.getProductById(id)
 
@@ -32,6 +33,9 @@ class ProductRepository(private val productDao: ProductDao) {
 
     fun getProductsInCategories(categoryNames: List<String>): Flow<List<Product>> =
         productDao.getProductsInCategories(categoryNames)
+
+    fun getProductsInCategoriesSorted(categoryNames: List<String>): Flow<List<Product>> =
+        productDao.getProductsInCategoriesSorted(categoryNames)
     
     fun getPricesInCategory(productIds: List<Long>): Flow<List<CategoryPricePojo>> =
         productDao.getPricesInCategory(productIds)
