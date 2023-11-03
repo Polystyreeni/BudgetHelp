@@ -93,7 +93,13 @@ class ProductListActivity : AppCompatActivity() {
                         stringBuilder.append(", ")
                     }
                 }
-                categorySelectView.text = stringBuilder.toString()
+                val maxLen = 32
+                val elemText = stringBuilder.toString()
+                categorySelectView.text =
+                    if (elemText.length > maxLen)
+                        "${elemText.substring(0, maxLen)}..."
+                    else elemText
+
                 getProducts()
             }
             builder.setNegativeButton(resources.getString(R.string.generic_reply_negative)) { dialogInterface, _ ->
