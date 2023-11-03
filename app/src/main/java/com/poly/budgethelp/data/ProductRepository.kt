@@ -1,5 +1,6 @@
 package com.poly.budgethelp.data
 
+import android.util.Log
 import androidx.annotation.WorkerThread
 import com.poly.budgethelp.dao.ProductDao
 import kotlinx.coroutines.flow.Flow
@@ -13,6 +14,21 @@ class ProductRepository(private val productDao: ProductDao) {
         = productDao.getProductsWithNames(productNames)
 
     fun getProductByName(name: String): Product = productDao.getProductByName(name)
+
+    fun getProductsStartingWith(startStr: String): Flow<List<Product>>
+        = productDao.getProductsStartingWith(startStr)
+
+    fun getProductNamesContaining(nameWords: List<String>): Flow<List<Product>> {
+        val params: MutableList<String> = mutableListOf(nameWords[0], nameWords[0], nameWords[0])
+
+        for (i in nameWords.indices) {
+            if (i >= params.size)
+                break
+            params[i] = nameWords[i]
+        }
+
+        return productDao.getProductsNameContaining(params[0], params[1], params[2])
+    }
 
     fun getProductsInCategories(categoryNames: List<String>): Flow<List<Product>> =
         productDao.getProductsInCategories(categoryNames)

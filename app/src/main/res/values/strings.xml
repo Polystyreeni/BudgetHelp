@@ -42,6 +42,7 @@
     <string name="error_camera_permissions_not_granted">Kameran käyttöoikeuksia ei sallittu!</string>
     <string name="error_creating_temporary_receipt">Keskeneräisen kuitin tallennus epäonnistui!</string>
     <string name="error_loading_temporary_receipt">Keskeneräisen kuitin lataus epäonnistui!</string>
+    <string name="error_no_products_to_process">Kuitilla ei ole tuotteita!</string>
     <string name="receipt_info_products">Tuotteet kuitilla:</string>
     <string name="hint_receipt_date">Kuitin päivämäärä…</string>
     <string name="hint_product_name">Tuotenimi…</string>
@@ -51,6 +52,8 @@
     <string name="load_modify_category">Muutetaan kategoriaa…</string>
     <string name="load_delete_category">Poistetaan kategoriaa…</string>
     <string name="load_update_products">Päivitetään tuotteita…</string>
+    <string name="load_fix_products">Korjataan tuotteita…</string>
+    <string name="load_categorize_products">Kategoroidaan…</string>
     <string name="product_list_limit_category">Näytettävät kategoriat</string>
     <string name="spending_activity_header">Kulutustarkastelu</string>
     <string name="spending_activity_info">Tarkastele kulutusta kategorian mukaan. Valitse aikaväli ja jakson pituus</string>
@@ -84,6 +87,7 @@
     <string name="settings_header">Asetukset</string>
     <string name="settings_header_general">Yleiset</string>
     <string name="settings_header_camera">Kuitin lukuasetukset</string>
+    <string name="settings_header_fixers">Tuotekorjausasetukset</string>
     <string name="setting_user_name_header">Käyttäjänimi</string>
     <string name="setting_user_name_hint">Käyttäjänimi…</string>
     <string name="setting_currency_header">Valuutta:</string>
@@ -94,6 +98,8 @@
     <string name="setting_words_to_ignore_hint">Ohitettavat sanat:</string>
     <string name="setting_words_to_ignore_description">Kuiteissa esiintyviä sanoja, joita ei haluta
         tulkita tuotteeksi (esimerkiksi "Yhteensä", "KPL" jne.)</string>
+    <string name="setting_similarity_guess_header">Samankaltaisuusvaatimus (0–100 %):</string>
+    <string name="setting_similarity_guess_hint">0–100</string>
     <string name="word_to_ignore_add_header">Uusi ohitettava sana</string>
     <string name="word_to_ignore_add_hint">Sana…</string>
     <string name="app_update_header">Päivitys saatavilla!</string>
@@ -119,6 +125,11 @@
     <string name="new_receipt_temp_receipt_created">Kuitti tallennettu keskeneräisenä</string>
     <string name="new_receipt_continue_with_camera_header">Lisää uusia tuotteita kamerasta</string>
     <string name="new_receipt_continue_with_camera_message">Haluatko lisätä kuitille uusia tuotteita kuvan perusteella?</string>
+    <string name="new_receipt_fix_options_header">Lisätoiminnot</string>
+    <string name="new_receipt_fix_options_info">Nämä asetukset hyödyntävät aiemmin lisättyjen kuittien tietoja korjaamaan mahdollisia virheitä.</string>
+    <string name="new_receipt_fix_similarity">Korjaa tuotteet</string>
+    <string name="new_receipt_fix_guess_category">Arvaa kategoriat</string>
+    <string name="new_receipt_fix_similarity_complete">Tuotteiden tarkastus suoritettu!</string>
     <string name="main_text_greeting">Hei %1$s!</string>
     <string name="main_text_spending_current_header">Kulutus tässä kuussa:</string>
     <string name="main_text_spending_previous_header">Tässä vaiheessa viime kuussa:</string>

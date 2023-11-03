@@ -228,6 +228,13 @@ class NewReceiptActivity : AppCompatActivity() {
                 requestCameraActivity()
             }
         }
+        
+        val fillCategoryButton: View = findViewById(R.id.newReceiptMoreOptions)
+        fillCategoryButton.setOnClickListener { _ ->
+            if (currentPopups.size <= 0) {
+                createMorePopup()
+            }
+        }
 
         if (ActivityUtils.isUsingNightModeResources(this)) {
             returnButton.background.colorFilter =
@@ -259,6 +266,29 @@ class NewReceiptActivity : AppCompatActivity() {
             popup.dismiss()
         }
         currentPopups.clear()
+    }
+
+    private fun createMorePopup() {
+        val builder = AlertDialog.Builder(this, R.style.AlertDialog)
+        builder.setCancelable(false)
+
+        builder.setTitle(resources.getString(R.string.new_receipt_fix_options_header))
+
+        val selectionItems = arrayOf(
+            resources.getString(R.string.new_receipt_fix_similarity),
+            resources.getString(R.string.new_receipt_fix_guess_category))
+        val actionArray = arrayOf(::fixProducts, ::autoFillCategories)
+
+        builder.setItems(selectionItems) {dialog, index ->
+            actionArray[index]()
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton(resources.getString(R.string.generic_reply_negative)) { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.show()
     }
 
     private fun generateProductBundleString(): String {
@@ -540,15 +570,19 @@ class NewReceiptActivity : AppCompatActivity() {
         })
     }
 
-    private fun createLoadPopup() {
+    private fun createLoadPopup(loadText: String = resources.getString(R.string.load_save_receipt)) {
+        clearPopups()
+        val popupData = ActivityUtils.createPopup(R.layout.popup_loading, this)
+        val loadTextView: TextView = popupData.first.findViewById(R.id.loadPopupDescription)
+        loadTextView.text = loadText
+        currentPopups.add(popupData.second)
+    }
+
+    private fun clearPopups() {
         for (popup in currentPopups) {
             popup.dismiss()
         }
         currentPopups.clear()
-        val popupData = ActivityUtils.createPopup(R.layout.popup_loading, this)
-        val loadTextView: TextView = popupData.first.findViewById(R.id.loadPopupDescription)
-        loadTextView.setText(R.string.load_save_receipt)
-        currentPopups.add(popupData.second)
     }
 
     private fun createCalendarPopup() {
@@ -585,6 +619,138 @@ class NewReceiptActivity : AppCompatActivity() {
         }
 
         currentPopups.add(popupWindow)
+    }
+
+    private fun fixProducts() {
+        if (productsInReceipt.isEmpty()) {
+            Toast.makeText(this, resources.getString(R.string.error_no_products_to_process), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        createLoadPopup(resources.getString(R.string.load_fix_products))
+        val checkMax = productsInReceipt.size
+        var checkedCount = 0
+        for (i in productsInReceipt.indices) {
+            // Don't modify already user edited products
+            if (productsInReceipt[i].productCategory != AppRoomDatabase.DEFAULT_CATEGORY) {
+                checkedCount++
+                continue
+            }
+
+            val searchTerm = "${productsInReceipt[i].productName.first()}%"
+            val liveData = productViewModel.getProductsStartingWith(searchTerm)
+            liveData.observe(this, object: Observer<List<Product>> {
+                override fun onChanged(t: List<Product>?) {
+                    checkedCount++
+                    liveData.removeObserver(this)
+                    if (t != null) {
+                        estimateSimilarity(i, t)
+                    }
+
+                    // Disable load popup
+                    if (checkedCount >= checkMax) {
+                        clearPopups()
+                        Toast.makeText(applicationContext, resources.getString(R.string.new_receipt_fix_similarity_complete), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+        }
+    }
+
+    private fun estimateSimilarity(index: Int, products: List<Product>) {
+        val toCheck = productsInReceipt[index]
+
+        var bestProduct = toCheck
+        var bestScore = UserConfig.similarityRequirement
+        Log.d(TAG, "Similarity requirement is: $bestScore")
+
+        for (product in products) {
+            val toCheckName = toCheck.productName.replace(" ", "")
+            val productNameTrimmed = product.productName.replace(" ", "")
+
+            // Extremely big differences in length should never be equal
+            if (abs(toCheckName.length - productNameTrimmed.length) > 10)
+                continue
+
+            // Calculate similarity using Jaro algorithm
+            val similarity = TextUtils.jaroDistance(toCheckName, productNameTrimmed)
+
+            if (similarity > bestScore) {
+                bestProduct = product
+                bestScore = similarity
+                if (bestScore >= 0.99)
+                    break
+            }
+        }
+
+        if (bestProduct == toCheck)
+            return
+
+        // Create new product based on similarity info, but keep price intact
+        val newProduct = Product(bestProduct.productName, bestProduct.productCategory, toCheck.productPrice)
+        productsInReceipt[index] = newProduct
+        modifyItemAtPosition(index, newProduct)
+    }
+
+    private fun autoFillCategories() {
+        if (productsInReceipt.isEmpty()) {
+            Toast.makeText(this, resources.getString(R.string.error_no_products_to_process), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        for (i in productsInReceipt.indices) {
+            // Only update products that have not had their category set
+            if (productsInReceipt[i].productCategory != AppRoomDatabase.DEFAULT_CATEGORY)
+                continue
+
+            val words: List<String> = productsInReceipt[i].productName.split(" ", "-")
+            val searchTerms = words.map { term -> "%$term%" }
+
+            if (searchTerms.isNotEmpty())
+                guessProductCategory(i, searchTerms)
+        }
+    }
+
+    private fun guessProductCategory(index: Int, searchTerms: List<String>) {
+        val liveData = productViewModel.productsWithNameContaining(searchTerms)
+        liveData.observe(this, object: Observer<List<Product>> {
+            override fun onChanged(t: List<Product>?) {
+                liveData.removeObserver(this)
+
+                if (!t.isNullOrEmpty()) {
+                    Log.d(TAG, "Found $t.size products similar to this")
+                    // Map categories
+                    val categoryMap: HashMap<String, Int> = hashMapOf()
+                    for (product in t) {
+                        val category = product.productCategory
+                        if (category == AppRoomDatabase.DEFAULT_CATEGORY)
+                            continue
+
+                        if (categoryMap.containsKey(category)) {
+                            val currentVal = categoryMap[category]!!
+                            categoryMap[category] = currentVal + 1
+                        } else {
+                            categoryMap[category] = 1
+                        }
+                    }
+
+                    var bestCategory = AppRoomDatabase.DEFAULT_CATEGORY
+                    var bestCount = 0
+                    for (category in categoryMap.keys) {
+                        if (categoryMap[category]!! > bestCount) {
+                            bestCategory = category
+                            bestCount = categoryMap[category]!!
+                        }
+                    }
+
+                    if (bestCategory != AppRoomDatabase.DEFAULT_CATEGORY) {
+                        val refProduct = productsInReceipt[index]
+                        val newProduct = Product(refProduct.productName, bestCategory, refProduct.productPrice)
+                        modifyItemAtPosition(index, newProduct)
+                    }
+                }
+            }
+        })
     }
 
     companion object {

@@ -137,6 +137,35 @@
                 android:focusable="false"
                 android:hint="@string/setting_words_to_ignore_hint"
                 android:autofillHints=""/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.5"
+                android:layout_marginVertical="14dp"
+                android:background="@color/black"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_header_fixers"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginBottom="6dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="@string/setting_similarity_guess_header"/>
+
+            <EditText
+                android:id="@+id/settingsFixSimilarityEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="4dp"
+                android:hint="@string/setting_similarity_guess_hint"
+                android:autofillHints="" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

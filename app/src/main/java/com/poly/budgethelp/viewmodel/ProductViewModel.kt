@@ -25,6 +25,12 @@ class ProductViewModel (private val repository: ProductRepository) : ViewModel()
     fun pricesInCategory(productIds: List<Long>): LiveData<List<CategoryPricePojo>> =
         repository.getPricesInCategory(productIds).asLiveData()
 
+    fun getProductsStartingWith(startStr: String): LiveData<List<Product>>
+        = repository.getProductsStartingWith(startStr).asLiveData()
+
+    fun productsWithNameContaining(nameWords: List<String>): LiveData<List<Product>>
+        = repository.getProductNamesContaining(nameWords).asLiveData()
+
     suspend fun insert(product: Product): Long =
         withContext(viewModelScope.coroutineContext) {
             val toAdd = Product(TextUtils.sanitizeText(product.productName.uppercase()),

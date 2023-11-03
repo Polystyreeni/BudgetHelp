@@ -24,6 +24,7 @@ import com.poly.budgethelp.utility.ActivityUtils
 import com.poly.budgethelp.viewmodel.WordToIgnoreViewModel
 import com.poly.budgethelp.viewmodel.WordToIgnoreViewModelFactory
 import kotlinx.coroutines.launch
+import kotlin.math.round
 
 class UserSettingsActivity : AppCompatActivity() {
 
@@ -32,6 +33,7 @@ class UserSettingsActivity : AppCompatActivity() {
     private lateinit var priceEdit: EditText
     private lateinit var offsetEdit: EditText
     private lateinit var wordsToIgnoreEdit: EditText
+    private lateinit var similarityEdit: EditText
 
     private val wordsToIgnore: ArrayList<String> = arrayListOf()
     private lateinit var adapter: WordToIgnoreAdapter
@@ -52,6 +54,7 @@ class UserSettingsActivity : AppCompatActivity() {
         priceEdit = findViewById(R.id.settingsMaxPriceEdit)
         offsetEdit = findViewById(R.id.settingsOffsetEdit)
         wordsToIgnoreEdit = findViewById(R.id.wordsToIgnoreEditText)
+        similarityEdit = findViewById(R.id.settingsFixSimilarityEditText)
 
         adapter = WordToIgnoreAdapter()
         adapter.baseContext = this
@@ -137,7 +140,22 @@ class UserSettingsActivity : AppCompatActivity() {
         if (offset != null)
             UserConfig.priceNameMaxOffset = offset
 
+        val similarity: Int? = similarityEdit.text.toString().toIntOrNull()
+        if (similarity != null)
+            UserConfig.similarityRequirement = getSimilarity(similarity)
+
         UserConfig.writeConfig(this)
+    }
+
+    private fun getSimilarity(percent: Int): Float {
+        if (percent <= 0) return 0.0f
+        if (percent >= 100) return 1.0f
+        return percent.toFloat() / 100.0f
+    }
+
+    private fun similarityToIntString(similarity: Float): String {
+        val similarityRounded = (similarity * 100).toInt()
+        return similarityRounded.toString()
     }
 
     private fun initializeValues() {
@@ -147,6 +165,7 @@ class UserSettingsActivity : AppCompatActivity() {
 
         priceEdit.setText(UserConfig.productMaxPrice.toString())
         offsetEdit.setText(UserConfig.priceNameMaxOffset.toString())
+        similarityEdit.setText(similarityToIntString(UserConfig.similarityRequirement))
     }
 
     private fun updateWordEditText() {

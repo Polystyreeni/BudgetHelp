@@ -22,6 +22,7 @@ class UserConfig {
         var productMaxPrice: Float = 1000f
         var priceNameMaxOffset: Int = 40
         var darkMode: Boolean = false
+        var similarityRequirement: Float = 0.85f
 
         private val userSettings: List<MethodRunner> = listOf(
             object : MethodRunner {
@@ -52,6 +53,12 @@ class UserConfig {
                 override fun run(arg: Any) {
                     val value: Boolean? = arg.toString().toBooleanStrictOrNull()
                     if (value != null) darkMode = value
+                }
+            },
+            object: MethodRunner {
+                override fun run(arg: Any) {
+                    val value: Float? = arg.toString().toFloatOrNull()
+                    if (value != null) similarityRequirement = value
                 }
             }
         )
@@ -89,7 +96,8 @@ class UserConfig {
                     .append(currency).append(FILEDELIMITER)
                     .append(productMaxPrice).append(FILEDELIMITER)
                     .append(priceNameMaxOffset).append(FILEDELIMITER)
-                    .append(darkMode)
+                    .append(darkMode).append(FILEDELIMITER)
+                    .append(similarityRequirement)
                     .toString()
 
                 outputStream.write(settings.encodeToByteArray())
