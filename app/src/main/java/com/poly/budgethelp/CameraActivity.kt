@@ -3,13 +3,17 @@ package com.poly.budgethelp
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Rect
+import android.media.Image
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
+import android.view.ViewTreeObserver
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
@@ -32,12 +36,14 @@ import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.databinding.ActivityCameraBinding
+import com.poly.budgethelp.graphics.GraphicOverlay
+import com.poly.budgethelp.graphics.GraphicOverlay.Graphic
+import com.poly.budgethelp.graphics.TextGraphic
 import com.poly.budgethelp.utility.ActivityUtils
 import com.poly.budgethelp.utility.TextUtils
 import com.poly.budgethelp.viewmodel.WordToIgnoreViewModel
 import com.poly.budgethelp.viewmodel.WordToIgnoreViewModelFactory
 import kotlinx.coroutines.launch
-import java.lang.StringBuilder
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.math.abs
@@ -55,6 +61,11 @@ class CameraActivity : AppCompatActivity() {
     private var currentPopup: PopupWindow? = null
 
     private var addToExistingReceipt = false
+
+    private var validLines: ArrayList<Pair<String, Rect>> = ArrayList()
+
+    private var imageViewWidth: Int? = null
+    private var imageViewHeight: Int? = null
 
     // Viewmodels
     private val wordToIgnoreViewModel: WordToIgnoreViewModel by viewModels {
@@ -122,7 +133,7 @@ class CameraActivity : AppCompatActivity() {
                     val inputImage = InputImage.fromMediaImage(mediaImage, image.imageInfo.rotationDegrees)
                     textRecognizer.process(inputImage)
                         .addOnSuccessListener { visionText ->
-                            processText(visionText)
+                            processText(visionText, inputImage)
                             image.close()
                         }
                         .addOnFailureListener { e ->
@@ -203,10 +214,12 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun processText(visionText: Text) {
-        val items: ArrayList<Pair<String, Int>> = ArrayList()
-        val prices: ArrayList<Pair<Float, Int>> = ArrayList()
+    private fun processText(visionText: Text, inputImage: InputImage) {
+        val items: ArrayList<Pair<String, Rect>> = ArrayList()
+        val prices: ArrayList<Pair<Float, Rect>> = ArrayList()
         val itemWithPrice: ArrayList<Pair<String, Float>> = ArrayList()
+
+        validLines.clear()
 
         lifecycleScope.launch {
             for (block in visionText.textBlocks) {
@@ -219,19 +232,19 @@ class CameraActivity : AppCompatActivity() {
 
                     val textValue: Float? = text.replace(" ", "").toFloatOrNull()
                     if (textValue != null && textValue <= UserConfig.productMaxPrice) {
-                        val y = line.boundingBox?.centerY()
-                        if (y != null) {
-                            val element = Pair(text.replace(" ", "").toFloat(), y)
+                        val bb = line.boundingBox
+                        if (bb != null) {
+                            val element = Pair(text.replace(" ", "").toFloat(), bb)
                             prices.add(element)
                         }
                     }
 
                     else {
-                        val y = line.boundingBox?.centerY()
-                        if (y != null) {
+                        val bb = line.boundingBox
+                        if (bb != null) {
                             // Seems very common to misinterpret i with |, so do this replace here
                             val receiptText = line.text.replace("|", "I")
-                            val element = Pair(TextUtils.sanitizeText(receiptText), y)
+                            val element = Pair(TextUtils.sanitizeText(receiptText), bb)
                             items.add(element)
                         }
                     }
@@ -241,12 +254,13 @@ class CameraActivity : AppCompatActivity() {
             // Connect items and prices based on coordinates
             // FUTURE IMPROVEMENTS TO TEST:
             // - Sort prices based on offset, select one with least offset
-            // - Take into account image rotation
             val maxOffset = UserConfig.priceNameMaxOffset
             for (pair in items) {
                 for (price in prices) {
-                    if (abs(pair.second - price.second) < maxOffset) {
+                    if (abs(pair.second.centerY() - price.second.centerY()) < maxOffset) {
                         itemWithPrice.add(Pair(pair.first, price.first))
+                        validLines.add(Pair(pair.first, pair.second))
+                        validLines.add(Pair(price.first.toString(), price.second))
                     }
                 }
             }
@@ -262,42 +276,70 @@ class CameraActivity : AppCompatActivity() {
 
         val builder = StringBuilder()
         var productCount = 0
-        for(pair in itemWithPrice) {
+
+        for (pair in itemWithPrice) {
             productCount++
             Log.d(TAG, pair.first + " : " + pair.second)
             builder.append(pair.first.uppercase()).append(NewReceiptActivity.saveFileDelimiter).append(pair.second).append(System.lineSeparator())
         }
 
-        createAlert(productCount, builder)
+        createImagePopup(builder, inputImage, productCount)
     }
 
-    private fun createAlert(productCount: Int, data: StringBuilder) {
-        val builder = AlertDialog.Builder(this, R.style.AlertDialog)
-        builder.setTitle(resources.getString(R.string.camera_reading_complete))
-        builder.setCancelable(false)
+    private fun createImagePopup(builder: StringBuilder, inputImage: InputImage, count: Int) {
+        val popupData = ActivityUtils.createPopup(R.layout.popup_image_preview, this)
 
-        if (addToExistingReceipt) {
-            builder.setMessage(resources.getString(R.string.camera_number_of_items_existing, productCount))
-        } else {
-            builder.setMessage(resources.getString(R.string.camera_number_of_items, productCount))
+        val imageView: ImageView = popupData.first.findViewById(R.id.imageView)
+        val graphicOverlay: GraphicOverlay = popupData.first.findViewById(R.id.graphicOverlay)
+        val infoText: TextView = popupData.first.findViewById(R.id.previewImageText)
+        val confirmButton: Button = popupData.first.findViewById(R.id.confirmSelectButton)
+        val cancelButton: View = popupData.first.findViewById(R.id.cancelSelectButton)
+
+        if (addToExistingReceipt)
+            infoText.text = resources.getString(R.string.camera_number_of_items_existing, count)
+        else
+            infoText.text = resources.getString(R.string.camera_number_of_items, count)
+
+        popupData.first.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                popupData.first.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                imageViewWidth = imageView.width
+                imageViewHeight = imageView.height
+                Log.d(TAG, "Image Width: $imageViewWidth, Image Height: $imageViewHeight")
+                graphicOverlay.setCameraInformation(inputImage.width, inputImage.height)
+
+                for (line in validLines) {
+                    val textGraphic: Graphic = TextGraphic(graphicOverlay, android.util.Pair(line.first, line.second))
+                    graphicOverlay.add(textGraphic)
+                }
+            }
+        })
+
+        popupData.second.setOnDismissListener {
+            if (currentPopup == popupData.second)
+                currentPopup = null
         }
-        builder.setPositiveButton(resources.getString(R.string.camera_alert_positive)) {dialogInterface, _ ->
-            // Start new activity
+
+        currentPopup?.dismiss()
+        currentPopup = popupData.second
+        val bmp: Bitmap? = inputImage.bitmapInternal
+        if (bmp != null) {
+            imageView.setImageBitmap(bmp)
+        }
+
+        graphicOverlay.clear()
+        confirmButton.setOnClickListener { _ ->
             val intent = Intent(this, NewReceiptActivity::class.java)
-            intent.putExtra(EXTRA_MESSAGE, data.toString())
+            intent.putExtra(EXTRA_MESSAGE, builder.toString())
             intent.putExtra(NewReceiptActivity.EXTRA_LOAD_PRODUCTS, addToExistingReceipt)
             startActivity(intent)
-            dialogInterface.dismiss()
             finish()
         }
 
-        builder.setNegativeButton(resources.getString(R.string.camera_alert_negative)) { dialogInterface, _ ->
-            dialogInterface.dismiss()
-            currentPopup?.dismiss()
+        cancelButton.setOnClickListener { _ ->
+            popupData.second.dismiss()
             captureButton.isClickable = true
         }
-
-        builder.show()
     }
 
     private fun createLoadPopup() {

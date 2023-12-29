@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/rounded_corner">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitStart"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+    <com.poly.budgethelp.graphics.GraphicOverlay
+        android:id="@+id/graphicOverlay"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        app:layout_constraintTop_toTopOf="@id/imageView"
+        app:layout_constraintBottom_toBottomOf="@id/imageView"
+        app:layout_constraintLeft_toLeftOf="@id/imageView"
+        app:layout_constraintRight_toRightOf="@id/imageView"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/previewImageText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/camera_number_of_items"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/confirmSelectButton"
+        />
+
+    <Button
+        android:id="@+id/confirmSelectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/cancelSelectButton"
+        android:text="@string/camera_alert_positive"
+        />
+    <Button
+        android:id="@+id/cancelSelectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/camera_alert_negative"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

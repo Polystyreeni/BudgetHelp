@@ -64,13 +64,13 @@
     <string name="spending_time_warning">Pitkällä aikavälillä haku voi kestää kauan.
         Haluatko varmasti jatkaa?</string>
     <string name="spending_generate_overview">Muodosta yhteenveto</string>
-    <string name="camera_reading_complete">Kuitti luettu</string>
+    <string name="camera_reading_complete">Kuitilta luetut tuotteet</string>
     <string name="camera_number_of_items">Löydettiin %1$d tuotetta kuitilta.
-        Lisätäänkö tuotteet uudelle kuitille?</string>
+        Lisätäänkö uudelle kuitille?</string>
     <string name="camera_number_of_items_existing">Löydettiin %1$d tuotetta kuitilta.
-        Lisätäänkö tuotteet viimeisimmälle keskeneräiselle kuitille?</string>
-    <string name="camera_alert_positive">Lisää</string>
-    <string name="camera_alert_negative">Peruuta</string>
+        Lisätäänkö keskeneräiselle kuitille?</string>
+    <string name="camera_alert_positive">Lisää kuitille</string>
+    <string name="camera_alert_negative">Peruuta lisäys</string>
     <string name="delete_from_new_receipt">Poistettiin %1$s</string>
     <string name="delete_product_header">Poista tuote %1$s</string>
     <string name="delete_product_message">Haluatko varmasti poistaa tuotteen?
