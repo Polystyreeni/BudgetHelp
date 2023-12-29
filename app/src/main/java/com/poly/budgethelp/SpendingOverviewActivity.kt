@@ -68,7 +68,7 @@ class SpendingOverviewActivity : AppCompatActivity() {
     // Overview state
     private var currentTimeStepIndex: Int = 0
     private val spendingBlockList: ArrayList<SpendingTimeBlock> = arrayListOf()
-    private val warningLimit: Long = 7889400000L
+    private val warningLimit: Long = 15778800000L
 
     // Viewmodels
     private val receiptProductViewModel: ReceiptProductViewModel by viewModels {
