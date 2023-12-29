@@ -17,6 +17,7 @@ import com.poly.budgethelp.R
 import com.poly.budgethelp.data.Product
 import com.poly.budgethelp.db.AppRoomDatabase
 import com.poly.budgethelp.utility.ActivityUtils
+import com.poly.budgethelp.utility.TextUtils.Companion.sanitizeText
 
 const val VIEW_TYPE_ITEM = 0
 const val VIEW_TYPE_NEW = 1
@@ -145,7 +146,7 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             Toast.LENGTH_SHORT).show()
                     }
                     else {
-                        val name: String = nameEditText.text.toString().uppercase()
+                        val name: String = sanitizeText(nameEditText.text.toString().uppercase())
                         val price: Float? = priceEditText.text.toString().toFloatOrNull()
                         val category: String = categoryTextEdit.text.toString()
 
@@ -238,7 +239,7 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             Toast.LENGTH_SHORT).show()
                     }
                     else {
-                        val name: String = nameEditText.text.toString().uppercase()
+                        val name: String = sanitizeText(nameEditText.text.toString().uppercase())
                         val price: Float? = priceEditText.text.toString().toFloatOrNull()
                         val category: String = categoryTextView.text.toString()
                         if (price != null) {

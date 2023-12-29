@@ -24,6 +24,7 @@ import com.poly.budgethelp.data.Product
 import com.poly.budgethelp.db.AppRoomDatabase
 import com.poly.budgethelp.utility.ActivityUtils
 import com.poly.budgethelp.utility.TextUtils
+import com.poly.budgethelp.utility.TextUtils.Companion.sanitizeText
 import com.poly.budgethelp.viewmodel.CategoryViewModel
 import com.poly.budgethelp.viewmodel.CategoryViewModelFactory
 import com.poly.budgethelp.viewmodel.ProductViewModel
@@ -124,7 +125,7 @@ class CategoryActivity : AppCompatActivity() {
             category.categoryName, newName.uppercase())))
 
         builder.setPositiveButton(resources.getString(R.string.generic_reply_positive)) {dialogInterface, _ ->
-            modifyCategory(category, newName.uppercase())
+            modifyCategory(category, sanitizeText(newName.uppercase()))
             dialogInterface.dismiss()
         }
 

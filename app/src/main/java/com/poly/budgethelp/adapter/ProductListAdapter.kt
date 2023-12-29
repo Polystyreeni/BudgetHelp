@@ -20,6 +20,7 @@ import com.poly.budgethelp.R
 import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.data.Product
 import com.poly.budgethelp.utility.ActivityUtils
+import com.poly.budgethelp.utility.TextUtils.Companion.sanitizeText
 
 class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListViewHolder>(ReceiptsComparator()) {
 
@@ -119,7 +120,7 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
                     // Valid product data
                     else {
                         val id = product.productId
-                        val newName = nameEdit.text.toString()
+                        val newName = sanitizeText(nameEdit.text.toString().uppercase())
                         val category = categoryText.text.toString()
                         val price = priceEdit.text.toString().toFloat()
 
