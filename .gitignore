@@ -16,3 +16,4 @@ local.properties
 version.txt
 updatemessage.txt
 notes.txt
+/app/src/main/java/com/poly/budgethelp/config/NetworkConfig.kt
