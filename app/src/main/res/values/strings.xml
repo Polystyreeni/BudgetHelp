@@ -129,7 +129,7 @@
     <string name="new_receipt_fix_options_info">Nämä asetukset hyödyntävät aiemmin lisättyjen kuittien tietoja korjaamaan mahdollisia virheitä.</string>
     <string name="new_receipt_fix_similarity">Korjaa tuotteet</string>
     <string name="new_receipt_fix_guess_category">Arvaa kategoriat</string>
-    <string name="new_receipt_fix_similarity_complete">Tuotteiden tarkastus suoritettu!</string>
+    <string name="new_receipt_fix_similarity_complete">Korjattiin %1$d tuotetta.</string>
     <string name="main_text_greeting">Hei %1$s!</string>
     <string name="main_text_spending_current_header">Kulutus tässä kuussa:</string>
     <string name="main_text_spending_previous_header">Tässä vaiheessa viime kuussa:</string>

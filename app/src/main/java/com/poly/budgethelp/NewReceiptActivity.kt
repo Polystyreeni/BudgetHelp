@@ -630,6 +630,7 @@ class NewReceiptActivity : AppCompatActivity() {
         createLoadPopup(resources.getString(R.string.load_fix_products))
         val checkMax = productsInReceipt.size
         var checkedCount = 0
+        var fixedCount = 0
         for (i in productsInReceipt.indices) {
             // Don't modify already user edited products
             if (productsInReceipt[i].productCategory != AppRoomDatabase.DEFAULT_CATEGORY) {
@@ -644,20 +645,24 @@ class NewReceiptActivity : AppCompatActivity() {
                     checkedCount++
                     liveData.removeObserver(this)
                     if (t != null) {
-                        estimateSimilarity(i, t)
+                        if (estimateSimilarity(i, t))
+                            fixedCount++
                     }
 
                     // Disable load popup
                     if (checkedCount >= checkMax) {
                         clearPopups()
-                        Toast.makeText(applicationContext, resources.getString(R.string.new_receipt_fix_similarity_complete), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, resources.getString(R.string.new_receipt_fix_similarity_complete, fixedCount),
+                            Toast.LENGTH_SHORT).show()
                     }
                 }
             })
         }
     }
 
-    private fun estimateSimilarity(index: Int, products: List<Product>) {
+    // Check similarity of product at index, with all products
+    // Return true if product was modified
+    private fun estimateSimilarity(index: Int, products: List<Product>): Boolean {
         val toCheck = productsInReceipt[index]
 
         var bestProduct = toCheck
@@ -683,13 +688,15 @@ class NewReceiptActivity : AppCompatActivity() {
             }
         }
 
+        // Nothing was done
         if (bestProduct == toCheck)
-            return
+            return false
 
         // Create new product based on similarity info, but keep price intact
         val newProduct = Product(bestProduct.productName, bestProduct.productCategory, toCheck.productPrice)
         productsInReceipt[index] = newProduct
         modifyItemAtPosition(index, newProduct)
+        return true
     }
 
     private fun autoFillCategories() {
