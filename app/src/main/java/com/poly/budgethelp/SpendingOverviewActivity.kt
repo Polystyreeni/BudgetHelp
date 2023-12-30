@@ -1,6 +1,5 @@
 package com.poly.budgethelp
 
-import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -59,14 +58,12 @@ class SpendingOverviewActivity : AppCompatActivity() {
 
     private var startDate: Long? = null
     private var endDate: Long? = null
-    private val timeSteps: ArrayList<Pair<Long, Long>> = arrayListOf()
     private val timeStepRange = hashMapOf(Pair("Viikko", 604800000L), Pair("Kuukausi", 2678400000L))
     private var timeStep: Long? = null
 
     private var currentPopup: PopupWindow? = null
 
     // Overview state
-    private var currentTimeStepIndex: Int = 0
     private val spendingBlockList: ArrayList<SpendingTimeBlock> = arrayListOf()
     private val warningLimit: Long = 15778800000L
 
@@ -112,8 +109,10 @@ class SpendingOverviewActivity : AppCompatActivity() {
                 if (position == 0)
                     timeStep = null
                 else
-                    generateTimeSteps(timeStepSpinner.getItemAtPosition(position).toString())
-                currentTimeStepIndex = position
+                {
+                    val item: String = timeStepSpinner.getItemAtPosition(position).toString()
+                    timeStep = timeStepRange[item]!!
+                }
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -198,7 +197,7 @@ class SpendingOverviewActivity : AppCompatActivity() {
             return
         }
 
-        // Warning for long time (3 months)
+        // Warning for long time (6 months)
         if (endDate!! - startDate!! > warningLimit) {
             createTimeWarningAlert()
         }
@@ -276,19 +275,6 @@ class SpendingOverviewActivity : AppCompatActivity() {
             currentPopup?.dismiss()
             currentPopup = null
         }
-    }
-
-    private fun generateTimeSteps(selectedTimeStep: String) {
-        timeSteps.clear()
-
-        if (startDate == null || endDate == null)
-            return
-
-        // val diff: Long = endDate!! - startDate!!
-        val add: Long = timeStepRange[selectedTimeStep]!!
-        // val step: Long = diff / add
-        timeStep = add
-
     }
 
     private fun getReceiptCrossRefData(receipts: List<Receipt>, timeStep: Long) {
