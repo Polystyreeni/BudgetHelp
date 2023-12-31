@@ -99,10 +99,6 @@ class ProductListAdapter : ListAdapter<Product, ProductListAdapter.ProductListVi
                     builder.show()
                 }
 
-                // baseContext.categoryAdapter.setDropDownViewResource(R.layout.spinner_item)
-                // categorySpinner.adapter = baseContext.categoryAdapter
-                // categorySpinner.setSelection(baseContext.categoryAdapter.getPosition(product.productCategory))
-
                 popupData.second.update()
 
                 confirmButton.setOnClickListener {_ ->

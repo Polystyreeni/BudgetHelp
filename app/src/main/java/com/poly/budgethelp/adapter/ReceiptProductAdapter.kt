@@ -1,19 +1,17 @@
 package com.poly.budgethelp.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.poly.budgethelp.NewReceiptActivity
 import com.poly.budgethelp.R
+import com.poly.budgethelp.config.UserConfig
 import com.poly.budgethelp.data.Product
 import com.poly.budgethelp.db.AppRoomDatabase
 import com.poly.budgethelp.utility.ActivityUtils
@@ -71,7 +69,7 @@ class ReceiptProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             nameTextView.text = item.product.productName
             categoryTextView.text = item.product.productCategory
-            priceTextView.text = item.product.productPrice.toString()
+            priceTextView.text = String.format("%.2f %s", item.product.productPrice, UserConfig.currency)
 
             // Button functionalities
             editButton.setOnClickListener {
