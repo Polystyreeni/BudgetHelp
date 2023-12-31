@@ -525,6 +525,7 @@ class MainActivity : ComponentActivity() {
         ) {
             Surface(
                 modifier = Modifier.fillMaxWidth(),
+                color = Color.White,
                 shadowElevation = 4.dp
             ) {
                 Column (
@@ -535,13 +536,15 @@ class MainActivity : ComponentActivity() {
                         text = resources.getString(R.string.app_update_header),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
+                        color = Color.Black,
                         modifier = Modifier.padding(8.dp)
                     )
                     Text(
                         text = resources.getString(R.string.app_update_version_compare,
                             VersionManager.currentVersion.toString(), fetchedAppVersion!!.toString()),
-                        fontSize = 16.sp
-                    )
+                        fontSize = 16.sp,
+                        color = Color.Black
+                        )
                     HyperlinkText(
                         modifier = Modifier.padding(8.dp),
                         fullText = resources.getString(R.string.app_update_info),
