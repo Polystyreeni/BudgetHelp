@@ -35,6 +35,9 @@ interface ProductDao {
     @Query("SELECT * FROM product WHERE productName LIKE :startStr")
     fun getProductsStartingWith(startStr: String): Flow<List<Product>>
 
+    @Query("SELECT * FROM product WHERE productName LIKE :firstStr OR productName LIKE :secondStr")
+    fun getProductsStartingWithEither(firstStr: String, secondStr: String): Flow<List<Product>>
+
     @Query("SELECT * FROM product WHERE productName LIKE :key1 OR productName LIKE :key2 OR productName LIKE :key3")
     fun getProductsNameContaining(key1: String, key2: String, key3: String): Flow<List<Product>>
 

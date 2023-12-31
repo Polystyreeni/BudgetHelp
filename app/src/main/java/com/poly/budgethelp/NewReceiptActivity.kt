@@ -632,14 +632,23 @@ class NewReceiptActivity : AppCompatActivity() {
         var checkedCount = 0
         var fixedCount = 0
         for (i in productsInReceipt.indices) {
-            // Don't modify already user edited products
-            if (productsInReceipt[i].productCategory != AppRoomDatabase.DEFAULT_CATEGORY) {
+            // Don't modify already user edited products, or products with very short names
+            if (productsInReceipt[i].productCategory != AppRoomDatabase.DEFAULT_CATEGORY
+                || productsInReceipt[i].productName.length < 3) {
                 checkedCount++
+                if (checkedCount >= checkMax) {
+                    Toast.makeText(applicationContext,
+                        resources.getString(R.string.new_receipt_fix_nothing_to_fix),
+                        Toast.LENGTH_SHORT).show()
+                    clearPopups()
+                    return
+                }
                 continue
             }
 
-            val searchTerm = "${productsInReceipt[i].productName.first()}%"
-            val liveData = productViewModel.getProductsStartingWith(searchTerm)
+            val searchTerm1 = "${productsInReceipt[i].productName.first()}%"
+            val searchTerm2 = "_${productsInReceipt[i].productName[1]}%"
+            val liveData = productViewModel.getProductsStartingWithEither(searchTerm1, searchTerm2)
             liveData.observe(this, object: Observer<List<Product>> {
                 override fun onChanged(t: List<Product>?) {
                     checkedCount++

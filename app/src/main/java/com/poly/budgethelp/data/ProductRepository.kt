@@ -19,6 +19,9 @@ class ProductRepository(private val productDao: ProductDao) {
     fun getProductsStartingWith(startStr: String): Flow<List<Product>>
         = productDao.getProductsStartingWith(startStr)
 
+    fun getProductsStartingWithEither(first: String, second: String): Flow<List<Product>>
+        = productDao.getProductsStartingWithEither(first, second)
+
     fun getProductNamesContaining(nameWords: List<String>): Flow<List<Product>> {
         val params: MutableList<String> = mutableListOf(nameWords[0], nameWords[0], nameWords[0])
 

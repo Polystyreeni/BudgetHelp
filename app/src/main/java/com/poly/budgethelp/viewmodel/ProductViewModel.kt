@@ -32,6 +32,8 @@ class ProductViewModel (private val repository: ProductRepository) : ViewModel()
 
     fun getProductsStartingWith(startStr: String): LiveData<List<Product>>
         = repository.getProductsStartingWith(startStr).asLiveData()
+    fun getProductsStartingWithEither(first: String, second: String): LiveData<List<Product>>
+            = repository.getProductsStartingWithEither(first, second).asLiveData()
 
     fun productsWithNameContaining(nameWords: List<String>): LiveData<List<Product>>
         = repository.getProductNamesContaining(nameWords).asLiveData()
